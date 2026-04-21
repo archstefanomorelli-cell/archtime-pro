@@ -52,7 +52,27 @@
                     Smetti di lavorare in perdita. Arch Time Pro è lo strumento progettato per gli studi tecnici che vogliono smettere di rincorrere le scadenze e iniziare a guadagnare su ogni singola commessa.
                 </p>
                 <div class="flex flex-col sm:flex-row justify-center items-center gap-5">
-                    <a href="app.html" class="w-full sm:w-auto bg-indigo-600 text-white text-lg font-bold px-10 py-5 rounded-2xl hover:bg-indigo-700 transition-all shadow-2xl shadow-indigo-500/20 active:scale-95 flex items-center justify-center gap-3">
+                    <div class="flex items-start gap-4 text-slate-600 text-left">
+                        <div class="bg-indigo-500/20 p-2.5 rounded-xl border border-indigo-500/30">
+                            <i data-lucide="bar-chart-3" class="text-indigo-600 w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-slate-900 text-sm">Analisi Margini Reali</p>
+                            <p class="text-xs mt-1 text-slate-500">Traccia ore e spese per l'utile reale.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4 text-slate-600 text-left">
+                        <div class="bg-indigo-500/20 p-2.5 rounded-xl border border-indigo-500/30">
+                            <i data-lucide="shield-check" class="text-indigo-600 w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-slate-900 text-sm">Privacy Finanziaria</p>
+                            <p class="text-xs mt-1 text-slate-500">Tariffe interne riservate e inviti gratis.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-12">
+                    <a href="app.html" class="w-full sm:w-auto bg-indigo-600 text-white text-lg font-bold px-10 py-5 rounded-2xl hover:bg-indigo-700 transition-all shadow-2xl shadow-indigo-500/20 active:scale-95 flex inline-items-center justify-center gap-3">
                         Configura il tuo Studio <i data-lucide="arrow-right" class="w-5 h-5"></i>
                     </a>
                 </div>
@@ -107,11 +127,11 @@
                 <div class="md:col-span-2 bg-slate-50 p-8 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
                     <div>
                         <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center mb-6 border border-indigo-100">
-                            <i data-lucide="eye-off" class="w-6 h-6"></i>
+                            <i data-lucide="shield-check" class="w-6 h-6"></i>
                         </div>
-                        <h4 class="text-xl font-black text-slate-900 mb-3 tracking-tight">Il Modello "Costo Segreto"</h4>
+                        <h4 class="text-xl font-black text-slate-900 mb-3 tracking-tight">Visibilità a Livelli e Privacy</h4>
                         <p class="text-slate-500 leading-relaxed text-sm">
-                            Assegna un costo orario aziendale a ciascun collaboratore (tirocinanti, partner, ingegneri esterni). Loro inseriscono le ore senza mai vedere i dati finanziari. Tu, come Manager, vedi l'impatto reale sui costi della commessa in tempo reale.
+                            Imposta le tariffe orarie aziendali per ogni collaboratore in modo totalmente riservato. Il team inserisce le ore vedendo solo il proprio lavoro operativo, mentre tu mantieni il controllo esclusivo e sicuro su costi, budget e margini.
                         </p>
                     </div>
                 </div>
@@ -201,11 +221,11 @@
 
                 <details class="bg-slate-50 border border-slate-200 rounded-2xl group cursor-pointer overflow-hidden transition-all shadow-sm">
                     <summary class="p-6 font-bold text-slate-900 flex justify-between items-center select-none group-open:bg-white transition-colors">
-                        Cosa si intende per "Costo Segreto"?
+                        Come funziona la Privacy Finanziaria per il team?
                         <i data-lucide="chevron-down" class="text-slate-400 group-open:rotate-180 transition-transform"></i>
                     </summary>
                     <div class="px-6 pb-6 pt-4 text-sm text-slate-600 leading-relaxed border-t border-slate-100 bg-white">
-                        Il Manager assegna a ogni membro del team un costo orario aziendale (es. 25€/h). I collaboratori vedono solo il timer per inserire le ore, ma non vedranno mai il proprio costo orario, quello dei colleghi o il budget totale del progetto. Questi dati sono visibili solo al Manager.
+                        Il sistema utilizza una visibilità a livelli per tutelare i dati del tuo Studio. La direzione imposta internamente il costo orario di ogni collaboratore (es. 25€/h) per calcolare la marginalità. Il team traccia le ore lavorate senza mai avere accesso a dati sensibili: non vedranno le tariffe orarie, i costi dei colleghi o i budget dei clienti.
                     </div>
                 </details>
 
@@ -383,7 +403,6 @@
             }
         }
 
-        // Inizializza la griglia prezzi al caricamento
         document.addEventListener('DOMContentLoaded', renderPricing);
     </script>
 </body>
