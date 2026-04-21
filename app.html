@@ -112,14 +112,38 @@
                         <input type="text" id="full-name" placeholder="Nome e Cognome" class="w-full border border-slate-200 rounded-xl p-3.5 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all bg-white">
                         <div class="p-5 bg-slate-50 rounded-xl border border-slate-200">
                             <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-3">Tipo di Account</label>
-                            <div class="space-y-2">
-                                <label class="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200 cursor-pointer hover:border-primary-300 transition-all shadow-sm"><input type="radio" name="account-type" value="admin-studio" checked onchange="toggleInviteInput()" class="w-4 h-4 text-primary-600 focus:ring-primary-500"><span class="text-sm font-bold text-slate-700">Manager (Studio Tecnico)</span></label>
-                                <label class="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200 cursor-pointer hover:border-primary-300 transition-all shadow-sm"><input type="radio" name="account-type" value="admin-impresa" onchange="toggleInviteInput()" class="w-4 h-4 text-primary-600 focus:ring-primary-500"><span class="text-sm font-bold text-slate-700">Titolare (Impresa Edile)</span></label>
-                                <label class="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200 cursor-pointer hover:border-primary-300 transition-all shadow-sm"><input type="radio" name="account-type" value="staff" onchange="toggleInviteInput()" class="w-4 h-4 text-primary-600 focus:ring-primary-500"><span class="text-sm font-bold text-slate-700">Collaboratore (Unisciti)</span></label>
+                            
+                            <div class="space-y-3">
+                                <div>
+                                    <label class="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200 cursor-pointer hover:border-primary-300 transition-all shadow-sm">
+                                        <input type="radio" name="main-role" value="admin" checked onchange="toggleSignupOptions()" class="w-4 h-4 text-primary-600 focus:ring-primary-500">
+                                        <span class="text-sm font-bold text-slate-700">Manager (Crea Spazio di Lavoro)</span>
+                                    </label>
+                                    
+                                    <div id="sector-selection" class="pl-4 border-l-2 border-primary-200 ml-3 mt-3 transition-all duration-300">
+                                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-2">Seleziona il tuo settore:</label>
+                                        <div class="flex gap-2">
+                                            <label class="flex-1 flex items-center justify-center gap-2 p-2.5 bg-white rounded-lg border border-slate-200 cursor-pointer hover:border-primary-300 transition-all shadow-sm relative has-[:checked]:border-primary-500 has-[:checked]:ring-1 has-[:checked]:ring-primary-500">
+                                                <input type="radio" name="business-type" value="studio" checked class="sr-only">
+                                                <span class="text-xs font-bold text-slate-700">Studio Tecnico</span>
+                                            </label>
+                                            <label class="flex-1 flex items-center justify-center gap-2 p-2.5 bg-white rounded-lg border border-slate-200 cursor-pointer hover:border-primary-300 transition-all shadow-sm relative has-[:checked]:border-amber-500 has-[:checked]:ring-1 has-[:checked]:ring-amber-500">
+                                                <input type="radio" name="business-type" value="impresa" class="sr-only">
+                                                <span class="text-xs font-bold text-slate-700">Impresa Edile</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <label class="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200 cursor-pointer hover:border-primary-300 transition-all shadow-sm">
+                                    <input type="radio" name="main-role" value="staff" onchange="toggleSignupOptions()" class="w-4 h-4 text-primary-600 focus:ring-primary-500">
+                                    <span class="text-sm font-bold text-slate-700">Collaboratore (Unisciti)</span>
+                                </label>
                             </div>
+
                             <div id="trial-info-container" class="mt-4 p-3.5 bg-primary-50 border border-primary-100 rounded-xl flex gap-3 items-start"><i data-lucide="gift" class="w-5 h-5 text-primary-600 shrink-0"></i><p class="text-xs text-primary-900 leading-relaxed"><strong class="font-black">15 giorni di prova gratuita!</strong><br>Nessuna carta richiesta.</p></div>
                         </div>
-                        <div id="invite-code-container" class="force-hide"><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Codice Invito Admin</label><input type="text" id="invite-code-input" placeholder="Incolla codice" class="w-full border border-primary-200 bg-primary-50/30 rounded-xl p-3.5 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div>
+                        <div id="invite-code-container" class="force-hide"><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Codice Invito Manager</label><input type="text" id="invite-code-input" placeholder="Incolla codice" class="w-full border border-primary-200 bg-primary-50/30 rounded-xl p-3.5 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div>
                     </div>
                     <input type="email" id="email" placeholder="Email professionale" class="w-full border border-slate-200 rounded-xl p-3.5 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all bg-white">
                     <input type="password" id="password" placeholder="Password" class="w-full border border-slate-200 rounded-xl p-3.5 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all bg-white">
@@ -701,10 +725,22 @@
             document.getElementById('btn-auth').innerText = isSignupMode ? "Crea Account Utente" : "Accedi ora"; 
         }
         
-        function toggleInviteInput() { const type = document.querySelector('input[name="account-type"]:checked').value; document.getElementById('invite-code-container').classList.toggle('force-hide', type !== 'staff'); const trialInfo = document.getElementById('trial-info-container'); if (trialInfo) trialInfo.classList.toggle('force-hide', type === 'staff'); }
+        function toggleSignupOptions() { 
+            const role = document.querySelector('input[name="main-role"]:checked').value; 
+            const isStaff = role === 'staff';
+            document.getElementById('invite-code-container').classList.toggle('force-hide', !isStaff); 
+            document.getElementById('sector-selection').classList.toggle('force-hide', isStaff);
+            const trialInfo = document.getElementById('trial-info-container'); 
+            if (trialInfo) trialInfo.classList.toggle('force-hide', isStaff); 
+        }
         
         const urlParams = new URLSearchParams(window.location.search);
-        if(urlParams.get('invite')) { switchAuthTab('signup'); document.querySelectorAll('input[name="account-type"]').forEach(input => { if(input.value === 'staff') input.checked = true; }); document.getElementById('invite-code-input').value = urlParams.get('invite'); toggleInviteInput(); }
+        if(urlParams.get('invite')) { 
+            switchAuthTab('signup'); 
+            document.querySelectorAll('input[name="main-role"]').forEach(input => { if(input.value === 'staff') input.checked = true; }); 
+            document.getElementById('invite-code-input').value = urlParams.get('invite'); 
+            toggleSignupOptions(); 
+        }
 
         async function handleAuthAction() {
             const email = document.getElementById('email').value.trim(); 
@@ -715,10 +751,9 @@
                 const acceptTerms = document.getElementById('accept-terms').checked;
                 if(!acceptTerms) return await appAlert("Attenzione", "Devi accettare i Termini di Servizio e la Privacy Policy per registrarti.", "danger");
                 
-                const rawType = document.querySelector('input[name="account-type"]:checked').value; 
-                const isStaff = rawType === 'staff';
-                const role = isStaff ? 'staff' : 'admin';
-                const businessType = rawType === 'admin-impresa' ? 'impresa' : 'studio';
+                const role = document.querySelector('input[name="main-role"]:checked').value; 
+                const isStaff = role === 'staff';
+                const businessType = isStaff ? 'studio' : document.querySelector('input[name="business-type"]:checked').value;
                 const code = document.getElementById('invite-code-input').value.trim();
                 
                 if(isStaff && !code) return await appAlert("Attenzione", "Inserisci il codice invito!", "danger");
@@ -854,7 +889,6 @@
                     let bType = 'studio';
                     if (userProfile.role === 'admin') {
                         bType = user?.user_metadata?.business_type || 'studio';
-                        // Salva nel db studio se non c'è ancora
                         if (studioData && !studioData.business_type) {
                             await supabaseClient.from('studios').update({ business_type: bType }).eq('id', studioData.id);
                             studioData.business_type = bType;
