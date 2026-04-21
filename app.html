@@ -5,8 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#f8fafc">
-    <title>Arch Time Pro - Studio Management</title>
+    <title>Arch Time Pro - Studio & Impresa Management</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: 'rgb(var(--color-primary-50) / <alpha-value>)',
+                            100: 'rgb(var(--color-primary-100) / <alpha-value>)',
+                            200: 'rgb(var(--color-primary-200) / <alpha-value>)',
+                            300: 'rgb(var(--color-primary-300) / <alpha-value>)',
+                            400: 'rgb(var(--color-primary-400) / <alpha-value>)',
+                            500: 'rgb(var(--color-primary-500) / <alpha-value>)',
+                            600: 'rgb(var(--color-primary-600) / <alpha-value>)',
+                            700: 'rgb(var(--color-primary-700) / <alpha-value>)',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -15,8 +38,32 @@
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        /* THEME: STUDIO TECNICO (INDIGO DEFAULT) */
+        :root {
+            --color-primary-50: 238 242 255;
+            --color-primary-100: 224 231 255;
+            --color-primary-200: 199 210 254;
+            --color-primary-300: 165 180 252;
+            --color-primary-400: 129 140 248;
+            --color-primary-500: 99 102 241;
+            --color-primary-600: 79 70 229;
+            --color-primary-700: 67 56 202;
+        }
+
+        /* THEME: IMPRESA EDILE (AMBER/ORANGE) */
+        body.theme-impresa {
+            --color-primary-50: 255 251 235;
+            --color-primary-100: 254 243 199;
+            --color-primary-200: 253 230 138;
+            --color-primary-300: 252 211 77;
+            --color-primary-400: 251 191 36;
+            --color-primary-500: 245 158 11;
+            --color-primary-600: 217 119 6;
+            --color-primary-700: 180 83 9;
+        }
+
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; -webkit-tap-highlight-color: transparent; }
-        /* Scrollbar custom per eleganza */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
@@ -47,11 +94,11 @@
         <div class="hidden lg:flex lg:w-1/2 bg-slate-900 flex-col justify-center px-20 relative overflow-hidden">
             <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
             <div class="relative z-10">
-                <h1 class="text-6xl font-black text-white mb-6 tracking-tight">Arch <span class="text-indigo-500">Time</span> Pro</h1>
-                <p class="text-slate-400 text-xl mb-10 max-w-md leading-relaxed">Il gestionale definitivo per il controllo dei margini negli Studi Tecnici.</p>
+                <h1 id="landing-title" class="text-6xl font-black text-white mb-6 tracking-tight">Arch <span class="text-primary-500">Time</span> Pro</h1>
+                <p class="text-slate-400 text-xl mb-10 max-w-md leading-relaxed">Il gestionale definitivo per il controllo dei margini negli Studi Tecnici e Imprese Edili.</p>
                 <div class="space-y-6">
-                    <div class="flex items-start gap-4 text-slate-300"><div class="bg-indigo-500/20 p-2.5 rounded-xl border border-indigo-500/30"><i data-lucide="bar-chart-3" class="text-indigo-400 w-5 h-5"></i></div><div><p class="font-bold text-white">Analisi Margini Reali</p><p class="text-sm mt-1 text-slate-400">Traccia ore e spese extra per scoprire il vero utile.</p></div></div>
-                    <div class="flex items-start gap-4 text-slate-300"><div class="bg-indigo-500/20 p-2.5 rounded-xl border border-indigo-500/30"><i data-lucide="users" class="text-indigo-400 w-5 h-5"></i></div><div><p class="font-bold text-white">Team Senza Attriti</p><p class="text-sm mt-1 text-slate-400">Assegna costi segreti e invita collaboratori gratuiti.</p></div></div>
+                    <div class="flex items-start gap-4 text-slate-300"><div class="bg-primary-500/20 p-2.5 rounded-xl border border-primary-500/30"><i data-lucide="bar-chart-3" class="text-primary-400 w-5 h-5"></i></div><div><p class="font-bold text-white">Analisi Margini Reali</p><p class="text-sm mt-1 text-slate-400">Traccia ore e spese extra per scoprire il vero utile.</p></div></div>
+                    <div class="flex items-start gap-4 text-slate-300"><div class="bg-primary-500/20 p-2.5 rounded-xl border border-primary-500/30"><i data-lucide="users" class="text-primary-400 w-5 h-5"></i></div><div><p class="font-bold text-white">Team Senza Attriti</p><p class="text-sm mt-1 text-slate-400">Assegna costi segreti e invita collaboratori gratuiti.</p></div></div>
                 </div>
             </div>
         </div>
@@ -62,25 +109,26 @@
                 <div class="flex p-1 bg-slate-100 rounded-xl mb-8 border border-slate-200"><button id="tab-login" onclick="switchAuthTab('login')" class="flex-1 py-2.5 text-sm font-bold rounded-lg bg-white shadow-sm text-slate-900 transition-all border border-slate-200/50">Accedi</button><button id="tab-signup" onclick="switchAuthTab('signup')" class="flex-1 py-2.5 text-sm font-bold text-slate-500 hover:text-slate-700 transition-all">Nuovo Utente</button></div>
                 <div class="space-y-4">
                     <div id="signup-fields" class="force-hide space-y-4">
-                        <input type="text" id="full-name" placeholder="Nome e Cognome" class="w-full border border-slate-200 rounded-xl p-3.5 text-sm outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all bg-white">
+                        <input type="text" id="full-name" placeholder="Nome e Cognome" class="w-full border border-slate-200 rounded-xl p-3.5 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all bg-white">
                         <div class="p-5 bg-slate-50 rounded-xl border border-slate-200">
                             <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-3">Tipo di Account</label>
                             <div class="space-y-2">
-                                <label class="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200 cursor-pointer hover:border-indigo-300 transition-all shadow-sm"><input type="radio" name="account-type" value="admin" checked onchange="toggleInviteInput()" class="w-4 h-4 text-indigo-600 focus:ring-indigo-500"><span class="text-sm font-bold text-slate-700">Manager (Crea Studio)</span></label>
-                                <label class="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200 cursor-pointer hover:border-indigo-300 transition-all shadow-sm"><input type="radio" name="account-type" value="staff" onchange="toggleInviteInput()" class="w-4 h-4 text-indigo-600 focus:ring-indigo-500"><span class="text-sm font-bold text-slate-700">Collaboratore (Unisciti)</span></label>
+                                <label class="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200 cursor-pointer hover:border-primary-300 transition-all shadow-sm"><input type="radio" name="account-type" value="admin-studio" checked onchange="toggleInviteInput()" class="w-4 h-4 text-primary-600 focus:ring-primary-500"><span class="text-sm font-bold text-slate-700">Manager (Studio Tecnico)</span></label>
+                                <label class="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200 cursor-pointer hover:border-primary-300 transition-all shadow-sm"><input type="radio" name="account-type" value="admin-impresa" onchange="toggleInviteInput()" class="w-4 h-4 text-primary-600 focus:ring-primary-500"><span class="text-sm font-bold text-slate-700">Titolare (Impresa Edile)</span></label>
+                                <label class="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200 cursor-pointer hover:border-primary-300 transition-all shadow-sm"><input type="radio" name="account-type" value="staff" onchange="toggleInviteInput()" class="w-4 h-4 text-primary-600 focus:ring-primary-500"><span class="text-sm font-bold text-slate-700">Collaboratore (Unisciti)</span></label>
                             </div>
-                            <div id="trial-info-container" class="mt-4 p-3.5 bg-indigo-50 border border-indigo-100 rounded-xl flex gap-3 items-start"><i data-lucide="gift" class="w-5 h-5 text-indigo-600 shrink-0"></i><p class="text-xs text-indigo-900 leading-relaxed"><strong class="font-black">15 giorni di prova gratuita!</strong><br>Nessuna carta richiesta.</p></div>
+                            <div id="trial-info-container" class="mt-4 p-3.5 bg-primary-50 border border-primary-100 rounded-xl flex gap-3 items-start"><i data-lucide="gift" class="w-5 h-5 text-primary-600 shrink-0"></i><p class="text-xs text-primary-900 leading-relaxed"><strong class="font-black">15 giorni di prova gratuita!</strong><br>Nessuna carta richiesta.</p></div>
                         </div>
-                        <div id="invite-code-container" class="force-hide"><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Codice Invito Admin</label><input type="text" id="invite-code-input" placeholder="Incolla codice" class="w-full border border-indigo-200 bg-indigo-50/30 rounded-xl p-3.5 text-sm outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all"></div>
+                        <div id="invite-code-container" class="force-hide"><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Codice Invito Admin</label><input type="text" id="invite-code-input" placeholder="Incolla codice" class="w-full border border-primary-200 bg-primary-50/30 rounded-xl p-3.5 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div>
                     </div>
-                    <input type="email" id="email" placeholder="Email professionale" class="w-full border border-slate-200 rounded-xl p-3.5 text-sm outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all bg-white">
-                    <input type="password" id="password" placeholder="Password" class="w-full border border-slate-200 rounded-xl p-3.5 text-sm outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all bg-white">
+                    <input type="email" id="email" placeholder="Email professionale" class="w-full border border-slate-200 rounded-xl p-3.5 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all bg-white">
+                    <input type="password" id="password" placeholder="Password" class="w-full border border-slate-200 rounded-xl p-3.5 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all bg-white">
                     
                     <div id="signup-legal" class="force-hide mt-4 mb-2">
                         <label class="flex items-start gap-2.5 cursor-pointer group">
-                            <input type="checkbox" id="accept-terms" class="mt-0.5 w-4 h-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500 transition-all cursor-pointer">
+                            <input type="checkbox" id="accept-terms" class="mt-0.5 w-4 h-4 text-primary-600 border-slate-300 rounded focus:ring-primary-500 transition-all cursor-pointer">
                             <span class="text-[10px] text-slate-500 leading-tight">
-                                Ho letto e accetto integralmente i <a href="termini.html" target="_blank" class="font-bold text-slate-700 group-hover:text-indigo-600 hover:underline transition-colors">Termini di Servizio</a> e la <a href="privacy.html" target="_blank" class="font-bold text-slate-700 group-hover:text-indigo-600 hover:underline transition-colors">Privacy Policy</a>.*
+                                Ho letto e accetto integralmente i <a href="termini.html" target="_blank" class="font-bold text-slate-700 group-hover:text-primary-600 hover:underline transition-colors">Termini di Servizio</a> e la <a href="privacy.html" target="_blank" class="font-bold text-slate-700 group-hover:text-primary-600 hover:underline transition-colors">Privacy Policy</a>.*
                             </span>
                         </label>
                     </div>
@@ -98,7 +146,7 @@
             <p class="text-slate-500 text-sm mb-8 leading-relaxed">La tua prova gratuita è terminata. Scegli il piano più adatto al tuo Studio per continuare.</p>
             
             <div class="flex flex-col gap-3 mb-6">
-                <button onclick="redirectToStripe('premium')" class="w-full bg-indigo-600 text-white py-3.5 rounded-xl font-bold hover:bg-indigo-700 transition-all shadow-sm active:scale-[0.98] flex justify-center items-center gap-2">
+                <button onclick="redirectToStripe('premium')" class="w-full bg-primary-600 text-white py-3.5 rounded-xl font-bold hover:bg-primary-700 transition-all shadow-sm active:scale-[0.98] flex justify-center items-center gap-2">
                     <i data-lucide="zap" class="w-4 h-4"></i> Attiva PREMIUM (59,99€/mese)
                 </button>
                 <button onclick="redirectToStripe('starter')" class="w-full bg-white border border-slate-200 text-slate-700 py-3.5 rounded-xl font-bold hover:bg-slate-50 transition-all active:scale-[0.98] flex justify-center items-center gap-2 text-sm shadow-sm">
@@ -115,7 +163,7 @@
             <button onclick="closeUpgradeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>
             <div class="w-16 h-16 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-amber-100"><i data-lucide="zap" class="w-8 h-8"></i></div>
             <h2 class="text-xl font-black text-slate-900 mb-2 tracking-tight">Sblocca il Premium</h2>
-            <p id="upgrade-message" class="text-slate-500 text-sm mb-8 leading-relaxed">Questa funzione è riservata agli studi con il piano Premium.</p>
+            <p id="upgrade-message" class="text-slate-500 text-sm mb-8 leading-relaxed">Questa funzione è riservata agli abbonamenti Premium.</p>
             <button onclick="redirectToStripe('premium')" class="w-full bg-slate-900 text-white py-3.5 rounded-xl font-bold hover:bg-slate-800 transition-all shadow-sm active:scale-[0.98] flex justify-center items-center gap-2">Sblocca PREMIUM a 59,99€</button>
         </div>
     </div>
@@ -125,17 +173,17 @@
             <div class="max-w-7xl mx-auto flex justify-between items-center">
                 <div class="flex items-center gap-2 sm:gap-3">
                     <img id="header-logo" class="h-8 object-contain force-hide rounded-lg" alt="Logo">
-                    <h1 id="header-title" class="text-base sm:text-lg font-black text-slate-900 tracking-tight whitespace-nowrap">ARCH <span class="text-indigo-600">TIME</span> PRO</h1>
+                    <h1 id="header-title" class="text-base sm:text-lg font-black text-slate-900 tracking-tight whitespace-nowrap">ARCH <span class="text-primary-600">TIME</span> PRO</h1>
                     <span id="trial-badge" class="admin-only force-hide text-[9px] px-1.5 py-0.5 rounded-md font-bold border whitespace-nowrap tracking-wider transition-all"></span>
                     <span id="plan-badge" class="admin-only force-hide text-[9px] px-2 py-0.5 rounded-md border border-slate-200 bg-slate-50 text-slate-500 font-bold uppercase tracking-wider ml-1 sm:ml-2 hidden sm:inline-block"></span>
                 </div>
                 <div class="flex items-center gap-2 lg:gap-4 shrink-0">
-                    <button id="btn-header-pdf" onclick="openReportModal()" class="admin-only text-[10px] lg:text-xs font-bold text-slate-600 hover:text-indigo-600 flex items-center gap-1.5 bg-white border border-slate-200 hover:border-indigo-200 hover:bg-indigo-50 lg:border-transparent lg:bg-transparent lg:hover:bg-transparent px-2.5 py-1.5 lg:p-0 rounded-lg transition-all shadow-sm lg:shadow-none"><i data-lucide="file-text" class="w-4 h-4"></i> <span class="hidden lg:inline">PDF REPORT</span></button>
+                    <button id="btn-header-pdf" onclick="openReportModal()" class="admin-only text-[10px] lg:text-xs font-bold text-slate-600 hover:text-primary-600 flex items-center gap-1.5 bg-white border border-slate-200 hover:border-primary-200 hover:bg-primary-50 lg:border-transparent lg:bg-transparent lg:hover:bg-transparent px-2.5 py-1.5 lg:p-0 rounded-lg transition-all shadow-sm lg:shadow-none"><i data-lucide="file-text" class="w-4 h-4"></i> <span class="hidden lg:inline">PDF REPORT</span></button>
                     <div class="hidden lg:block h-6 w-[1px] bg-slate-200 admin-only mx-2"></div>
                     
                     <button onclick="openAccountModal()" class="flex items-center gap-2 border border-transparent hover:border-slate-200 hover:bg-slate-50 p-1.5 lg:px-3 lg:py-1.5 rounded-xl transition-all group">
-                        <i data-lucide="user" class="w-5 h-5 text-slate-400 group-hover:text-indigo-600 lg:hidden"></i>
-                        <span id="user-display" class="hidden lg:inline text-xs font-bold text-slate-600 uppercase truncate max-w-[120px] group-hover:text-indigo-600 tracking-wide"></span>
+                        <i data-lucide="user" class="w-5 h-5 text-slate-400 group-hover:text-primary-600 lg:hidden"></i>
+                        <span id="user-display" class="hidden lg:inline text-xs font-bold text-slate-600 uppercase truncate max-w-[120px] group-hover:text-primary-600 tracking-wide"></span>
                     </button>
                 </div>
             </div>
@@ -146,11 +194,11 @@
             <div class="lg:col-span-4 space-y-6 lg:space-y-8">
                 <section class="bg-slate-100 border border-slate-200/80 rounded-2xl p-6 shadow-md mobile-tab active" data-tab="operate">
                     <div>
-                        <div class="flex justify-between items-center mb-6"><h2 class="text-lg font-black text-slate-800 tracking-tight flex items-center gap-2"><i data-lucide="clock" class="text-indigo-500 w-5 h-5"></i> Timer</h2><button onclick="openManualEntry()" class="text-[10px] font-bold text-slate-500 hover:text-indigo-600 bg-white border border-slate-200 hover:border-indigo-200 hover:bg-indigo-50 px-2 py-1 rounded-md uppercase tracking-wider transition-colors shadow-sm">Manuale</button></div>
+                        <div class="flex justify-between items-center mb-6"><h2 class="text-lg font-black text-slate-800 tracking-tight flex items-center gap-2"><i data-lucide="clock" class="text-primary-500 w-5 h-5"></i> Timer</h2><button onclick="openManualEntry()" class="text-[10px] font-bold text-slate-500 hover:text-primary-600 bg-white border border-slate-200 hover:border-primary-200 hover:bg-primary-50 px-2 py-1 rounded-md uppercase tracking-wider transition-colors shadow-sm">Manuale</button></div>
                         <div class="space-y-4">
-                            <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Progetto</label><select id="project-select" onchange="updateTaskDropdown()" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white shadow-sm outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all appearance-none cursor-pointer text-slate-700"></select></div>
-                            <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Attività</label><select id="task-select" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white shadow-sm outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all appearance-none cursor-pointer text-slate-700"></select></div>
-                            <div><input type="text" id="timer-notes" placeholder="Aggiungi una nota (opzionale)" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white shadow-sm outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all text-slate-700 placeholder:text-slate-400"></div>
+                            <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1" id="lbl-timer-project">Progetto</label><select id="project-select" onchange="updateTaskDropdown()" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white shadow-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none cursor-pointer text-slate-700"></select></div>
+                            <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Attività</label><select id="task-select" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white shadow-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none cursor-pointer text-slate-700"></select></div>
+                            <div><input type="text" id="timer-notes" placeholder="Aggiungi una nota (opzionale)" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white shadow-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all text-slate-700 placeholder:text-slate-400"></div>
                         </div>
                         <div class="mt-8 mb-8"><div id="timer-display" class="text-5xl lg:text-6xl font-black tracking-tighter text-center text-slate-800 tabular-nums">00:00:00</div></div>
                         <button id="btn-toggle-timer" onclick="toggleTimer()" class="w-full bg-slate-900 text-white py-3.5 rounded-xl font-bold text-base shadow-sm hover:bg-slate-800 transition-all active:scale-[0.98] flex justify-center items-center gap-2"><i data-lucide="play-circle" id="btn-icon" class="w-5 h-5"></i> <span id="btn-text">AVVIA ORA</span></button>
@@ -158,39 +206,39 @@
                 </section>
 
                 <section class="bg-slate-100 border border-slate-200/80 rounded-2xl p-6 shadow-md admin-only mobile-tab relative overflow-visible" data-tab="manage">
-                    <h2 class="text-lg font-black text-slate-800 tracking-tight mb-6 flex items-center gap-2"><i data-lucide="folder-plus" class="text-indigo-500 w-5 h-5"></i> Nuovo Progetto</h2>
+                    <h2 id="lbl-new-project" class="text-lg font-black text-slate-800 tracking-tight mb-6 flex items-center gap-2"><i data-lucide="folder-plus" class="text-primary-500 w-5 h-5"></i> Nuovo Progetto</h2>
                     <div class="space-y-4">
-                        <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Nome Progetto</label><input type="text" id="new-proj-name" placeholder="Es. Villa Rossi" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white shadow-sm outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all text-slate-700"></div>
-                        <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Cliente</label><input type="text" id="new-proj-client" placeholder="Nome Cliente" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white shadow-sm outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all text-slate-700"></div>
-                        <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Budget Assegnato</label><div class="flex gap-2 bg-white shadow-sm p-3 rounded-xl border border-slate-200 focus-within:border-indigo-500 focus-within:ring-4 focus-within:ring-indigo-500/10 transition-all"><span class="text-slate-400 font-bold text-sm">€</span><input type="number" id="new-proj-budget" placeholder="0.00" class="bg-transparent w-full outline-none text-sm font-bold text-slate-800"></div></div>
+                        <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Nome</label><input type="text" id="new-proj-name" placeholder="Nome Lavoro" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white shadow-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all text-slate-700"></div>
+                        <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Cliente</label><input type="text" id="new-proj-client" placeholder="Nome Cliente" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white shadow-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all text-slate-700"></div>
+                        <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Budget Assegnato</label><div class="flex gap-2 bg-white shadow-sm p-3 rounded-xl border border-slate-200 focus-within:border-primary-500 focus-within:ring-4 focus-within:ring-primary-500/10 transition-all"><span class="text-slate-400 font-bold text-sm">€</span><input type="number" id="new-proj-budget" placeholder="0.00" class="bg-transparent w-full outline-none text-sm font-bold text-slate-800"></div></div>
                         
                         <div class="pt-5 mt-2 border-t border-slate-200">
                             <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-2 ml-1">Flusso di lavoro</label>
                             <div class="flex gap-2 mb-3">
-                                <select id="new-proj-template" onchange="applyTemplateToNewProject()" class="flex-1 border border-slate-200 rounded-xl p-3 text-sm bg-white shadow-sm outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all appearance-none cursor-pointer text-slate-700"><option value="" selected disabled>Scegli un Template</option></select>
-                                <button id="btn-manage-templates" onclick="openTemplatesModal()" class="bg-white shadow-sm border border-slate-200 text-slate-500 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50 px-3.5 rounded-xl transition-all flex items-center justify-center" title="Gestisci Template"><i data-lucide="layers" class="w-4 h-4"></i></button>
+                                <select id="new-proj-template" onchange="applyTemplateToNewProject()" class="flex-1 border border-slate-200 rounded-xl p-3 text-sm bg-white shadow-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none cursor-pointer text-slate-700"><option value="" selected disabled>Scegli un Template</option></select>
+                                <button id="btn-manage-templates" onclick="openTemplatesModal()" class="bg-white shadow-sm border border-slate-200 text-slate-500 hover:text-primary-600 hover:border-primary-200 hover:bg-primary-50 px-3.5 rounded-xl transition-all flex items-center justify-center" title="Gestisci Template"><i data-lucide="layers" class="w-4 h-4"></i></button>
                             </div>
                             
                             <div class="bg-white border border-slate-200 rounded-xl p-3.5 shadow-sm">
                                 <div class="flex justify-between items-center mb-2.5">
                                     <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Attività Incluse</span>
-                                    <button onclick="openTaskBuilder('new')" class="bg-white text-slate-500 hover:text-indigo-600 border border-slate-200 hover:border-indigo-200 hover:bg-indigo-50 p-1.5 rounded-md transition-all shadow-sm" title="Aggiungi Attività">
+                                    <button onclick="openTaskBuilder('new')" class="bg-white text-slate-500 hover:text-primary-600 border border-slate-200 hover:border-primary-200 hover:bg-primary-50 p-1.5 rounded-md transition-all shadow-sm" title="Aggiungi Attività">
                                         <i data-lucide="plus" class="w-3.5 h-3.5"></i>
                                     </button>
                                 </div>
                                 <div id="new-proj-selected-tasks" class="flex flex-wrap gap-1.5 min-h-[28px]"></div>
                             </div>
                         </div>
-                        <button onclick="createNewProject()" class="w-full bg-slate-900 text-white py-3.5 mt-4 rounded-xl font-bold shadow-sm hover:bg-slate-800 transition-all active:scale-[0.98] flex items-center justify-center gap-2"><i data-lucide="folder-plus" class="w-4 h-4"></i> Crea Progetto</button>
+                        <button onclick="createNewProject()" class="w-full bg-slate-900 text-white py-3.5 mt-4 rounded-xl font-bold shadow-sm hover:bg-slate-800 transition-all active:scale-[0.98] flex items-center justify-center gap-2"><i data-lucide="folder-plus" class="w-4 h-4"></i> Crea</button>
                     </div>
                 </section>
 
                 <section class="bg-slate-100 border border-slate-200/80 rounded-2xl p-6 shadow-md admin-only mobile-tab" data-tab="manage">
                     <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-lg font-black text-slate-800 tracking-tight flex items-center gap-2"><i data-lucide="users" class="text-indigo-500 w-5 h-5"></i> Team</h2>
+                        <h2 class="text-lg font-black text-slate-800 tracking-tight flex items-center gap-2"><i data-lucide="users" class="text-primary-500 w-5 h-5"></i> Team</h2>
                         <div class="flex gap-2">
-                            <button onclick="openTeamReportModal()" class="bg-white border border-slate-200 shadow-sm text-slate-600 text-[10px] font-bold px-2.5 py-1.5 rounded-lg hover:bg-slate-50 hover:text-indigo-600 transition-all flex items-center gap-1.5 uppercase tracking-wider"><i data-lucide="file-text" class="w-3 h-3"></i> Report</button>
-                            <button onclick="generateInviteLink()" class="bg-white border border-slate-200 shadow-sm text-slate-600 text-[10px] font-bold px-2.5 py-1.5 rounded-lg hover:bg-slate-50 hover:text-indigo-600 transition-all flex items-center gap-1.5 uppercase tracking-wider"><i data-lucide="link" class="w-3 h-3"></i> Invita</button>
+                            <button onclick="openTeamReportModal()" class="bg-white border border-slate-200 shadow-sm text-slate-600 text-[10px] font-bold px-2.5 py-1.5 rounded-lg hover:bg-slate-50 hover:text-primary-600 transition-all flex items-center gap-1.5 uppercase tracking-wider"><i data-lucide="file-text" class="w-3 h-3"></i> Report</button>
+                            <button onclick="generateInviteLink()" class="bg-white border border-slate-200 shadow-sm text-slate-600 text-[10px] font-bold px-2.5 py-1.5 rounded-lg hover:bg-slate-50 hover:text-primary-600 transition-all flex items-center gap-1.5 uppercase tracking-wider"><i data-lucide="link" class="w-3 h-3"></i> Invita</button>
                         </div>
                     </div>
                     <div id="team-list" class="space-y-3"></div>
@@ -201,13 +249,13 @@
                 <section class="admin-only space-y-4 mobile-tab" data-tab="analyze">
                     <h2 class="text-lg lg:text-xl font-black text-slate-800 tracking-tight pl-1">Salute Finanziaria</h2>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="bg-indigo-50/60 border border-indigo-100 rounded-2xl p-5 shadow-sm relative overflow-hidden">
+                        <div class="bg-primary-50/60 border border-primary-100 rounded-2xl p-5 shadow-sm relative overflow-hidden">
                             <div class="absolute inset-0 z-0 pointer-events-none">
-                                <i data-lucide="trending-up" class="absolute -right-4 -bottom-4 w-24 h-24 text-indigo-200 opacity-60"></i>
+                                <i data-lucide="trending-up" class="absolute -right-4 -bottom-4 w-24 h-24 text-primary-200 opacity-60"></i>
                             </div>
                             <div class="relative z-10">
                                 <h3 class="text-[11px] font-bold uppercase text-slate-500 tracking-wider mb-1">Margine (Attivi)</h3>
-                                <div id="kpi-margin" class="text-2xl lg:text-3xl font-black text-indigo-600 truncate tracking-tight transition-colors duration-500">€ 0.00</div>
+                                <div id="kpi-margin" class="text-2xl lg:text-3xl font-black text-primary-600 truncate tracking-tight transition-colors duration-500">€ 0.00</div>
                             </div>
                         </div>
                         <div id="card-profit" class="bg-emerald-50/60 border border-emerald-100 rounded-2xl p-5 shadow-sm relative overflow-hidden transition-all duration-500">
@@ -236,14 +284,14 @@
                 </section>
 
                 <section class="mobile-tab active" data-tab="operate">
-                    <div class="flex justify-between items-center mb-4 pl-1"><h2 class="text-lg lg:text-xl font-black text-slate-800 tracking-tight">Progetti Attivi</h2><button id="toggle-archived-btn" onclick="toggleViewArchived()" class="text-[10px] font-bold uppercase tracking-wider bg-white px-3 py-1.5 rounded-lg border border-slate-200 shadow-sm text-slate-500 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50 transition-all">Archivio</button></div>
+                    <div class="flex justify-between items-center mb-4 pl-1"><h2 id="lbl-active-projects" class="text-lg lg:text-xl font-black text-slate-800 tracking-tight">Progetti Attivi</h2><button id="toggle-archived-btn" onclick="toggleViewArchived()" class="text-[10px] font-bold uppercase tracking-wider bg-white px-3 py-1.5 rounded-lg border border-slate-200 shadow-sm text-slate-500 hover:text-primary-600 hover:border-primary-200 hover:bg-primary-50 transition-all">Archivio</button></div>
                     <div id="projects-list" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
                 </section>
 
                 <section class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden mobile-tab active" data-tab="operate">
                     <div class="p-5 border-b border-slate-100 flex flex-col md:flex-row md:justify-between items-start md:items-center gap-4 bg-white sticky top-0 z-10">
-                        <h2 class="text-base font-black text-slate-800 tracking-tight flex items-center gap-2"><i data-lucide="align-left" class="text-indigo-500 w-4 h-4"></i> Registro Attività</h2>
-                        <div class="flex items-center gap-1.5 bg-slate-50 rounded-lg p-1 border border-slate-200"><button onclick="prevWeek()" class="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-white rounded-md shadow-sm transition-colors border border-transparent hover:border-slate-200"><i data-lucide="chevron-left" class="w-4 h-4"></i></button><span id="week-display" class="text-[11px] font-bold text-slate-600 min-w-[130px] text-center uppercase tracking-wider"></span><button onclick="nextWeek()" class="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-white rounded-md shadow-sm transition-colors border border-transparent hover:border-slate-200"><i data-lucide="chevron-right" class="w-4 h-4"></i></button></div>
+                        <h2 class="text-base font-black text-slate-800 tracking-tight flex items-center gap-2"><i data-lucide="align-left" class="text-primary-500 w-4 h-4"></i> Registro Attività</h2>
+                        <div class="flex items-center gap-1.5 bg-slate-50 rounded-lg p-1 border border-slate-200"><button onclick="prevWeek()" class="p-1.5 text-slate-400 hover:text-primary-600 hover:bg-white rounded-md shadow-sm transition-colors border border-transparent hover:border-slate-200"><i data-lucide="chevron-left" class="w-4 h-4"></i></button><span id="week-display" class="text-[11px] font-bold text-slate-600 min-w-[130px] text-center uppercase tracking-wider"></span><button onclick="nextWeek()" class="p-1.5 text-slate-400 hover:text-primary-600 hover:bg-white rounded-md shadow-sm transition-colors border border-transparent hover:border-slate-200"><i data-lucide="chevron-right" class="w-4 h-4"></i></button></div>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm text-left hidden lg:table"><thead class="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold tracking-wider border-b border-slate-200"><tr><th class="px-5 py-4 font-bold">Data</th><th class="px-5 py-4 text-center font-bold">Team</th><th class="px-5 py-4 font-bold">Progetto</th><th class="px-5 py-4 font-bold">Attività / Note</th><th class="px-5 py-4 font-bold">Tempo</th><th class="px-5 py-4 admin-only text-right font-bold">Costo / Azioni</th></tr></thead><tbody id="entries-table-desktop" class="divide-y divide-slate-100"></tbody></table>
@@ -255,7 +303,7 @@
         </main>
 
         <nav class="lg:hidden fixed bottom-0 w-full bg-white border-t border-slate-200 flex justify-around p-2 pb-safe z-50 shadow-[0_-10px_20px_-10px_rgba(0,0,0,0.02)]">
-            <button onclick="switchAppTab('operate')" class="nav-btn text-indigo-600 flex flex-col items-center p-2 w-full active:scale-95 transition-all" data-tab="operate"><i data-lucide="clock" class="w-5 h-5 mb-1"></i><span class="text-[10px] font-bold uppercase tracking-wider">Lavoro</span></button>
+            <button onclick="switchAppTab('operate')" class="nav-btn text-primary-600 flex flex-col items-center p-2 w-full active:scale-95 transition-all" data-tab="operate"><i data-lucide="clock" class="w-5 h-5 mb-1"></i><span class="text-[10px] font-bold uppercase tracking-wider">Lavoro</span></button>
             <button onclick="switchAppTab('analyze')" class="nav-btn text-slate-400 admin-only flex flex-col items-center p-2 w-full active:scale-95 transition-all hover:text-slate-600" data-tab="analyze"><i data-lucide="pie-chart" class="w-5 h-5 mb-1"></i><span class="text-[10px] font-bold uppercase tracking-wider">Analisi</span></button>
             <button onclick="switchAppTab('manage')" class="nav-btn text-slate-400 admin-only flex flex-col items-center p-2 w-full active:scale-95 transition-all hover:text-slate-600" data-tab="manage"><i data-lucide="settings" class="w-5 h-5 mb-1"></i><span class="text-[10px] font-bold uppercase tracking-wider">Gestione</span></button>
         </nav>
@@ -287,32 +335,32 @@
             </div>
 
             <div class="border-t border-slate-100 pt-4 admin-only">
-                <h3 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2.5 flex items-center gap-1.5"><i data-lucide="image" class="w-3.5 h-3.5"></i> Identità Studio</h3>
+                <h3 id="lbl-identity-title" class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2.5 flex items-center gap-1.5"><i data-lucide="image" class="w-3.5 h-3.5"></i> Identità Studio</h3>
                 <div class="flex items-center gap-3 mb-3">
                     <div class="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center border border-dashed border-slate-300 overflow-hidden relative shrink-0">
                         <img id="account-logo-preview" class="force-hide w-full h-full object-contain z-10 bg-white">
                         <i data-lucide="upload-cloud" class="text-slate-400 absolute z-0 w-4 h-4"></i>
                     </div>
                     <div class="flex-1 overflow-hidden">
-                        <input type="file" accept="image/*" onchange="uploadLogo(event)" class="text-[10px] w-full file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-[10px] file:font-bold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer transition-colors">
+                        <input type="file" accept="image/*" onchange="uploadLogo(event)" class="text-[10px] w-full file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-[10px] file:font-bold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100 cursor-pointer transition-colors">
                     </div>
                 </div>
                 <div class="flex gap-2">
-                    <input type="text" id="account-studio-name" placeholder="Nome Studio" class="flex-1 border border-slate-200 rounded-xl p-2.5 text-sm outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all">
-                    <button onclick="saveStudioName()" class="bg-indigo-600 text-white px-3.5 rounded-xl hover:bg-indigo-700 transition-all shadow-sm flex items-center justify-center"><i data-lucide="save" class="w-4 h-4"></i></button>
+                    <input type="text" id="account-studio-name" placeholder="Nome Studio" class="flex-1 border border-slate-200 rounded-xl p-2.5 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all">
+                    <button onclick="saveStudioName()" class="bg-primary-600 text-white px-3.5 rounded-xl hover:bg-primary-700 transition-all shadow-sm flex items-center justify-center"><i data-lucide="save" class="w-4 h-4"></i></button>
                 </div>
                 
                 <div class="mt-4 pt-4 border-t border-slate-100 flex justify-between items-center">
                     <div>
-                        <p class="text-[11px] font-bold text-slate-700 uppercase tracking-wider">Catalogo Attività</p>
-                        <p class="text-[9px] text-slate-500 mt-0.5">Gestisci catalogo attività</p>
+                        <p id="lbl-catalog-title" class="text-[11px] font-bold text-slate-700 uppercase tracking-wider">Catalogo Attività</p>
+                        <p id="lbl-catalog-desc" class="text-[9px] text-slate-500 mt-0.5">Gestisci catalogo attività</p>
                     </div>
-                    <button onclick="openCatalogModal()" class="text-[10px] font-bold bg-white text-slate-600 border border-slate-200 px-3 py-2 rounded-lg hover:border-indigo-200 hover:text-indigo-600 hover:bg-indigo-50 flex items-center gap-1.5 shadow-sm transition-all"><i data-lucide="book-open" class="w-3.5 h-3.5"></i> Apri Catalogo</button>
+                    <button onclick="openCatalogModal()" class="text-[10px] font-bold bg-white text-slate-600 border border-slate-200 px-3 py-2 rounded-lg hover:border-primary-200 hover:text-primary-600 hover:bg-primary-50 flex items-center gap-1.5 shadow-sm transition-all"><i data-lucide="book-open" class="w-3.5 h-3.5"></i> Apri Catalogo</button>
                 </div>
             </div>
 
             <div class="border-t border-slate-100 mt-5 pt-4 text-center flex flex-col gap-2">
-                <button onclick="exportUserData()" class="text-[10px] font-bold uppercase tracking-wider text-indigo-500 hover:text-indigo-700 py-1.5 px-4 rounded-lg transition-all flex items-center justify-center gap-1.5 mx-auto mb-2"><i data-lucide="download" class="w-3.5 h-3.5"></i> Esporta i miei dati (JSON)</button>
+                <button onclick="exportUserData()" class="text-[10px] font-bold uppercase tracking-wider text-primary-500 hover:text-primary-700 py-1.5 px-4 rounded-lg transition-all flex items-center justify-center gap-1.5 mx-auto mb-2"><i data-lucide="download" class="w-3.5 h-3.5"></i> Esporta i miei dati (JSON)</button>
 
                 <button onclick="handleLogout()" class="text-[11px] font-bold uppercase tracking-wider text-slate-500 hover:text-slate-800 py-2 px-4 rounded-lg transition-all flex items-center justify-center gap-1.5 mx-auto"><i data-lucide="log-out" class="w-3.5 h-3.5"></i> Esci dall'account</button>
                 
@@ -325,14 +373,14 @@
         <div class="w-full max-w-md p-6 lg:p-8 shadow-xl border border-slate-200 rounded-2xl relative bg-white flex flex-col max-h-[90vh]">
             <button onclick="closeTaskBuilder()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>
             
-            <h2 class="text-lg font-black text-slate-800 tracking-tight mb-1 flex items-center gap-2"><i data-lucide="layers" class="text-indigo-500 w-5 h-5"></i> Costruttore Attività</h2>
+            <h2 class="text-lg font-black text-slate-800 tracking-tight mb-1 flex items-center gap-2"><i data-lucide="layers" class="text-primary-500 w-5 h-5"></i> Costruttore Attività</h2>
             <p class="text-[11px] text-slate-500 mb-6 uppercase tracking-wider font-bold">Aggiungi e ordina le fasi.</p>
             
             <div class="flex-1 overflow-y-auto mb-6 pr-2 space-y-6">
                 <div>
                     <div class="flex justify-between items-center mb-2.5">
                         <h3 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Attività Selezionate</h3>
-                        <span class="text-[9px] text-indigo-600 font-bold bg-indigo-50 px-1.5 py-0.5 rounded-md border border-indigo-100 uppercase tracking-wider">Ordine Salvato</span>
+                        <span class="text-[9px] text-primary-600 font-bold bg-primary-50 px-1.5 py-0.5 rounded-md border border-primary-100 uppercase tracking-wider">Ordine Salvato</span>
                     </div>
                     <div id="builder-selected-tasks" class="space-y-2 min-h-[60px] p-3.5 bg-slate-50 border border-slate-200 rounded-xl">
                     </div>
@@ -342,7 +390,7 @@
                     <div>
                         <div class="flex justify-between items-center mb-2.5">
                             <h3 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Aggiungi dal Catalogo</h3>
-                            <button onclick="openCatalogModal()" class="text-[9px] font-bold text-slate-500 hover:text-indigo-600 bg-white border border-slate-200 hover:border-indigo-200 hover:bg-indigo-50 px-2 py-1 rounded-md transition-all flex items-center gap-1 shadow-sm"><i data-lucide="settings" class="w-3 h-3"></i> Gestisci</button>
+                            <button onclick="openCatalogModal()" class="text-[9px] font-bold text-slate-500 hover:text-primary-600 bg-white border border-slate-200 hover:border-primary-200 hover:bg-primary-50 px-2 py-1 rounded-md transition-all flex items-center gap-1 shadow-sm"><i data-lucide="settings" class="w-3 h-3"></i> Gestisci</button>
                         </div>
                         <div id="builder-catalog-tasks" class="flex flex-wrap gap-1.5">
                         </div>
@@ -351,8 +399,8 @@
                     <div class="pt-4 border-t border-slate-100">
                         <h3 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">Creane una nuova al volo</h3>
                         <div class="flex gap-2">
-                            <input type="text" id="builder-new-task-input" placeholder="Es. Pratica Sismica" class="flex-1 border border-slate-200 rounded-xl p-3 text-sm outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all bg-white">
-                            <button onclick="addNewTaskFromBuilder()" class="bg-indigo-600 text-white px-4 rounded-xl hover:bg-indigo-700 transition-all shadow-sm font-bold text-sm flex items-center gap-1.5"><i data-lucide="plus" class="w-4 h-4"></i> Crea</button>
+                            <input type="text" id="builder-new-task-input" placeholder="Es. Lavoro Custom" class="flex-1 border border-slate-200 rounded-xl p-3 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all bg-white">
+                            <button onclick="addNewTaskFromBuilder()" class="bg-primary-600 text-white px-4 rounded-xl hover:bg-primary-700 transition-all shadow-sm font-bold text-sm flex items-center gap-1.5"><i data-lucide="plus" class="w-4 h-4"></i> Crea</button>
                         </div>
                     </div>
                 </div>
@@ -365,11 +413,11 @@
     <div id="modal-catalog" class="force-hide fixed inset-0 z-[300] modal flex items-center justify-center p-4">
         <div class="w-full max-w-lg p-6 lg:p-8 shadow-xl border border-slate-200 rounded-2xl relative bg-white">
             <button onclick="closeCatalogModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>
-            <h2 class="text-lg font-black text-slate-800 tracking-tight mb-1 flex items-center gap-2"><i data-lucide="book-open" class="text-indigo-500 w-5 h-5"></i> Catalogo Attività</h2>
-            <p class="text-[11px] text-slate-500 uppercase tracking-wider font-bold mb-6">Personalizza il vocabolario dello Studio.</p>
+            <h2 id="modal-catalog-title" class="text-lg font-black text-slate-800 tracking-tight mb-1 flex items-center gap-2"><i data-lucide="book-open" class="text-primary-500 w-5 h-5"></i> Catalogo Attività</h2>
+            <p id="modal-catalog-desc" class="text-[11px] text-slate-500 uppercase tracking-wider font-bold mb-6">Personalizza il vocabolario dello Studio.</p>
             <div class="flex gap-2 mb-6">
-                <input type="text" id="new-catalog-item" placeholder="Nuova attività" class="flex-1 border border-slate-200 rounded-xl p-3 text-sm outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all bg-white">
-                <button id="btn-add-catalog" onclick="addActivityToCatalog()" class="bg-indigo-600 text-white px-5 rounded-xl hover:bg-indigo-700 transition-all font-bold text-sm shadow-sm shrink-0">Aggiungi</button>
+                <input type="text" id="new-catalog-item" placeholder="Nuova attività" class="flex-1 border border-slate-200 rounded-xl p-3 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all bg-white">
+                <button id="btn-add-catalog" onclick="addActivityToCatalog()" class="bg-primary-600 text-white px-5 rounded-xl hover:bg-primary-700 transition-all font-bold text-sm shadow-sm shrink-0">Aggiungi</button>
                 <button id="btn-cancel-catalog" onclick="cancelCatalogEdit()" class="hidden bg-slate-100 text-slate-600 px-4 py-3 rounded-xl font-bold hover:bg-slate-200 shadow-sm text-sm transition-all border border-slate-200"><i data-lucide="x" class="w-4 h-4"></i></button>
             </div>
             <div class="max-h-[40vh] overflow-y-auto pr-2"><div id="catalog-manage-list" class="flex flex-wrap gap-1.5"></div></div>
@@ -379,10 +427,10 @@
     <div id="modal-templates" class="force-hide fixed inset-0 z-[100] modal flex items-center justify-center p-4">
         <div class="w-full max-w-xl p-6 lg:p-8 shadow-xl border border-slate-200 rounded-2xl relative bg-white">
             <button onclick="closeTemplatesModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>
-            <h2 class="text-lg font-black text-slate-800 tracking-tight mb-1 flex items-center gap-2"><i data-lucide="layers" class="text-indigo-500 w-5 h-5"></i> Template Progetti</h2>
-            <p class="text-[11px] text-slate-500 uppercase tracking-wider font-bold mb-6">Crea pacchetti per le commesse standard.</p>
+            <h2 id="modal-template-title" class="text-lg font-black text-slate-800 tracking-tight mb-1 flex items-center gap-2"><i data-lucide="layers" class="text-primary-500 w-5 h-5"></i> Template Progetti</h2>
+            <p class="text-[11px] text-slate-500 uppercase tracking-wider font-bold mb-6">Crea pacchetti per i lavori standard.</p>
             <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 shadow-sm mb-6">
-                <input type="text" id="new-template-name" placeholder="Nome Template (es. Ristrutturazione)" class="w-full border border-slate-200 bg-white rounded-xl p-3 text-sm outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all mb-4 text-slate-900">
+                <input type="text" id="new-template-name" placeholder="Nome Template (es. Ristrutturazione)" class="w-full border border-slate-200 bg-white rounded-xl p-3 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all mb-4 text-slate-900">
                 <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-2.5">Seleziona attività da includere:</span>
                 <div id="new-template-catalog-tasks" class="flex flex-wrap gap-1.5 mb-5"></div>
                 <div class="flex gap-2">
@@ -396,16 +444,16 @@
 
     <div id="modal-detail" class="force-hide fixed inset-0 z-[100] modal flex items-end lg:items-center justify-center lg:p-4"><div class="w-full h-[90vh] lg:h-auto lg:max-w-4xl lg:max-h-[90vh] overflow-y-auto p-6 lg:p-10 shadow-xl border border-slate-200 relative rounded-t-3xl lg:rounded-2xl bg-white"><button onclick="closeDetail()" class="absolute top-4 right-4 lg:top-6 lg:right-6 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors z-10"><i data-lucide="x"></i></button><div id="detail-content" class="mt-2 lg:mt-0"></div></div></div>
     
-    <div id="modal-manual" class="force-hide fixed inset-0 z-[100] modal flex items-center justify-center p-4"><div class="w-full max-w-md p-6 lg:p-8 shadow-xl border border-slate-200 rounded-2xl relative bg-white"><button onclick="closeManualEntry()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button><h2 class="text-lg font-black text-slate-800 tracking-tight mb-6">Inserimento Manuale</h2><div class="space-y-4"><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Progetto</label><select id="manual-project" onchange="updateManualTaskDropdown()" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all appearance-none"></select></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Attività</label><select id="manual-task" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all appearance-none"></select></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Note</label><input type="text" id="manual-notes" placeholder="Opzionale" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all"></div><div class="grid grid-cols-2 gap-4"><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Data</label><input type="date" id="manual-date" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all"></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Ore</label><input type="number" step="0.1" id="manual-hours" placeholder="0.0" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all"></div></div><button onclick="saveManualEntry()" class="w-full bg-slate-900 text-white py-3.5 mt-4 rounded-xl font-bold shadow-sm hover:bg-slate-800 transition-all active:scale-[0.98]">Salva Ore</button></div></div></div>
+    <div id="modal-manual" class="force-hide fixed inset-0 z-[100] modal flex items-center justify-center p-4"><div class="w-full max-w-md p-6 lg:p-8 shadow-xl border border-slate-200 rounded-2xl relative bg-white"><button onclick="closeManualEntry()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button><h2 class="text-lg font-black text-slate-800 tracking-tight mb-6">Inserimento Manuale</h2><div class="space-y-4"><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Progetto</label><select id="manual-project" onchange="updateManualTaskDropdown()" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none"></select></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Attività</label><select id="manual-task" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none"></select></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Note</label><input type="text" id="manual-notes" placeholder="Opzionale" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div><div class="grid grid-cols-2 gap-4"><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Data</label><input type="date" id="manual-date" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Ore</label><input type="number" step="0.1" id="manual-hours" placeholder="0.0" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div></div><button onclick="saveManualEntry()" class="w-full bg-slate-900 text-white py-3.5 mt-4 rounded-xl font-bold shadow-sm hover:bg-slate-800 transition-all active:scale-[0.98]">Salva Ore</button></div></div></div>
     
-    <div id="modal-edit-entry" class="force-hide fixed inset-0 z-[100] modal flex items-center justify-center p-4"><div class="w-full max-w-md p-6 lg:p-8 shadow-xl border border-slate-200 rounded-2xl relative bg-white"><button onclick="closeEditEntryModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button><h2 class="text-lg font-black text-slate-800 tracking-tight mb-6 flex items-center gap-2"><i data-lucide="edit" class="text-indigo-500 w-5 h-5"></i> Modifica Attività</h2><input type="hidden" id="edit-entry-id"><div class="space-y-4"><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Data</label><input type="date" id="edit-entry-date" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all"></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Team</label><select id="edit-entry-user" onchange="updateEditCost()" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all"></select></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Progetto</label><select id="edit-entry-project" onchange="updateEditTaskDropdown()" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all"></select></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Attività</label><select id="edit-entry-task" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all"></select></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Note</label><input type="text" id="edit-entry-notes" placeholder="Note" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all"></div><div class="grid grid-cols-2 gap-4"><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Ore</label><input type="number" step="0.1" id="edit-entry-hours" oninput="updateEditCost()" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all"></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Costo (€)</label><input type="number" id="edit-entry-cost" readonly class="w-full border border-slate-200 bg-slate-50 text-slate-500 font-bold rounded-xl p-3 text-sm outline-none"></div></div><button onclick="saveEntryEdit()" class="w-full bg-slate-900 text-white py-3.5 mt-4 rounded-xl font-bold shadow-sm hover:bg-slate-800 transition-all active:scale-[0.98]">Salva Modifiche</button></div></div></div>
+    <div id="modal-edit-entry" class="force-hide fixed inset-0 z-[100] modal flex items-center justify-center p-4"><div class="w-full max-w-md p-6 lg:p-8 shadow-xl border border-slate-200 rounded-2xl relative bg-white"><button onclick="closeEditEntryModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button><h2 class="text-lg font-black text-slate-800 tracking-tight mb-6 flex items-center gap-2"><i data-lucide="edit" class="text-primary-500 w-5 h-5"></i> Modifica Attività</h2><input type="hidden" id="edit-entry-id"><div class="space-y-4"><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Data</label><input type="date" id="edit-entry-date" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Team</label><select id="edit-entry-user" onchange="updateEditCost()" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></select></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Progetto</label><select id="edit-entry-project" onchange="updateEditTaskDropdown()" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></select></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Attività</label><select id="edit-entry-task" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></select></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Note</label><input type="text" id="edit-entry-notes" placeholder="Note" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div><div class="grid grid-cols-2 gap-4"><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Ore</label><input type="number" step="0.1" id="edit-entry-hours" oninput="updateEditCost()" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Costo (€)</label><input type="number" id="edit-entry-cost" readonly class="w-full border border-slate-200 bg-slate-50 text-slate-500 font-bold rounded-xl p-3 text-sm outline-none"></div></div><button onclick="saveEntryEdit()" class="w-full bg-slate-900 text-white py-3.5 mt-4 rounded-xl font-bold shadow-sm hover:bg-slate-800 transition-all active:scale-[0.98]">Salva Modifiche</button></div></div></div>
     
-    <div id="modal-edit-project" class="force-hide fixed inset-0 z-[100] modal flex items-center justify-center p-4"><div class="w-full max-w-md p-6 lg:p-8 shadow-xl border border-slate-200 rounded-2xl relative bg-white overflow-visible"><button onclick="closeEditProjectModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button><h2 class="text-lg font-black text-slate-800 tracking-tight mb-6 flex items-center gap-2"><i data-lucide="edit-3" class="text-indigo-500 w-5 h-5"></i> Modifica Progetto</h2><input type="hidden" id="edit-modal-proj-id"><div class="space-y-4"><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Nome Progetto</label><input type="text" id="edit-modal-name" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all"></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Cliente</label><input type="text" id="edit-modal-client" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all"></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Budget Totale</label><div class="flex gap-2 bg-white p-3 rounded-xl border border-slate-200 focus-within:border-indigo-500 focus-within:ring-4 focus-within:ring-indigo-500/10 transition-all"><span class="text-slate-400 font-bold text-sm">€</span><input type="number" id="edit-modal-budget" class="bg-transparent w-full outline-none text-sm font-bold text-slate-800"></div></div><div class="pt-5 mt-2 border-t border-slate-100"><div class="bg-white border border-slate-200 rounded-xl p-3.5 shadow-sm"><div class="flex justify-between items-center mb-2.5"><span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Attività Incluse</span><button onclick="openTaskBuilder('edit')" class="text-[10px] font-bold text-indigo-600 hover:text-indigo-700 bg-white border border-slate-200 hover:border-indigo-200 hover:bg-indigo-50 px-2 py-1 rounded-md transition-all flex items-center gap-1 shadow-sm"><i data-lucide="settings" class="w-3 h-3"></i> Configura</button></div><div id="edit-proj-selected-tasks" class="flex flex-wrap gap-1.5 min-h-[28px]"></div></div></div><button onclick="saveModalProjectEdit()" class="w-full bg-slate-900 text-white py-3.5 mt-4 rounded-xl font-bold shadow-sm hover:bg-slate-800 transition-all active:scale-[0.98]">Salva Modifiche</button></div></div></div>
+    <div id="modal-edit-project" class="force-hide fixed inset-0 z-[100] modal flex items-center justify-center p-4"><div class="w-full max-w-md p-6 lg:p-8 shadow-xl border border-slate-200 rounded-2xl relative bg-white overflow-visible"><button onclick="closeEditProjectModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button><h2 class="text-lg font-black text-slate-800 tracking-tight mb-6 flex items-center gap-2"><i data-lucide="edit-3" class="text-primary-500 w-5 h-5"></i> Modifica Dati</h2><input type="hidden" id="edit-modal-proj-id"><div class="space-y-4"><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Nome</label><input type="text" id="edit-modal-name" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Cliente</label><input type="text" id="edit-modal-client" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Budget Totale</label><div class="flex gap-2 bg-white p-3 rounded-xl border border-slate-200 focus-within:border-primary-500 focus-within:ring-4 focus-within:ring-primary-500/10 transition-all"><span class="text-slate-400 font-bold text-sm">€</span><input type="number" id="edit-modal-budget" class="bg-transparent w-full outline-none text-sm font-bold text-slate-800"></div></div><div class="pt-5 mt-2 border-t border-slate-100"><div class="bg-white border border-slate-200 rounded-xl p-3.5 shadow-sm"><div class="flex justify-between items-center mb-2.5"><span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Attività Incluse</span><button onclick="openTaskBuilder('edit')" class="text-[10px] font-bold text-primary-600 hover:text-primary-700 bg-white border border-slate-200 hover:border-primary-200 hover:bg-primary-50 px-2 py-1 rounded-md transition-all flex items-center gap-1 shadow-sm"><i data-lucide="settings" class="w-3 h-3"></i> Configura</button></div><div id="edit-proj-selected-tasks" class="flex flex-wrap gap-1.5 min-h-[28px]"></div></div></div><button onclick="saveModalProjectEdit()" class="w-full bg-slate-900 text-white py-3.5 mt-4 rounded-xl font-bold shadow-sm hover:bg-slate-800 transition-all active:scale-[0.98]">Salva Modifiche</button></div></div></div>
 
     <div id="modal-report" class="force-hide fixed inset-0 z-[100] modal flex items-center justify-center p-4">
         <div class="w-full max-w-sm p-6 lg:p-8 shadow-xl border border-slate-200 rounded-2xl relative bg-white">
             <button onclick="closeReportModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>
-            <h2 class="text-lg font-black text-slate-800 tracking-tight mb-2 flex items-center gap-2"><i data-lucide="file-text" class="text-indigo-500 w-5 h-5"></i> Report PDF</h2>
+            <h2 class="text-lg font-black text-slate-800 tracking-tight mb-2 flex items-center gap-2"><i data-lucide="file-text" class="text-primary-500 w-5 h-5"></i> Report PDF</h2>
             <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-6">Seleziona periodo.</p>
             <div id="report-modal-content"></div>
         </div>
@@ -414,27 +462,27 @@
     <div id="modal-team-report" class="force-hide fixed inset-0 z-[100] modal flex items-center justify-center p-4">
         <div class="w-full max-w-sm p-6 lg:p-8 shadow-xl border border-slate-200 rounded-2xl relative bg-white">
             <button onclick="closeTeamReportModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>
-            <h2 class="text-lg font-black text-slate-800 tracking-tight mb-2 flex items-center gap-2"><i data-lucide="users" class="text-indigo-500 w-5 h-5"></i> Report Team PDF</h2>
+            <h2 class="text-lg font-black text-slate-800 tracking-tight mb-2 flex items-center gap-2"><i data-lucide="users" class="text-primary-500 w-5 h-5"></i> Report Team PDF</h2>
             <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-6">Seleziona periodo e collaboratore.</p>
             <div id="team-report-modal-content">
                 <div class="space-y-4">
                     <div>
                         <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Collaboratore</label>
-                        <select id="team-report-user" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all appearance-none cursor-pointer text-slate-700">
+                        <select id="team-report-user" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none cursor-pointer text-slate-700">
                             <option value="all">Tutto il Team</option>
                         </select>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Dal</label>
-                            <input type="date" id="team-report-start" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all">
+                            <input type="date" id="team-report-start" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all">
                         </div>
                         <div>
                             <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Al</label>
-                            <input type="date" id="team-report-end" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all">
+                            <input type="date" id="team-report-end" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all">
                         </div>
                     </div>
-                    <button onclick="generateTeamPDFReport()" class="w-full bg-slate-900 text-white py-3.5 mt-2 rounded-xl font-bold hover:bg-slate-800 transition-all active:scale-[0.98] shadow-sm flex items-center justify-center gap-2"><i data-lucide="file-text" class="w-4 h-4"></i> Genera Report Team</button>
+                    <button onclick="generateTeamPDFReport()" class="w-full bg-slate-900 text-white py-3.5 mt-2 rounded-xl font-bold hover:bg-slate-800 transition-all active:scale-[0.98] shadow-sm flex items-center justify-center gap-2"><i data-lucide="file-text" class="w-4 h-4"></i> Genera Report</button>
                 </div>
             </div>
         </div>
@@ -444,7 +492,7 @@
         <div class="text-xs text-slate-300 leading-relaxed max-w-4xl">
             <strong>Informativa sui Cookie:</strong> Utilizziamo esclusivamente cookie tecnici strettamente necessari (Supabase e Stripe) per mantenere attiva la tua sessione, garantire la sicurezza del tuo account e gestire i pagamenti. Non utilizziamo cookie di profilazione o di tracciamento per scopi di marketing. Continuando a navigare, accetti il loro utilizzo come descritto nella nostra <a href="privacy.html" target="_blank" class="text-white font-bold hover:underline transition-all">Privacy Policy</a>.
         </div>
-        <button onclick="acceptCookies()" class="bg-indigo-600 text-white text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-xl hover:bg-indigo-500 transition-colors shadow-sm shrink-0 whitespace-nowrap active:scale-95">Ho capito</button>
+        <button onclick="acceptCookies()" class="bg-primary-600 text-white text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-xl hover:bg-primary-500 transition-colors shadow-sm shrink-0 whitespace-nowrap active:scale-95">Ho capito</button>
     </div>
 
     <div id="custom-dialog" class="force-hide fixed inset-0 z-[9999] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
@@ -452,7 +500,7 @@
             <div id="custom-dialog-icon" class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6"></div>
             <h2 id="custom-dialog-title" class="text-xl font-black text-slate-900 mb-2 tracking-tight"></h2>
             <p id="custom-dialog-msg" class="text-slate-500 text-sm mb-6 leading-relaxed"></p>
-            <input type="text" id="custom-dialog-input" class="force-hide w-full border border-slate-200 rounded-xl p-3 text-sm outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all mb-6 text-center font-bold">
+            <input type="text" id="custom-dialog-input" class="force-hide w-full border border-slate-200 rounded-xl p-3 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all mb-6 text-center font-bold">
             <div class="flex gap-3 justify-center w-full" id="custom-dialog-buttons"></div>
         </div>
     </div>
@@ -472,17 +520,98 @@
         let charts = { global: null, tasks: null };
         let activePlan = 'premium'; 
 
-        const DEFAULT_CATALOG = ["Sopralluogo", "Rilievo", "Progetto Preliminare", "Progetto Definitivo", "Progetto Esecutivo", "Direzione Lavori", "Pratica Comunale", "Computo Metrico", "Riunioni", "Generico"];
-        const DEFAULT_TEMPLATES = [{name: "Ristrutturazione", tasks: ["Sopralluogo", "Rilievo", "Progetto Preliminare", "Computo Metrico", "Pratica Comunale", "Direzione Lavori"]}];
+        // ------------------ LOGICA THEMES (WHITE LABELING) ------------------
+        let currentBusinessType = 'studio';
+        const THEMES = {
+            studio: {
+                appNameHtmlLanding: 'Arch <span class="text-primary-500">Time</span> Pro',
+                appNameHtmlHeader: 'ARCH <span class="text-primary-600">TIME</span> PRO',
+                managerLabel: 'Manager Studio',
+                studioNameLabel: 'Nome Studio',
+                identityTitle: 'Identità Studio',
+                catalogTitle: 'Catalogo Attività',
+                catalogDesc: 'Personalizza il vocabolario dello Studio.',
+                activeProjectsTitle: 'Progetti Attivi',
+                newProjectTitle: 'Nuovo Progetto',
+                templateModalTitle: 'Template Progetti',
+                defaultCatalog: ["Sopralluogo", "Rilievo", "Progetto Preliminare", "Progetto Definitivo", "Progetto Esecutivo", "Direzione Lavori", "Pratica Comunale", "Computo Metrico", "Riunioni", "Generico"],
+                defaultTemplates: [{name: "Ristrutturazione", tasks: ["Sopralluogo", "Rilievo", "Progetto Preliminare", "Computo Metrico", "Pratica Comunale", "Direzione Lavori"]}],
+                demoProject: 'Villa sul Lago',
+                demoClient: 'Famiglia Rossi',
+                demoTask: 'Sopralluogo',
+                demoExpense: 'Marche da bollo',
+                pdfColor: [79, 70, 229], // indigo-600
+                chartMainColor: '#4f46e5',
+                chartPalette: ['#312e81','#4338ca','#4f46e5','#6366f1','#818cf8']
+            },
+            impresa: {
+                appNameHtmlLanding: 'Build <span class="text-primary-500">Time</span> Pro',
+                appNameHtmlHeader: 'BUILD <span class="text-primary-600">TIME</span> PRO',
+                managerLabel: 'Titolare Impresa',
+                studioNameLabel: 'Ragione Sociale',
+                identityTitle: 'Identità Impresa',
+                catalogTitle: 'Lavorazioni Cantiere',
+                catalogDesc: 'Personalizza l\'elenco lavorazioni.',
+                activeProjectsTitle: 'Cantieri Attivi',
+                newProjectTitle: 'Nuovo Cantiere',
+                templateModalTitle: 'Template Cantieri',
+                defaultCatalog: ["Allestimento Cantiere", "Scavi e Demolizioni", "Opere Murarie", "Impianto Idraulico", "Impianto Elettrico", "Posa Pavimenti", "Tinteggiatura", "Cartongesso", "Riunioni", "Generico"],
+                defaultTemplates: [{name: "Ristrutturazione Bagno", tasks: ["Scavi e Demolizioni", "Impianto Idraulico", "Opere Murarie", "Posa Pavimenti", "Tinteggiatura"]}],
+                demoProject: 'Cantiere Via Roma',
+                demoClient: 'Condominio Roma',
+                demoTask: 'Allestimento Cantiere',
+                demoExpense: 'Materiale Edile',
+                pdfColor: [217, 119, 6], // amber-600
+                chartMainColor: '#d97706',
+                chartPalette: ['#78350f','#b45309','#d97706','#f59e0b','#fbbf24']
+            }
+        };
+
+        function applyTheme(type) {
+            currentBusinessType = type;
+            const theme = THEMES[type];
+            
+            if (type === 'impresa') {
+                document.body.classList.add('theme-impresa');
+            } else {
+                document.body.classList.remove('theme-impresa');
+            }
+
+            const els = {
+                'landing-title': theme.appNameHtmlLanding,
+                'header-title': theme.appNameHtmlHeader,
+                'lbl-new-project': `<i data-lucide="folder-plus" class="text-primary-500 w-5 h-5"></i> ${theme.newProjectTitle}`,
+                'lbl-active-projects': theme.activeProjectsTitle,
+                'lbl-identity-title': `<i data-lucide="image" class="w-3.5 h-3.5"></i> ${theme.identityTitle}`,
+                'lbl-catalog-title': theme.catalogTitle,
+                'lbl-catalog-desc': theme.catalogDesc,
+                'modal-catalog-title': `<i data-lucide="book-open" class="text-primary-500 w-5 h-5"></i> ${theme.catalogTitle}`,
+                'modal-catalog-desc': theme.catalogDesc,
+                'modal-template-title': `<i data-lucide="layers" class="text-primary-500 w-5 h-5"></i> ${theme.templateModalTitle}`,
+                'account-role': userProfile?.role === 'admin' ? theme.managerLabel : 'Collaboratore'
+            };
+
+            for (let id in els) {
+                let el = document.getElementById(id);
+                if (el) el.innerHTML = els[id];
+            }
+            
+            let studioInput = document.getElementById('account-studio-name');
+            if(studioInput) studioInput.placeholder = theme.studioNameLabel;
+            
+            let timerProjLbl = document.getElementById('lbl-timer-project');
+            if(timerProjLbl) timerProjLbl.innerText = type === 'impresa' ? 'Cantiere' : 'Progetto';
+
+            lucide.createIcons();
+        }
+        // ----------------------------------------------------------------------
+
         let activityCatalog = [], projectTemplates = [], newProjectTasks = [], editProjectTasks = [], newTemplateTasks = [];
         let editingTemplateIndex = null; 
         let editingCatalogTask = null; 
-
-        // VARIABILI TASK BUILDER
         let taskBuilderMode = 'new';
         let tempBuilderTasks = [];
 
-        // CUSTOM DIALOG SYSTEM
         function showCustomDialog(options) {
             return new Promise((resolve) => {
                 const modal = document.getElementById('custom-dialog');
@@ -503,7 +632,7 @@
                     iconEl.className = "w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 bg-emerald-50 text-emerald-600 border border-emerald-100";
                     iconEl.innerHTML = '<i data-lucide="check-circle" class="w-8 h-8"></i>';
                 } else {
-                    iconEl.className = "w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 bg-indigo-50 text-indigo-600 border border-indigo-100";
+                    iconEl.className = "w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 bg-primary-50 text-primary-600 border border-primary-100";
                     iconEl.innerHTML = '<i data-lucide="info" class="w-8 h-8"></i>';
                 }
 
@@ -531,7 +660,7 @@
                     btnsEl.appendChild(btnCancel);
 
                     const btnOk = document.createElement('button');
-                    btnOk.className = `flex-1 text-white py-3 rounded-xl font-bold transition-all shadow-sm active:scale-95 text-sm ${options.type === 'danger' ? 'bg-red-600 hover:bg-red-700' : 'bg-indigo-600 hover:bg-indigo-700'}`;
+                    btnOk.className = `flex-1 text-white py-3 rounded-xl font-bold transition-all shadow-sm active:scale-95 text-sm ${options.type === 'danger' ? 'bg-red-600 hover:bg-red-700' : 'bg-primary-600 hover:bg-primary-700'}`;
                     btnOk.innerText = "Conferma";
                     btnOk.onclick = () => {
                         if(options.prompt) closeAndResolve(inputEl.value.trim());
@@ -572,7 +701,7 @@
             document.getElementById('btn-auth').innerText = isSignupMode ? "Crea Account Utente" : "Accedi ora"; 
         }
         
-        function toggleInviteInput() { const type = document.querySelector('input[name="account-type"]:checked').value; document.getElementById('invite-code-container').classList.toggle('force-hide', type === 'admin'); const trialInfo = document.getElementById('trial-info-container'); if (trialInfo) trialInfo.classList.toggle('force-hide', type !== 'admin'); }
+        function toggleInviteInput() { const type = document.querySelector('input[name="account-type"]:checked').value; document.getElementById('invite-code-container').classList.toggle('force-hide', type !== 'staff'); const trialInfo = document.getElementById('trial-info-container'); if (trialInfo) trialInfo.classList.toggle('force-hide', type === 'staff'); }
         
         const urlParams = new URLSearchParams(window.location.search);
         if(urlParams.get('invite')) { switchAuthTab('signup'); document.querySelectorAll('input[name="account-type"]').forEach(input => { if(input.value === 'staff') input.checked = true; }); document.getElementById('invite-code-input').value = urlParams.get('invite'); toggleInviteInput(); }
@@ -586,12 +715,19 @@
                 const acceptTerms = document.getElementById('accept-terms').checked;
                 if(!acceptTerms) return await appAlert("Attenzione", "Devi accettare i Termini di Servizio e la Privacy Policy per registrarti.", "danger");
                 
-                const type = document.querySelector('input[name="account-type"]:checked').value; 
+                const rawType = document.querySelector('input[name="account-type"]:checked').value; 
+                const isStaff = rawType === 'staff';
+                const role = isStaff ? 'staff' : 'admin';
+                const businessType = rawType === 'admin-impresa' ? 'impresa' : 'studio';
                 const code = document.getElementById('invite-code-input').value.trim();
                 
-                if(type === 'staff' && !code) return await appAlert("Attenzione", "Inserisci il codice invito!", "danger");
+                if(isStaff && !code) return await appAlert("Attenzione", "Inserisci il codice invito!", "danger");
                 
-                const { error } = await supabaseClient.auth.signUp({ email, password, options: { data: { full_name: fullName, role: type, studio_id: type === 'staff' ? code : null } } });
+                const { error } = await supabaseClient.auth.signUp({ 
+                    email, password, 
+                    options: { data: { full_name: fullName, role: role, business_type: businessType, studio_id: isStaff ? code : null } } 
+                });
+                
                 if(error) await appAlert("Errore", error.message, "danger"); else { await appAlert("Ottimo!", "Registrazione OK!", "success"); switchAuthTab('login'); }
             } else { 
                 const { error } = await supabaseClient.auth.signInWithPassword({ email, password }); 
@@ -599,40 +735,22 @@
             }
         }
 
-        // COOKIE BANNER
         function checkCookies() {
-            if (!localStorage.getItem('cookie_consent_archtime')) {
-                document.getElementById('cookie-banner').classList.remove('force-hide');
-            }
+            if (!localStorage.getItem('cookie_consent_archtime')) { document.getElementById('cookie-banner').classList.remove('force-hide'); }
         }
         function acceptCookies() {
-            localStorage.setItem('cookie_consent_archtime', 'true');
-            document.getElementById('cookie-banner').classList.add('force-hide');
+            localStorage.setItem('cookie_consent_archtime', 'true'); document.getElementById('cookie-banner').classList.add('force-hide');
         }
         document.addEventListener('DOMContentLoaded', checkCookies);
 
-        // ESPORTAZIONE DATI (GDPR DATA PORTABILITY)
         async function exportUserData() {
             if(!userProfile) return await appAlert("Errore", "Utente non trovato.", "danger");
             try {
-                const exportData = {
-                    profile: userProfile,
-                    studio: userProfile.role === 'admin' ? studioData : "Non autorizzato a scaricare dati completi dello Studio.",
-                    projects: projects,
-                    entries: entries,
-                    expenses: expenses,
-                    exportDate: new Date().toISOString()
-                };
+                const exportData = { profile: userProfile, studio: userProfile.role === 'admin' ? studioData : "Dati Studio non accessibili.", projects: projects, entries: entries, expenses: expenses, exportDate: new Date().toISOString() };
                 const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
-                const downloadAnchorNode = document.createElement('a');
-                downloadAnchorNode.setAttribute("href", dataStr);
-                downloadAnchorNode.setAttribute("download", "ArchTimePro_Export_" + userProfile.full_name.replace(/\s+/g, '_') + ".json");
-                document.body.appendChild(downloadAnchorNode);
-                downloadAnchorNode.click();
-                downloadAnchorNode.remove();
-            } catch (err) {
-                await appAlert("Errore", "Errore durante l'esportazione: " + err.message, "danger");
-            }
+                const downloadAnchorNode = document.createElement('a'); downloadAnchorNode.setAttribute("href", dataStr); downloadAnchorNode.setAttribute("download", "Export_" + userProfile.full_name.replace(/\s+/g, '_') + ".json");
+                document.body.appendChild(downloadAnchorNode); downloadAnchorNode.click(); downloadAnchorNode.remove();
+            } catch (err) { await appAlert("Errore", "Errore: " + err.message, "danger"); }
         }
 
         function redirectToStripe(plan) { 
@@ -642,13 +760,12 @@
         }
         function showPaywall() { document.getElementById('auth-container').classList.add('force-hide'); document.getElementById('app-container').classList.add('force-hide'); document.getElementById('paywall-container').classList.remove('force-hide'); lucide.createIcons(); }
         
-        function openUpgradeModal(featureName) { document.getElementById('upgrade-message').innerText = `La funzione ${featureName} è riservata agli studi con il piano Premium. Passa al livello superiore per lavorare senza limiti.`; document.getElementById('modal-upgrade').classList.remove('force-hide'); if (document.getElementById('modal-detail')) document.getElementById('modal-detail').classList.add('force-hide'); if (document.getElementById('modal-report')) document.getElementById('modal-report').classList.add('force-hide'); if (document.getElementById('modal-team-report')) document.getElementById('modal-team-report').classList.add('force-hide'); }
+        function openUpgradeModal(featureName) { document.getElementById('upgrade-message').innerText = `La funzione ${featureName} è riservata agli abbonamenti Premium.`; document.getElementById('modal-upgrade').classList.remove('force-hide'); if (document.getElementById('modal-detail')) document.getElementById('modal-detail').classList.add('force-hide'); if (document.getElementById('modal-report')) document.getElementById('modal-report').classList.add('force-hide'); if (document.getElementById('modal-team-report')) document.getElementById('modal-team-report').classList.add('force-hide'); }
         function closeUpgradeModal() { document.getElementById('modal-upgrade').classList.add('force-hide'); }
 
         function openAccountModal() {
             document.getElementById('account-name').innerText = userProfile.full_name;
             document.getElementById('account-email').innerText = userProfile.email;
-            document.getElementById('account-role').innerText = userProfile.role === 'admin' ? 'Manager Studio' : 'Collaboratore';
             
             if(userProfile.role === 'admin') {
                 document.getElementById('account-plan-name').innerText = activePlan.toUpperCase();
@@ -661,44 +778,28 @@
         function closeAccountModal() { document.getElementById('modal-account').classList.add('force-hide'); }
 
         async function deleteAccount() {
-            if(await appConfirm("Eliminazione Account", "ATTENZIONE: Stai per eliminare definitivamente il tuo account. Se sei un Manager, eliminerai anche l'intero Studio, inclusi tutti i progetti, i report e i dati dei collaboratori.\n\nQuesta operazione è IRREVERSIBILE. Vuoi procedere?", "danger")) {
+            const warning = currentBusinessType === 'impresa' ? "Se sei il Titolare, eliminerai anche l'intera Impresa, tutti i cantieri e i dati." : "Se sei il Manager, eliminerai anche l'intero Studio, tutti i progetti e i dati.";
+            if(await appConfirm("Eliminazione Account", `ATTENZIONE: Stai per eliminare il tuo account. ${warning}\nQuesta operazione è IRREVERSIBILE. Vuoi procedere?`, "danger")) {
                 const check = await appPrompt("Conferma di sicurezza", "Scrivi ELIMINA per confermare la cancellazione:", "ELIMINA");
                 if(check === "ELIMINA") {
                     const { error } = await supabaseClient.rpc('delete_user_account');
-                    if(error) await appAlert("Errore", "Errore durante l'eliminazione: " + error.message, "danger");
-                    else {
-                        await supabaseClient.auth.signOut();
-                        await appAlert("Account Eliminato", "Il tuo account e tutti i dati associati sono stati eliminati correttamente.", "success");
-                        location.reload();
-                    }
-                } else if(check !== null) {
-                    await appAlert("Annullato", "Operazione annullata.", "info");
-                }
+                    if(error) await appAlert("Errore", error.message, "danger"); else { await supabaseClient.auth.signOut(); await appAlert("Account Eliminato", "Tutti i dati sono stati eliminati.", "success"); location.reload(); }
+                } else if(check !== null) { await appAlert("Annullato", "Operazione annullata.", "info"); }
             }
         }
 
         async function handlePlanChange(targetPlan) {
             if (targetPlan === 'starter') {
                 const activeCount = projects.filter(p => !p.is_archived).length;
-                if (activeCount > 5) {
-                    await appAlert("Attenzione", `Il piano Starter ha un limite di 5 progetti attivi. Attualmente ne hai ${activeCount}.\nArchivia o elimina almeno ${activeCount - 5} progetti prima di effettuare il downgrade.`, "danger");
-                    return;
-                }
+                if (activeCount > 5) { return await appAlert("Attenzione", `Il piano Starter ha un limite di 5 lavori attivi. Ne hai ${activeCount}.\nArchivia o elimina i lavori in eccesso.`, "danger"); }
             }
-            if(STRIPE_CUSTOMER_PORTAL && STRIPE_CUSTOMER_PORTAL.includes('http')) window.location.href = STRIPE_CUSTOMER_PORTAL;
-            else redirectToStripe(targetPlan);
+            if(STRIPE_CUSTOMER_PORTAL && STRIPE_CUSTOMER_PORTAL.includes('http')) window.location.href = STRIPE_CUSTOMER_PORTAL; else redirectToStripe(targetPlan);
         }
 
         async function saveStudioName() { const name = document.getElementById('account-studio-name').value.trim(); if(!name) return; await supabaseClient.from('studios').update({ name }).eq('id', userProfile.studio_id); if(studioData) studioData.name = name; await appAlert("Fatto", "Nome aggiornato!", "success"); }
-        async function uploadLogo(event) { const file = event.target.files[0]; if(!file) return; const fileExt = file.name.split('.').pop(); const filePath = `${userProfile.studio_id}_logo.${fileExt}`; const { error: uploadError } = await supabaseClient.storage.from('studio-logos').upload(filePath, file, { upsert: true }); if(uploadError) return await appAlert("Errore", "Errore caricamento: " + uploadError.message, "danger"); const { data: { publicUrl } } = supabaseClient.storage.from('studio-logos').getPublicUrl(filePath); await supabaseClient.from('studios').update({ logo_url: publicUrl }).eq('id', userProfile.studio_id); if(studioData) studioData.logo_url = publicUrl; document.getElementById('account-logo-preview').src = publicUrl; document.getElementById('account-logo-preview').classList.remove('force-hide'); document.getElementById('header-logo').src = publicUrl; document.getElementById('header-logo').classList.remove('force-hide'); }
+        async function uploadLogo(event) { const file = event.target.files[0]; if(!file) return; const fileExt = file.name.split('.').pop(); const filePath = `${userProfile.studio_id}_logo.${fileExt}`; const { error: uploadError } = await supabaseClient.storage.from('studio-logos').upload(filePath, file, { upsert: true }); if(uploadError) return await appAlert("Errore", uploadError.message, "danger"); const { data: { publicUrl } } = supabaseClient.storage.from('studio-logos').getPublicUrl(filePath); await supabaseClient.from('studios').update({ logo_url: publicUrl }).eq('id', userProfile.studio_id); if(studioData) studioData.logo_url = publicUrl; document.getElementById('account-logo-preview').src = publicUrl; document.getElementById('account-logo-preview').classList.remove('force-hide'); document.getElementById('header-logo').src = publicUrl; document.getElementById('header-logo').classList.remove('force-hide'); }
 
-        function openTaskBuilder(mode) {
-            taskBuilderMode = mode;
-            tempBuilderTasks = mode === 'new' ? [...newProjectTasks] : [...editProjectTasks];
-            renderTaskBuilder();
-            document.getElementById('modal-task-builder').classList.remove('force-hide');
-        }
-        
+        function openTaskBuilder(mode) { taskBuilderMode = mode; tempBuilderTasks = mode === 'new' ? [...newProjectTasks] : [...editProjectTasks]; renderTaskBuilder(); document.getElementById('modal-task-builder').classList.remove('force-hide'); }
         function closeTaskBuilder() { document.getElementById('modal-task-builder').classList.add('force-hide'); }
 
         function renderTaskBuilder() {
@@ -707,21 +808,20 @@
             else {
                 selectedContainer.innerHTML = tempBuilderTasks.map((task, idx) => `
                     <div class="flex justify-between items-center bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm tag-enter">
-                        <span class="text-xs font-bold text-slate-700 flex items-center gap-2.5"><span class="text-[10px] text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-100 font-black">${idx + 1}</span> ${task}</span>
+                        <span class="text-xs font-bold text-slate-700 flex items-center gap-2.5"><span class="text-[10px] text-primary-600 bg-primary-50 px-2 py-0.5 rounded-md border border-primary-100 font-black">${idx + 1}</span> ${task}</span>
                         <div class="flex items-center gap-0.5">
-                            ${idx > 0 ? `<button onclick="moveTaskBuilder(${idx}, -1)" class="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-slate-50 rounded-lg transition-colors"><i data-lucide="chevron-up" class="w-4 h-4"></i></button>` : `<div class="w-7"></div>`}
-                            ${idx < tempBuilderTasks.length - 1 ? `<button onclick="moveTaskBuilder(${idx}, 1)" class="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-slate-50 rounded-lg transition-colors"><i data-lucide="chevron-down" class="w-4 h-4"></i></button>` : `<div class="w-7"></div>`}
+                            ${idx > 0 ? `<button onclick="moveTaskBuilder(${idx}, -1)" class="p-1.5 text-slate-400 hover:text-primary-600 hover:bg-slate-50 rounded-lg transition-colors"><i data-lucide="chevron-up" class="w-4 h-4"></i></button>` : `<div class="w-7"></div>`}
+                            ${idx < tempBuilderTasks.length - 1 ? `<button onclick="moveTaskBuilder(${idx}, 1)" class="p-1.5 text-slate-400 hover:text-primary-600 hover:bg-slate-50 rounded-lg transition-colors"><i data-lucide="chevron-down" class="w-4 h-4"></i></button>` : `<div class="w-7"></div>`}
                             <div class="w-[1px] h-4 bg-slate-200 mx-1.5"></div>
                             <button onclick="removeTaskBuilder(${idx})" class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                         </div>
                     </div>
                 `).join('');
             }
-
             const catalogContainer = document.getElementById('builder-catalog-tasks');
             catalogContainer.innerHTML = activityCatalog.map(task => {
                 if(tempBuilderTasks.includes(task)) return '';
-                return `<button onclick="addTaskBuilder('${task}')" class="bg-white border border-slate-200 text-slate-600 hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700 px-3 py-2 rounded-xl text-[11px] font-bold tracking-wide transition-all shadow-sm tag-enter"><i data-lucide="plus" class="w-3 h-3 inline-block mr-1"></i>${task}</button>`;
+                return `<button onclick="addTaskBuilder('${task}')" class="bg-white border border-slate-200 text-slate-600 hover:border-primary-300 hover:bg-primary-50 hover:text-primary-700 px-3 py-2 rounded-xl text-[11px] font-bold tracking-wide transition-all shadow-sm tag-enter"><i data-lucide="plus" class="w-3 h-3 inline-block mr-1"></i>${task}</button>`;
             }).join('');
             lucide.createIcons();
         }
@@ -732,9 +832,7 @@
         function confirmTaskBuilder() { if(taskBuilderMode === 'new') { newProjectTasks = [...tempBuilderTasks]; renderNewProjectUI(); } else { editProjectTasks = [...tempBuilderTasks]; renderEditProjectTasks(); } closeTaskBuilder(); }
         
         async function addNewTaskFromBuilder() {
-            const input = document.getElementById('builder-new-task-input');
-            const val = input.value.trim();
-            if(!val) return;
+            const input = document.getElementById('builder-new-task-input'); const val = input.value.trim(); if(!val) return;
             if(!activityCatalog.includes(val)) { activityCatalog.push(val); syncCatalogAndTemplatesToDB(); }
             if(!tempBuilderTasks.includes(val)) { tempBuilderTasks.push(val); }
             input.value = ''; renderTaskBuilder();
@@ -751,6 +849,20 @@
 
                     const status = studioData?.subscription_status || 'trialing';
                     activePlan = studioData?.plan_type || 'premium'; 
+
+                    // GESTIONE TEMA E VOCABOLARIO (WHITE LABELING)
+                    let bType = 'studio';
+                    if (userProfile.role === 'admin') {
+                        bType = user?.user_metadata?.business_type || 'studio';
+                        // Salva nel db studio se non c'è ancora
+                        if (studioData && !studioData.business_type) {
+                            await supabaseClient.from('studios').update({ business_type: bType }).eq('id', studioData.id);
+                            studioData.business_type = bType;
+                        }
+                    } else {
+                        bType = studioData?.business_type || 'studio';
+                    }
+                    applyTheme(bType);
                     
                     if (status === 'canceled' || status === 'past_due' || status === 'inactive') { showPaywall(); return; }
 
@@ -760,16 +872,16 @@
                     if (status === 'active') {
                         trialBadge.classList.add('force-hide'); planBadge.innerText = activePlan === 'starter' ? 'STARTER' : 'PREMIUM'; planBadge.classList.remove('force-hide');
                     } else {
-                        const createdAt = new Date(studioData.created_at || new Date()); const expireDate = new Date(createdAt.getTime() + 15 * 24 * 60 * 60 * 1000); const daysLeft = Math.ceil((expireDate.getTime() - Date.now()) / (1000 * 3600 * 24));
+                        const createdAt = new Date(studioData?.created_at || new Date()); const expireDate = new Date(createdAt.getTime() + 15 * 24 * 60 * 60 * 1000); const daysLeft = Math.ceil((expireDate.getTime() - Date.now()) / (1000 * 3600 * 24));
                         if (daysLeft > 0) {
-                            trialBadge.innerText = `PROVA: ${daysLeft} GG`; trialBadge.className = daysLeft <= 3 ? "admin-only text-[9px] bg-red-50 text-red-600 border-red-200 px-1.5 py-0.5 rounded-md font-bold border whitespace-nowrap" : "admin-only text-[9px] bg-indigo-50 text-indigo-600 border-indigo-200 px-1.5 py-0.5 rounded-md font-bold border whitespace-nowrap"; trialBadge.classList.remove('force-hide'); planBadge.innerText = 'TUTTO SBLOCCATO'; planBadge.classList.remove('force-hide');
+                            trialBadge.innerText = `PROVA: ${daysLeft} GG`; trialBadge.className = daysLeft <= 3 ? "admin-only text-[9px] bg-red-50 text-red-600 border-red-200 px-1.5 py-0.5 rounded-md font-bold border whitespace-nowrap" : "admin-only text-[9px] bg-primary-50 text-primary-600 border-primary-200 px-1.5 py-0.5 rounded-md font-bold border whitespace-nowrap"; trialBadge.classList.remove('force-hide'); planBadge.innerText = 'TUTTO SBLOCCATO'; planBadge.classList.remove('force-hide');
                         } else { showPaywall(); return; }
                     }
 
                     if(profile.role === 'admin') {
                         document.body.classList.add('is-admin');
-                        activityCatalog = studioData?.activity_catalog ? studioData.activity_catalog : [...DEFAULT_CATALOG];
-                        projectTemplates = studioData?.project_templates ? studioData.project_templates : [...DEFAULT_TEMPLATES];
+                        activityCatalog = studioData?.activity_catalog ? studioData.activity_catalog : [...THEMES[currentBusinessType].defaultCatalog];
+                        projectTemplates = studioData?.project_templates ? studioData.project_templates : [...THEMES[currentBusinessType].defaultTemplates];
                         if(studioData) {
                             document.getElementById('account-studio-name').value = studioData.name || '';
                             if(studioData.logo_url) { document.getElementById('account-logo-preview').src = studioData.logo_url; document.getElementById('account-logo-preview').classList.remove('force-hide'); document.getElementById('header-logo').src = studioData.logo_url; document.getElementById('header-logo').classList.remove('force-hide'); }
@@ -777,7 +889,6 @@
                     }
 
                     document.getElementById('user-display').innerText = profile.full_name;
-                    
                     document.getElementById('auth-container').classList.add('force-hide'); document.getElementById('app-container').classList.remove('force-hide');
                     initApp();
                 } else if (error) await appAlert("Errore", "Errore accesso database.", "danger");
@@ -785,8 +896,8 @@
         }
 
         async function handleLogout() { await supabaseClient.auth.signOut(); location.reload(); }
-        function switchAppTab(tabName) { document.querySelectorAll('.mobile-tab').forEach(el => el.classList.toggle('active', el.dataset.tab === tabName)); document.querySelectorAll('.nav-btn').forEach(btn => { btn.classList.toggle('text-indigo-600', btn.dataset.tab === tabName); btn.classList.toggle('text-slate-400', btn.dataset.tab !== tabName); }); if(tabName === 'analyze' && userProfile.role === 'admin') setTimeout(renderStrategicCharts, 50); window.scrollTo(0, 0); }
-        async function generateInviteLink() { await navigator.clipboard.writeText(userProfile.studio_id); await appAlert("Fatto", "Codice Studio copiato negli appunti! Condividilo col tuo team.", "success"); }
+        function switchAppTab(tabName) { document.querySelectorAll('.mobile-tab').forEach(el => el.classList.toggle('active', el.dataset.tab === tabName)); document.querySelectorAll('.nav-btn').forEach(btn => { btn.classList.toggle('text-primary-600', btn.dataset.tab === tabName); btn.classList.toggle('text-slate-400', btn.dataset.tab !== tabName); }); if(tabName === 'analyze' && userProfile.role === 'admin') setTimeout(renderStrategicCharts, 50); window.scrollTo(0, 0); }
+        async function generateInviteLink() { await navigator.clipboard.writeText(userProfile.studio_id); await appAlert("Fatto", "Codice copiato negli appunti! Condividilo col tuo team.", "success"); }
 
         async function initApp() {
             lucide.createIcons();
@@ -800,7 +911,7 @@
                 const btnHeaderPdf = document.getElementById('btn-header-pdf');
                 if(btnHeaderPdf) { btnHeaderPdf.onclick = () => openUpgradeModal('Report PDF Cumulativi'); btnHeaderPdf.classList.add('locked-feature'); }
                 const btnManageTemplates = document.getElementById('btn-manage-templates');
-                if(btnManageTemplates) { btnManageTemplates.onclick = () => openUpgradeModal('Template Progetti'); btnManageTemplates.classList.add('locked-feature'); btnManageTemplates.innerHTML = '<i data-lucide="lock" class="w-4 h-4"></i>'; }
+                if(btnManageTemplates) { btnManageTemplates.onclick = () => openUpgradeModal('Template dei Lavori'); btnManageTemplates.classList.add('locked-feature'); btnManageTemplates.innerHTML = '<i data-lucide="lock" class="w-4 h-4"></i>'; }
             }
             lucide.createIcons();
         }
@@ -808,11 +919,14 @@
         async function checkAndGenerateDemoData() {
             if (projects.length === 0 && (!studioData || studioData.demo_generated !== true)) {
                 await supabaseClient.from('studios').update({ demo_generated: true }).eq('id', userProfile.studio_id);
-                const { data: pData } = await supabaseClient.from('projects').insert([ { studio_id: userProfile.studio_id, name: 'Villa sul Lago', client: 'Famiglia Rossi', budget: 15000, tasks: ['Sopralluogo', 'Rilievo', 'Progetto Preliminare'] }, { studio_id: userProfile.studio_id, name: 'Attico Centro', client: 'Bianchi Srl', budget: 3500, tasks: ['Rilievo', 'Pratica Comunale'] } ]).select();
+                const t = THEMES[currentBusinessType];
+                const { data: pData } = await supabaseClient.from('projects').insert([ 
+                    { studio_id: userProfile.studio_id, name: t.demoProject, client: t.demoClient, budget: 15000, tasks: [t.demoTask, 'Riunioni'] } 
+                ]).select();
                 if(pData && pData.length > 0) {
                     const rate = profiles.find(p=>p.id===userProfile.id)?.hourly_cost || 50;
-                    await supabaseClient.from('entries').insert([ { studio_id: userProfile.studio_id, project_id: pData[0].id, project_name: pData[0].name, task: 'Sopralluogo', duration: 4, rate: rate*4, user_name: userProfile.full_name, user_email: userProfile.email, created_at: new Date().toISOString() } ]);
-                    await supabaseClient.from('expenses').insert([ { studio_id: userProfile.studio_id, project_id: pData[0].id, description: 'Marche da bollo', amount: 150.00, user_name: userProfile.full_name, created_at: new Date().toISOString() } ]);
+                    await supabaseClient.from('entries').insert([ { studio_id: userProfile.studio_id, project_id: pData[0].id, project_name: pData[0].name, task: t.demoTask, duration: 4, rate: rate*4, user_name: userProfile.full_name, user_email: userProfile.email, created_at: new Date().toISOString() } ]);
+                    await supabaseClient.from('expenses').insert([ { studio_id: userProfile.studio_id, project_id: pData[0].id, description: t.demoExpense, amount: 150.00, user_name: userProfile.full_name, created_at: new Date().toISOString() } ]);
                 }
                 await fetchProjects(); await fetchEntries(); await fetchExpenses();
             }
@@ -826,7 +940,7 @@
         function renderProfiles() {
             document.getElementById('team-list').innerHTML = profiles.map(pr => {
                 const isMe = pr.id === userProfile.id;
-                return `<div class="p-5 border border-slate-200 rounded-2xl bg-white flex flex-col gap-4 shadow-sm"><div><input type="text" id="name-${pr.id}" value="${pr.full_name || ''}" class="bg-transparent font-black text-slate-800 text-sm w-full outline-none border-b border-transparent focus:border-indigo-500 pb-1 transition-colors"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">${pr.email}</p></div><div class="flex items-center justify-between gap-2 mt-1"><select id="role-${pr.id}" class="text-[11px] font-bold bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 outline-none uppercase text-slate-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"><option value="staff" ${pr.role==='staff'?'selected':''}>Staff</option><option value="admin" ${pr.role==='admin'?'selected':''}>Admin</option></select><div class="flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 flex-1 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-500/20 transition-all"><span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">€/h</span><input type="number" id="cost-${pr.id}" value="${pr.hourly_cost}" class="w-full text-sm text-center font-black bg-transparent outline-none text-slate-800"></div><div class="flex gap-1.5 shrink-0"><button onclick="updateTeamMember('${pr.id}')" class="bg-slate-900 text-white p-2.5 rounded-xl hover:bg-slate-800 transition-all shadow-sm active:scale-95"><i data-lucide="save" class="w-4 h-4"></i></button>${!isMe ? `<button onclick="deleteTeamMember('${pr.id}')" class="bg-white text-slate-400 p-2.5 rounded-xl border border-slate-200 hover:bg-red-50 hover:border-red-200 hover:text-red-600 transition-colors shadow-sm active:scale-95"><i data-lucide="trash-2" class="w-4 h-4"></i></button>` : ''}</div></div></div>`;
+                return `<div class="p-5 border border-slate-200 rounded-2xl bg-white flex flex-col gap-4 shadow-sm"><div><input type="text" id="name-${pr.id}" value="${pr.full_name || ''}" class="bg-transparent font-black text-slate-800 text-sm w-full outline-none border-b border-transparent focus:border-primary-500 pb-1 transition-colors"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">${pr.email}</p></div><div class="flex items-center justify-between gap-2 mt-1"><select id="role-${pr.id}" class="text-[11px] font-bold bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 outline-none uppercase text-slate-600 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"><option value="staff" ${pr.role==='staff'?'selected':''}>Staff</option><option value="admin" ${pr.role==='admin'?'selected':''}>Admin</option></select><div class="flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 flex-1 focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500/20 transition-all"><span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">€/h</span><input type="number" id="cost-${pr.id}" value="${pr.hourly_cost}" class="w-full text-sm text-center font-black bg-transparent outline-none text-slate-800"></div><div class="flex gap-1.5 shrink-0"><button onclick="updateTeamMember('${pr.id}')" class="bg-slate-900 text-white p-2.5 rounded-xl hover:bg-slate-800 transition-all shadow-sm active:scale-95"><i data-lucide="save" class="w-4 h-4"></i></button>${!isMe ? `<button onclick="deleteTeamMember('${pr.id}')" class="bg-white text-slate-400 p-2.5 rounded-xl border border-slate-200 hover:bg-red-50 hover:border-red-200 hover:text-red-600 transition-colors shadow-sm active:scale-95"><i data-lucide="trash-2" class="w-4 h-4"></i></button>` : ''}</div></div></div>`;
             }).join('');
             lucide.createIcons();
         }
@@ -835,7 +949,7 @@
 
         function openCatalogModal() { document.getElementById('modal-catalog').classList.remove('force-hide'); }
         function closeCatalogModal() { document.getElementById('modal-catalog').classList.add('force-hide'); cancelCatalogEdit(); }
-        function openTemplatesModal() { if(activePlan === 'starter') return openUpgradeModal('Template Progetti'); document.getElementById('modal-templates').classList.remove('force-hide'); }
+        function openTemplatesModal() { if(activePlan === 'starter') return openUpgradeModal('Gestione Template'); document.getElementById('modal-templates').classList.remove('force-hide'); }
         function closeTemplatesModal() { document.getElementById('modal-templates').classList.add('force-hide'); cancelEditTemplate(); }
 
         async function syncCatalogAndTemplatesToDB() { if(!studioData) return; await supabaseClient.from('studios').update({ activity_catalog: activityCatalog, project_templates: projectTemplates }).eq('id', userProfile.studio_id); }
@@ -845,7 +959,7 @@
                 <div class="flex items-center gap-1.5 bg-slate-50 text-slate-700 px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-bold tracking-wide tag-enter shadow-sm">
                     ${task} 
                     <div class="flex items-center gap-1 border-l border-slate-200 pl-1.5 ml-1">
-                        <button onclick="editCatalogTask('${task}')" class="text-slate-400 hover:text-indigo-600 focus:outline-none transition-colors"><i data-lucide="edit-2" class="w-3.5 h-3.5"></i></button>
+                        <button onclick="editCatalogTask('${task}')" class="text-slate-400 hover:text-primary-600 focus:outline-none transition-colors"><i data-lucide="edit-2" class="w-3.5 h-3.5"></i></button>
                         <button onclick="removeActivityFromCatalog('${task}')" class="text-slate-400 hover:text-red-500 focus:outline-none transition-colors"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
                     </div>
                 </div>
@@ -857,29 +971,21 @@
             if(btnAddCat) { btnAddCat.innerText = isEditCat ? "Aggiorna" : "Aggiungi"; }
             if(btnCancelCat) { isEditCat ? btnCancelCat.classList.remove('hidden') : btnCancelCat.classList.add('hidden'); }
 
-            document.getElementById('new-template-catalog-tasks').innerHTML = activityCatalog.map(task => { const isSelected = newTemplateTasks.includes(task); return `<button onclick="toggleTaskInNewTemplate('${task}')" class="px-3 py-1.5 rounded-lg border text-xs font-bold transition-all shadow-sm tag-enter ${isSelected ? 'bg-indigo-50 border-indigo-200 text-indigo-700' : 'bg-white border-slate-200 text-slate-600 hover:border-indigo-300 hover:text-indigo-600'}">${task}</button>`; }).join('');
+            document.getElementById('new-template-catalog-tasks').innerHTML = activityCatalog.map(task => { const isSelected = newTemplateTasks.includes(task); return `<button onclick="toggleTaskInNewTemplate('${task}')" class="px-3 py-1.5 rounded-lg border text-xs font-bold transition-all shadow-sm tag-enter ${isSelected ? 'bg-primary-50 border-primary-200 text-primary-700' : 'bg-white border-slate-200 text-slate-600 hover:border-primary-300 hover:text-primary-600'}">${task}</button>`; }).join('');
             
-            document.getElementById('templates-manage-list').innerHTML = projectTemplates.map((tpl, i) => `<div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex justify-between items-start group tag-enter"><div><h4 class="font-black text-sm text-slate-800 mb-2 tracking-tight">${tpl.name}</h4><div class="flex flex-wrap gap-1.5">${tpl.tasks.map(t=>`<span class="text-[10px] bg-slate-50 text-slate-500 font-bold px-2 py-0.5 rounded-md border border-slate-200 uppercase tracking-wider">${t}</span>`).join('')}</div></div><div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"><button onclick="editTemplate(${i})" class="text-slate-400 hover:text-indigo-600 p-1.5 hover:bg-slate-50 rounded-lg transition-colors"><i data-lucide="edit-2" class="w-4 h-4"></i></button><button onclick="removeTemplate(${i})" class="text-slate-400 hover:text-red-600 p-1.5 hover:bg-slate-50 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div></div>`).join('');
+            document.getElementById('templates-manage-list').innerHTML = projectTemplates.map((tpl, i) => `<div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex justify-between items-start group tag-enter"><div><h4 class="font-black text-sm text-slate-800 mb-2 tracking-tight">${tpl.name}</h4><div class="flex flex-wrap gap-1.5">${tpl.tasks.map(t=>`<span class="text-[10px] bg-slate-50 text-slate-500 font-bold px-2 py-0.5 rounded-md border border-slate-200 uppercase tracking-wider">${t}</span>`).join('')}</div></div><div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"><button onclick="editTemplate(${i})" class="text-slate-400 hover:text-primary-600 p-1.5 hover:bg-slate-50 rounded-lg transition-colors"><i data-lucide="edit-2" class="w-4 h-4"></i></button><button onclick="removeTemplate(${i})" class="text-slate-400 hover:text-red-600 p-1.5 hover:bg-slate-50 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div></div>`).join('');
             
             const isEditTpl = editingTemplateIndex !== null;
             const btnSaveTpl = document.getElementById('btn-save-template');
             const btnCancelTpl = document.getElementById('btn-cancel-edit-template');
-            if(btnSaveTpl) { btnSaveTpl.innerText = isEditTpl ? "Aggiorna Template" : "Salva Nuovo Template"; }
+            if(btnSaveTpl) { btnSaveTpl.innerText = isEditTpl ? "Aggiorna" : "Salva Nuovo"; }
             if(btnCancelTpl) { isEditTpl ? btnCancelTpl.classList.remove('hidden') : btnCancelTpl.classList.add('hidden'); }
             
             lucide.createIcons(); renderNewProjectUI();
         }
 
-        function editCatalogTask(task) {
-            editingCatalogTask = task;
-            document.getElementById('new-catalog-item').value = task;
-            renderCatalogAndTemplatesUI();
-        }
-        function cancelCatalogEdit() {
-            editingCatalogTask = null;
-            document.getElementById('new-catalog-item').value = '';
-            renderCatalogAndTemplatesUI();
-        }
+        function editCatalogTask(task) { editingCatalogTask = task; document.getElementById('new-catalog-item').value = task; renderCatalogAndTemplatesUI(); }
+        function cancelCatalogEdit() { editingCatalogTask = null; document.getElementById('new-catalog-item').value = ''; renderCatalogAndTemplatesUI(); }
 
         async function addActivityToCatalog() { 
             const val = document.getElementById('new-catalog-item').value.trim(); 
@@ -889,51 +995,27 @@
                 if (val !== editingCatalogTask && !activityCatalog.includes(val)) {
                     const idx = activityCatalog.indexOf(editingCatalogTask);
                     if (idx !== -1) activityCatalog[idx] = val;
-                    
-                    projectTemplates.forEach(tpl => {
-                        const tIdx = tpl.tasks.indexOf(editingCatalogTask);
-                        if(tIdx !== -1) tpl.tasks[tIdx] = val;
-                    });
-                    
+                    projectTemplates.forEach(tpl => { const tIdx = tpl.tasks.indexOf(editingCatalogTask); if(tIdx !== -1) tpl.tasks[tIdx] = val; });
                     let ntIdx = newTemplateTasks.indexOf(editingCatalogTask); if(ntIdx !== -1) newTemplateTasks[ntIdx] = val;
                     let npIdx = newProjectTasks.indexOf(editingCatalogTask); if(npIdx !== -1) newProjectTasks[npIdx] = val;
                     let epIdx = editProjectTasks.indexOf(editingCatalogTask); if(epIdx !== -1) editProjectTasks[epIdx] = val;
                     let tbIdx = tempBuilderTasks.indexOf(editingCatalogTask); if(tbIdx !== -1) tempBuilderTasks[tbIdx] = val;
-
-                    editingCatalogTask = null;
-                    document.getElementById('new-catalog-item').value = '';
-                    renderCatalogAndTemplatesUI();
+                    editingCatalogTask = null; document.getElementById('new-catalog-item').value = ''; renderCatalogAndTemplatesUI();
                     if(!document.getElementById('modal-task-builder').classList.contains('force-hide')) renderTaskBuilder();
                     await syncCatalogAndTemplatesToDB();
-                } else if (val === editingCatalogTask) { 
-                    cancelCatalogEdit(); 
-                } else { 
-                    await appAlert("Attenzione", "Questa attività esiste già nel catalogo.", "danger"); 
-                }
+                } else if (val === editingCatalogTask) { cancelCatalogEdit(); } 
+                else { await appAlert("Attenzione", "Questa voce esiste già nel catalogo.", "danger"); }
             } else {
-                if(activityCatalog.includes(val)) return await appAlert("Attenzione", "Attività già presente.", "danger"); 
-                activityCatalog.push(val); 
-                document.getElementById('new-catalog-item').value = ''; 
-                renderCatalogAndTemplatesUI(); 
-                await syncCatalogAndTemplatesToDB(); 
+                if(activityCatalog.includes(val)) return await appAlert("Attenzione", "Voce già presente.", "danger"); 
+                activityCatalog.push(val); document.getElementById('new-catalog-item').value = ''; renderCatalogAndTemplatesUI(); await syncCatalogAndTemplatesToDB(); 
             }
         }
 
         async function removeActivityFromCatalog(task) { 
-            if(await appConfirm("Elimina Attività", `Sei sicuro di voler eliminare l'attività "${task}" dal catalogo?\n(Verrà rimossa automaticamente anche dai Template che la utilizzano).`, "danger")) {
+            if(await appConfirm("Elimina Voce", `Sei sicuro di voler eliminare "${task}" dal catalogo?\n(Verrà rimossa automaticamente anche dai Template che la utilizzano).`, "danger")) {
                 if (editingCatalogTask === task) cancelCatalogEdit();
-                
-                activityCatalog = activityCatalog.filter(t => t !== task); 
-                newTemplateTasks = newTemplateTasks.filter(t => t !== task); 
-                newProjectTasks = newProjectTasks.filter(t => t !== task);
-                editProjectTasks = editProjectTasks.filter(t => t !== task);
-                tempBuilderTasks = tempBuilderTasks.filter(t => t !== task);
-                
-                projectTemplates.forEach(tpl => { tpl.tasks = tpl.tasks.filter(t => t !== task); });
-                
-                renderCatalogAndTemplatesUI(); 
-                if(!document.getElementById('modal-task-builder').classList.contains('force-hide')) renderTaskBuilder();
-                await syncCatalogAndTemplatesToDB(); 
+                activityCatalog = activityCatalog.filter(t => t !== task); newTemplateTasks = newTemplateTasks.filter(t => t !== task); newProjectTasks = newProjectTasks.filter(t => t !== task); editProjectTasks = editProjectTasks.filter(t => t !== task); tempBuilderTasks = tempBuilderTasks.filter(t => t !== task); projectTemplates.forEach(tpl => { tpl.tasks = tpl.tasks.filter(t => t !== task); });
+                renderCatalogAndTemplatesUI(); if(!document.getElementById('modal-task-builder').classList.contains('force-hide')) renderTaskBuilder(); await syncCatalogAndTemplatesToDB(); 
             }
         }
 
@@ -945,8 +1027,7 @@
             const name = document.getElementById('new-template-name').value.trim(); 
             if(!name || newTemplateTasks.length === 0) return await appAlert("Attenzione", "Inserisci un nome e seleziona almeno un'attività.", "danger"); 
             if(editingTemplateIndex !== null) { projectTemplates[editingTemplateIndex] = { name: name, tasks: [...newTemplateTasks] }; editingTemplateIndex = null; } else { projectTemplates.push({ name: name, tasks: [...newTemplateTasks] }); }
-            document.getElementById('new-template-name').value = ''; newTemplateTasks = []; 
-            renderCatalogAndTemplatesUI(); await syncCatalogAndTemplatesToDB(); 
+            document.getElementById('new-template-name').value = ''; newTemplateTasks = []; renderCatalogAndTemplatesUI(); await syncCatalogAndTemplatesToDB(); 
         }
         
         async function removeTemplate(index) { if(await appConfirm("Elimina Template", "Sei sicuro di voler eliminare questo template? L'operazione non può essere annullata.", "danger")) { if(editingTemplateIndex === index) cancelEditTemplate(); projectTemplates.splice(index, 1); renderCatalogAndTemplatesUI(); await syncCatalogAndTemplatesToDB(); } }
@@ -960,7 +1041,7 @@
             const selectedContainer = document.getElementById('new-proj-selected-tasks');
             if (selectedContainer) {
                 if (newProjectTasks.length === 0) selectedContainer.innerHTML = '<span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider py-1 block">Nessuna attività configurata.</span>';
-                else selectedContainer.innerHTML = newProjectTasks.map((task, idx) => `<span class="inline-block bg-indigo-50 text-indigo-700 text-[10px] font-bold px-2 py-1 rounded-lg border border-indigo-100 uppercase tracking-wider">${idx+1}. ${task}</span>`).join('');
+                else selectedContainer.innerHTML = newProjectTasks.map((task, idx) => `<span class="inline-block bg-primary-50 text-primary-700 text-[10px] font-bold px-2 py-1 rounded-lg border border-primary-100 uppercase tracking-wider">${idx+1}. ${task}</span>`).join('');
             }
             lucide.createIcons();
         }
@@ -970,14 +1051,14 @@
         async function createNewProject() {
             if (activePlan === 'starter') {
                 const activeCount = projects.filter(p => p.is_archived !== true).length;
-                if (activeCount >= 5) return openUpgradeModal('Creazione Progetti Illimitati');
+                if (activeCount >= 5) return openUpgradeModal('Lavori Illimitati');
             }
             const name = document.getElementById('new-proj-name').value.trim(); const client = document.getElementById('new-proj-client').value.trim(); const budget = parseFloat(document.getElementById('new-proj-budget').value) || 0;
-            if(!name) return await appAlert("Attenzione", "Inserisci il nome del progetto", "danger"); 
-            if(newProjectTasks.length === 0) return await appAlert("Attenzione", "Configura almeno un'attività per il progetto", "danger");
+            if(!name) return await appAlert("Attenzione", "Inserisci il nome del lavoro", "danger"); 
+            if(newProjectTasks.length === 0) return await appAlert("Attenzione", "Configura almeno un'attività", "danger");
             await supabaseClient.from('projects').insert([{ name: name, client: client, budget: budget, tasks: [...newProjectTasks], studio_id: userProfile.studio_id }]);
             document.getElementById('new-proj-name').value = ""; document.getElementById('new-proj-client').value = ""; document.getElementById('new-proj-budget').value = ""; document.getElementById('new-proj-template').value = ""; newProjectTasks = [];
-            renderNewProjectUI(); fetchProjects(); await appAlert("Fatto", "Progetto Creato!", "success"); switchAppTab('operate');
+            renderNewProjectUI(); fetchProjects(); await appAlert("Fatto", "Lavoro Creato!", "success"); switchAppTab('operate');
         }
 
         function updateTaskDropdown() { const idx = document.getElementById('project-select').value; const taskSel = document.getElementById('task-select'); if(idx === "") return taskSel.innerHTML = '<option disabled selected>Seleziona...</option>'; const p = projects[idx]; taskSel.innerHTML = (p.tasks || []).length > 0 ? p.tasks.map(t => `<option value="${t}">${t}</option>`).join('') : '<option value="Generico">Generico</option>'; }
@@ -996,21 +1077,19 @@
 
         async function toggleTimer() {
             const pIdx = document.getElementById('project-select').value; const tVal = document.getElementById('task-select').value; const notes = document.getElementById('timer-notes').value.trim();
-            if(pIdx === "") return await appAlert("Attenzione", "Scegli un progetto prima di avviare il timer!", "danger");
+            if(pIdx === "") return await appAlert("Attenzione", "Scegli un lavoro prima di avviare il timer!", "danger");
             if (!timerRunning) {
                 timerRunning = true; startTime = Date.now();
                 await supabaseClient.from('profiles').update({ active_timer_start: startTime.toString(), active_timer_project: pIdx, active_timer_task: tVal, active_timer_notes: notes }).eq('id', userProfile.id);
                 document.getElementById('btn-text').innerText = "FERMA E SALVA"; document.getElementById('btn-icon').setAttribute("data-lucide", "square"); 
-                document.getElementById('btn-toggle-timer').classList.replace('bg-slate-900', 'bg-red-500');
-                document.getElementById('btn-toggle-timer').classList.replace('hover:bg-slate-800', 'hover:bg-red-600');
+                document.getElementById('btn-toggle-timer').classList.replace('bg-slate-900', 'bg-red-500'); document.getElementById('btn-toggle-timer').classList.replace('hover:bg-slate-800', 'hover:bg-red-600');
                 timerInterval = setInterval(() => { const d = new Date(Date.now() - startTime); document.getElementById('timer-display').innerText = `${String(d.getUTCHours()).padStart(2,'0')}:${String(d.getUTCMinutes()).padStart(2,'0')}:${String(d.getUTCSeconds()).padStart(2,'0')}`; }, 1000);
             } else {
                 timerRunning = false; clearInterval(timerInterval);
                 await supabaseClient.from('profiles').update({ active_timer_start: null, active_timer_project: null, active_timer_task: null, active_timer_notes: null }).eq('id', userProfile.id);
                 saveEntry(projects[pIdx], tVal, (Date.now() - startTime) / 3600000, null, document.getElementById('timer-notes').value.trim());
                 document.getElementById('timer-display').innerText = "00:00:00"; document.getElementById('timer-notes').value = ""; document.getElementById('btn-text').innerText = "AVVIA ORA"; document.getElementById('btn-icon').setAttribute("data-lucide", "play-circle"); 
-                document.getElementById('btn-toggle-timer').classList.replace('bg-red-500', 'bg-slate-900');
-                document.getElementById('btn-toggle-timer').classList.replace('hover:bg-red-600', 'hover:bg-slate-800');
+                document.getElementById('btn-toggle-timer').classList.replace('bg-red-500', 'bg-slate-900'); document.getElementById('btn-toggle-timer').classList.replace('hover:bg-red-600', 'hover:bg-slate-800');
             }
             lucide.createIcons();
         }
@@ -1022,7 +1101,7 @@
             await supabaseClient.from('entries').insert([payload]); fetchEntries();
         }
 
-        function openManualEntry() { document.getElementById('modal-manual').classList.remove('force-hide'); document.getElementById('manual-date').valueAsDate = new Date(); document.getElementById('manual-project').innerHTML = '<option value="" disabled selected>Scegli Progetto</option>' + projects.filter(p => !p.is_archived).map((p, i) => `<option value="${projects.indexOf(p)}">${p.name}</option>`).join(''); }
+        function openManualEntry() { document.getElementById('modal-manual').classList.remove('force-hide'); document.getElementById('manual-date').valueAsDate = new Date(); document.getElementById('manual-project').innerHTML = '<option value="" disabled selected>Scegli...</option>' + projects.filter(p => !p.is_archived).map((p, i) => `<option value="${projects.indexOf(p)}">${p.name}</option>`).join(''); }
         function closeManualEntry() { document.getElementById('modal-manual').classList.add('force-hide'); }
         function updateManualTaskDropdown() { const p = projects[document.getElementById('manual-project').value]; document.getElementById('manual-task').innerHTML = (p.tasks || []).map(t => `<option value="${t}">${t}</option>`).join('') || '<option value="Generico">Generico</option>'; }
         async function saveManualEntry() { const pIdx = document.getElementById('manual-project').value; const h = parseFloat(document.getElementById('manual-hours').value); const d = document.getElementById('manual-date').value; const t = document.getElementById('manual-task').value; const n = document.getElementById('manual-notes').value.trim(); if(!pIdx || !h || !d) return await appAlert("Attenzione", "Completa tutti i dati obbligatori!", "danger"); await saveEntry(projects[pIdx], t, h, d, n); document.getElementById('manual-notes').value = ""; closeManualEntry(); }
@@ -1053,24 +1132,18 @@
 
         async function saveEntryEdit() {
             const id = document.getElementById('edit-entry-id').value; const dateVal = document.getElementById('edit-entry-date').value; const userVal = document.getElementById('edit-entry-user').value; const projId = document.getElementById('edit-entry-project').value; const taskVal = document.getElementById('edit-entry-task').value; const notesVal = document.getElementById('edit-entry-notes').value.trim(); const hoursVal = parseFloat(document.getElementById('edit-entry-hours').value); const costVal = parseFloat(document.getElementById('edit-entry-cost').value);
-            if (!dateVal || isNaN(hoursVal) || isNaN(costVal) || !projId) return await appAlert("Attenzione", "Compila tutti i campi correttamente!", "danger");
+            if (!dateVal || isNaN(hoursVal) || isNaN(costVal) || !projId) return await appAlert("Attenzione", "Compila tutti i campi!", "danger");
             const selectedProj = projects.find(p => p.id === projId); const projName = selectedProj ? selectedProj.name : document.getElementById('edit-entry-project').options[document.getElementById('edit-entry-project').selectedIndex].text;
             await supabaseClient.from('entries').update({ created_at: new Date(`${dateVal}T12:00:00Z`).toISOString(), user_name: userVal, project_id: projId, project_name: projName, task: taskVal, notes: notesVal, duration: hoursVal, rate: costVal }).eq('id', id); 
             closeEditEntryModal(); fetchEntries();
         }
 
-        async function deleteEntry(id) { if(await appConfirm("Elimina Attività", "Vuoi eliminare definitivamente questa singola attività dal registro?", "danger")) { await supabaseClient.from('entries').delete().eq('id', id); fetchEntries(); } }
+        async function deleteEntry(id) { if(await appConfirm("Elimina", "Rimuovere definitivamente questa voce?", "danger")) { await supabaseClient.from('entries').delete().eq('id', id); fetchEntries(); } }
 
         function renderProjects() {
             const container = document.getElementById('projects-list');
-            
             let visibleProjects = projects.filter(p => showArchived ? true : p.is_archived !== true);
-            visibleProjects.sort((a, b) => {
-                if (a.is_archived && !b.is_archived) return 1;
-                if (!a.is_archived && b.is_archived) return -1;
-                return 0; 
-            });
-
+            visibleProjects.sort((a, b) => { if (a.is_archived && !b.is_archived) return 1; if (!a.is_archived && b.is_archived) return -1; return 0; });
             document.getElementById('project-select').innerHTML = '<option value="" disabled selected>-- Seleziona --</option>' + projects.filter(p => !p.is_archived).map((p, i) => `<option value="${projects.indexOf(p)}">${p.name}</option>`).join('');
 
             container.innerHTML = visibleProjects.map((p, idx) => {
@@ -1078,18 +1151,17 @@
                 const costExp = expenses.filter(ex => ex.project_id === p.id).reduce((s,ex) => s + Number(ex.amount||0), 0);
                 const totalCost = costHrs + costExp;
                 let perc = p.budget > 0 ? (totalCost/p.budget*100) : 0;
-                
-                let color = perc > 90 ? 'bg-red-500' : (perc > 75 ? 'bg-amber-400' : 'bg-indigo-500');
+                let color = perc > 90 ? 'bg-red-500' : (perc > 75 ? 'bg-amber-400' : 'bg-primary-500');
                 
                 return `<div class="bg-white border border-slate-200 p-5 lg:p-6 shadow-sm hover:shadow-md rounded-2xl cursor-pointer relative group transition-shadow ${p.is_archived ? 'is-archived' : ''}" onclick="showProjectDetail('${p.id}')"><div class="flex justify-between items-start mb-4"><div><h3 class="font-black text-slate-800 text-base lg:text-lg tracking-tight">${p.name}</h3><p class="text-[9px] lg:text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">${p.client || 'Interno'}</p></div><div class="admin-only opacity-100 lg:opacity-0 group-hover:opacity-100 flex gap-1 bg-white lg:bg-transparent rounded-lg shadow-sm lg:shadow-none p-1 lg:p-0"><button onclick="event.stopPropagation(); toggleArchive('${p.id}', ${p.is_archived})" class="p-1.5 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"><i data-lucide="archive" class="w-4 h-4"></i></button><button onclick="event.stopPropagation(); deleteProject('${p.id}')" class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div></div><div class="flex justify-between text-[10px] uppercase font-bold tracking-wider text-slate-500 mb-2"><span>Speso: €${totalCost.toFixed(0)}</span><span>Target: €${p.budget}</span></div><div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden"><div class="${color} h-full transition-all duration-1000" style="width: ${perc > 100 ? 100 : perc}%"></div></div></div>`;
             }).join('');
             lucide.createIcons();
         }
 
-        async function addExpense(projId) { const desc = document.getElementById('exp-desc').value.trim(); const amt = parseFloat(document.getElementById('exp-amount').value); if(!desc || isNaN(amt)) return await appAlert("Attenzione", "Inserisci descrizione e importo della spesa.", "danger"); const { error } = await supabaseClient.from('expenses').insert([{ project_id: projId, studio_id: userProfile.studio_id, description: desc, amount: amt, user_name: userProfile.full_name }]); if(error) await appAlert("Errore", "Errore: " + error.message, "danger"); else { await fetchExpenses(); showProjectDetail(projId); } }
+        async function addExpense(projId) { const desc = document.getElementById('exp-desc').value.trim(); const amt = parseFloat(document.getElementById('exp-amount').value); if(!desc || isNaN(amt)) return await appAlert("Attenzione", "Inserisci dati spesa.", "danger"); const { error } = await supabaseClient.from('expenses').insert([{ project_id: projId, studio_id: userProfile.studio_id, description: desc, amount: amt, user_name: userProfile.full_name }]); if(error) await appAlert("Errore", error.message, "danger"); else { await fetchExpenses(); showProjectDetail(projId); } }
         async function deleteExpense(id, projId) { if(await appConfirm("Elimina Spesa", "Vuoi eliminare questa spesa?", "danger")) { await supabaseClient.from('expenses').delete().eq('id', id); await fetchExpenses(); showProjectDetail(projId); } }
         async function toggleArchive(id, status) { await supabaseClient.from('projects').update({ is_archived: !status }).eq('id', id); fetchProjects(); }
-        async function deleteProject(id) { if(await appConfirm("Elimina Progetto", "Vuoi eliminare definitivamente questo progetto e tutto il suo storico?", "danger")) { await supabaseClient.from('projects').delete().eq('id', id); fetchProjects(); } }
+        async function deleteProject(id) { if(await appConfirm("Elimina Definitivamente", "Rimuovere il lavoro e tutto lo storico?", "danger")) { await supabaseClient.from('projects').delete().eq('id', id); fetchProjects(); } }
         function toggleViewArchived() { showArchived = !showArchived; document.getElementById('toggle-archived-btn').innerText = showArchived ? "Nascondi Archiviati" : "Archivio"; renderProjects(); }
 
         function showProjectDetail(id) {
@@ -1103,15 +1175,15 @@
             pEntries.forEach(e => { const taskName = e.task || 'Altro'; if(!taskStats[taskName]) taskStats[taskName] = { h: 0, c: 0 }; taskStats[taskName].h += Number(e.duration || 0); taskStats[taskName].c += Number(e.rate || 0); const member = e.user_name || e.user_email.split('@')[0]; if(!teamStats[member]) teamStats[member] = { h: 0, c: 0 }; teamStats[member].h += Number(e.duration || 0); teamStats[member].c += Number(e.rate || 0); });
 
             let btnPdfHtml = activePlan === 'starter' 
-                ? `<button onclick="openUpgradeModal('Esportazione PDF Singolo')" class="text-xs font-bold bg-white text-slate-400 border border-slate-200 px-3.5 py-2.5 rounded-xl flex items-center justify-center gap-2 transition opacity-60 shadow-sm"><i data-lucide="lock" class="w-4 h-4"></i> Report PDF</button>`
-                : `<button onclick="exportProjectPDF('${p.id}')" class="text-xs font-bold bg-white text-indigo-600 border border-slate-200 px-3.5 py-2.5 rounded-xl hover:border-indigo-200 hover:bg-indigo-50 flex items-center justify-center gap-2 shadow-sm transition-all"><i data-lucide="file-text" class="w-4 h-4"></i> Esporta in PDF</button>`;
+                ? `<button onclick="openUpgradeModal('Report PDF Singolo')" class="text-xs font-bold bg-white text-slate-400 border border-slate-200 px-3.5 py-2.5 rounded-xl flex items-center justify-center gap-2 transition opacity-60 shadow-sm"><i data-lucide="lock" class="w-4 h-4"></i> Report PDF</button>`
+                : `<button onclick="exportProjectPDF('${p.id}')" class="text-xs font-bold bg-white text-primary-600 border border-slate-200 px-3.5 py-2.5 rounded-xl hover:border-primary-200 hover:bg-primary-50 flex items-center justify-center gap-2 shadow-sm transition-all"><i data-lucide="file-text" class="w-4 h-4"></i> Esporta in PDF</button>`;
 
-            let html = `<div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6 lg:mb-8 gap-4"><div><h2 class="text-2xl lg:text-3xl font-black text-slate-800 mb-1 leading-tight pr-8 tracking-tight">${p.name}</h2><p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">${p.client || 'Interno'}</p></div><div class="admin-only w-full lg:w-auto flex flex-col sm:flex-row gap-2"><button onclick="openEditProjectModal('${p.id}')" class="text-xs font-bold bg-white text-slate-600 border border-slate-200 px-3.5 py-2.5 rounded-xl hover:bg-slate-50 flex items-center justify-center gap-2 shadow-sm transition-all"><i data-lucide="edit" class="w-4 h-4"></i> Modifica</button>${btnPdfHtml}</div></div><div class="grid grid-cols-2 md:grid-cols-4 gap-3 lg:gap-4 mb-8"><div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-center"><p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Spesa Totale</p><p class="text-lg lg:text-xl font-black text-indigo-600 mt-1 tracking-tight">€${totalSpent.toFixed(0)} <span class="text-[10px] text-slate-400">/ ${p.budget}</span></p></div><div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-center"><p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Costo Team</p><p class="text-lg lg:text-xl font-black text-slate-800 mt-1 tracking-tight">€${totalHoursCost.toFixed(0)} <span class="text-[10px] text-slate-400">(${totalHours.toFixed(1)}h)</span></p></div><div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-center"><p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Spese Extra</p><p class="text-lg lg:text-xl font-black text-amber-600 mt-1 tracking-tight">€${totalExpenses.toFixed(0)}</p></div><div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-center"><p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Resa Oraria</p><p class="text-lg lg:text-xl font-black ${effectiveRate > 0 ? 'text-emerald-500' : 'text-red-500'} mt-1 tracking-tight">€${effectiveRate} <span class="text-[10px] text-slate-400">/h</span></p></div></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 pb-8 lg:pb-0"><div class="space-y-8"><div><h3 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200 pb-2 mb-4 flex items-center gap-1.5"><i data-lucide="layers" class="w-3.5 h-3.5"></i> Per Attività (Ore)</h3><div class="space-y-4">`;
+            let html = `<div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6 lg:mb-8 gap-4"><div><h2 class="text-2xl lg:text-3xl font-black text-slate-800 mb-1 leading-tight pr-8 tracking-tight">${p.name}</h2><p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">${p.client || 'Interno'}</p></div><div class="admin-only w-full lg:w-auto flex flex-col sm:flex-row gap-2"><button onclick="openEditProjectModal('${p.id}')" class="text-xs font-bold bg-white text-slate-600 border border-slate-200 px-3.5 py-2.5 rounded-xl hover:bg-slate-50 flex items-center justify-center gap-2 shadow-sm transition-all"><i data-lucide="edit" class="w-4 h-4"></i> Modifica</button>${btnPdfHtml}</div></div><div class="grid grid-cols-2 md:grid-cols-4 gap-3 lg:gap-4 mb-8"><div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-center"><p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Spesa Totale</p><p class="text-lg lg:text-xl font-black text-primary-600 mt-1 tracking-tight">€${totalSpent.toFixed(0)} <span class="text-[10px] text-slate-400">/ ${p.budget}</span></p></div><div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-center"><p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Costo Team</p><p class="text-lg lg:text-xl font-black text-slate-800 mt-1 tracking-tight">€${totalHoursCost.toFixed(0)} <span class="text-[10px] text-slate-400">(${totalHours.toFixed(1)}h)</span></p></div><div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-center"><p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Spese Extra</p><p class="text-lg lg:text-xl font-black text-amber-600 mt-1 tracking-tight">€${totalExpenses.toFixed(0)}</p></div><div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-center"><p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Resa Oraria</p><p class="text-lg lg:text-xl font-black ${effectiveRate > 0 ? 'text-emerald-500' : 'text-red-500'} mt-1 tracking-tight">€${effectiveRate} <span class="text-[10px] text-slate-400">/h</span></p></div></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 pb-8 lg:pb-0"><div class="space-y-8"><div><h3 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200 pb-2 mb-4 flex items-center gap-1.5"><i data-lucide="layers" class="w-3.5 h-3.5"></i> Per Attività (Ore)</h3><div class="space-y-4">`;
             const sortedTaskNames = Object.keys(taskStats).sort((a, b) => taskStats[b].h - taskStats[a].h);
-            sortedTaskNames.forEach(t => { const perc = p.budget > 0 ? (taskStats[t].c / p.budget * 100).toFixed(1) : 0; const isZero = taskStats[t].h === 0; html += `<div><div class="flex justify-between items-end mb-1.5"><span class="font-bold ${isZero?'text-slate-400':'text-slate-700'} text-xs">${t}</span><span class="text-[10px] font-mono font-bold text-slate-500">€${taskStats[t].c.toFixed(0)} (${taskStats[t].h.toFixed(1)}h)</span></div><div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden"><div class="${isZero?'bg-slate-200':'bg-indigo-500'} h-full" style="width: ${perc}%"></div></div></div>`; });
+            sortedTaskNames.forEach(t => { const perc = p.budget > 0 ? (taskStats[t].c / p.budget * 100).toFixed(1) : 0; const isZero = taskStats[t].h === 0; html += `<div><div class="flex justify-between items-end mb-1.5"><span class="font-bold ${isZero?'text-slate-400':'text-slate-700'} text-xs">${t}</span><span class="text-[10px] font-mono font-bold text-slate-500">€${taskStats[t].c.toFixed(0)} (${taskStats[t].h.toFixed(1)}h)</span></div><div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden"><div class="${isZero?'bg-slate-200':'bg-primary-500'} h-full" style="width: ${perc}%"></div></div></div>`; });
             html += `</div></div><div><h3 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200 pb-2 mb-4 flex items-center gap-1.5"><i data-lucide="users" class="w-3.5 h-3.5"></i> Per Membro Team</h3><div class="space-y-3">`;
-            Object.keys(teamStats).forEach(m => { html += `<div class="flex justify-between items-center bg-white p-3 rounded-xl border border-slate-200 shadow-sm"><span class="font-bold text-slate-700 text-xs uppercase tracking-wide">${m}</span><div class="text-right"><p class="text-[11px] font-mono font-bold text-indigo-600">${teamStats[m].h.toFixed(1)}h</p><p class="text-[10px] font-mono font-black text-slate-400 admin-only">€ ${teamStats[m].c.toFixed(2)}</p></div></div>`; });
-            html += `</div></div></div><div class="admin-only bg-slate-50 rounded-2xl p-5 border border-slate-200"><h3 class="text-[11px] font-bold text-slate-600 uppercase tracking-wider border-b border-slate-200 pb-3 mb-4 flex items-center gap-2"><i data-lucide="receipt" class="w-4 h-4 text-amber-500"></i> Spese Vive</h3><div class="flex gap-2 mb-6"><input type="text" id="exp-desc" placeholder="Es. Marche da bollo" class="flex-1 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 transition-all bg-white"><div class="w-24 relative flex items-center"><span class="absolute left-3 text-slate-400 font-bold text-xs">€</span><input type="number" step="0.01" id="exp-amount" placeholder="0.00" class="w-full border border-slate-200 rounded-xl p-3 pl-6 text-xs outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 transition-all font-bold bg-white"></div><button onclick="addExpense('${p.id}')" class="bg-amber-500 text-white px-3.5 rounded-xl hover:bg-amber-600 transition-all shadow-sm active:scale-95"><i data-lucide="plus" class="w-4 h-4"></i></button></div><div class="space-y-2 max-h-[300px] overflow-y-auto pr-1">${pExpenses.length === 0 ? '<div class="text-center py-6 text-slate-400 text-xs font-bold uppercase tracking-wider">Nessuna spesa registrata.</div>' : pExpenses.map(ex => `<div class="bg-white p-3 rounded-xl border border-slate-200 flex justify-between items-center shadow-sm group"><div><p class="text-xs font-bold text-slate-700">${ex.description}</p><p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mt-1">${new Date(ex.created_at).toLocaleDateString()} • ${ex.user_name}</p></div><div class="flex items-center gap-3"><span class="font-black text-amber-600 text-sm tracking-tight">€${Number(ex.amount).toFixed(2)}</span><button onclick="deleteExpense('${ex.id}', '${p.id}')" class="text-slate-300 hover:text-red-500 p-1.5 hover:bg-red-50 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></div></div>`).join('')}</div></div></div>`;
+            Object.keys(teamStats).forEach(m => { html += `<div class="flex justify-between items-center bg-white p-3 rounded-xl border border-slate-200 shadow-sm"><span class="font-bold text-slate-700 text-xs uppercase tracking-wide">${m}</span><div class="text-right"><p class="text-[11px] font-mono font-bold text-primary-600">${teamStats[m].h.toFixed(1)}h</p><p class="text-[10px] font-mono font-black text-slate-400 admin-only">€ ${teamStats[m].c.toFixed(2)}</p></div></div>`; });
+            html += `</div></div></div><div class="admin-only bg-slate-50 rounded-2xl p-5 border border-slate-200"><h3 class="text-[11px] font-bold text-slate-600 uppercase tracking-wider border-b border-slate-200 pb-3 mb-4 flex items-center gap-2"><i data-lucide="receipt" class="w-4 h-4 text-amber-500"></i> Spese Vive</h3><div class="flex gap-2 mb-6"><input type="text" id="exp-desc" placeholder="Es. Oneri o Materiali" class="flex-1 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 transition-all bg-white"><div class="w-24 relative flex items-center"><span class="absolute left-3 text-slate-400 font-bold text-xs">€</span><input type="number" step="0.01" id="exp-amount" placeholder="0.00" class="w-full border border-slate-200 rounded-xl p-3 pl-6 text-xs outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 transition-all font-bold bg-white"></div><button onclick="addExpense('${p.id}')" class="bg-amber-500 text-white px-3.5 rounded-xl hover:bg-amber-600 transition-all shadow-sm active:scale-95"><i data-lucide="plus" class="w-4 h-4"></i></button></div><div class="space-y-2 max-h-[300px] overflow-y-auto pr-1">${pExpenses.length === 0 ? '<div class="text-center py-6 text-slate-400 text-xs font-bold uppercase tracking-wider">Nessuna spesa registrata.</div>' : pExpenses.map(ex => `<div class="bg-white p-3 rounded-xl border border-slate-200 flex justify-between items-center shadow-sm group"><div><p class="text-xs font-bold text-slate-700">${ex.description}</p><p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mt-1">${new Date(ex.created_at).toLocaleDateString()} • ${ex.user_name}</p></div><div class="flex items-center gap-3"><span class="font-black text-amber-600 text-sm tracking-tight">€${Number(ex.amount).toFixed(2)}</span><button onclick="deleteExpense('${ex.id}', '${p.id}')" class="text-slate-300 hover:text-red-500 p-1.5 hover:bg-red-50 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></div></div>`).join('')}</div></div></div>`;
             
             document.getElementById('detail-content').innerHTML = html;
             document.getElementById('modal-detail').classList.remove('force-hide');
@@ -1130,7 +1202,7 @@
         function renderEditProjectTasks() {
             const selectedContainer = document.getElementById('edit-proj-selected-tasks');
             if (editProjectTasks.length === 0) selectedContainer.innerHTML = '<span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider py-1 block">Nessuna attività configurata.</span>';
-            else selectedContainer.innerHTML = editProjectTasks.map((task, idx) => `<span class="inline-block bg-indigo-50 text-indigo-700 text-[10px] font-bold px-2 py-1 rounded-md border border-indigo-100 uppercase tracking-wider">${idx+1}. ${task}</span>`).join('');
+            else selectedContainer.innerHTML = editProjectTasks.map((task, idx) => `<span class="inline-block bg-primary-50 text-primary-700 text-[10px] font-bold px-2 py-1 rounded-md border border-primary-100 uppercase tracking-wider">${idx+1}. ${task}</span>`).join('');
             lucide.createIcons();
         }
 
@@ -1140,18 +1212,12 @@
             const name = document.getElementById('edit-modal-name').value.trim(); 
             const client = document.getElementById('edit-modal-client').value.trim(); 
             const budget = parseFloat(document.getElementById('edit-modal-budget').value) || 0;
-            
-            if(!name) return await appAlert("Attenzione", "Inserisci il nome del progetto", "danger"); 
-            if(editProjectTasks.length === 0) return await appAlert("Attenzione", "Configura almeno un'attività per il progetto cliccando su 'Configura & Ordina'", "danger");
-            
+            if(!name) return await appAlert("Attenzione", "Inserisci il nome", "danger"); 
+            if(editProjectTasks.length === 0) return await appAlert("Attenzione", "Configura almeno un'attività", "danger");
             await supabaseClient.from('projects').update({ name, client, budget, tasks: editProjectTasks }).eq('id', id); 
             await supabaseClient.from('entries').update({ project_name: name }).eq('project_id', id);
-            
-            await fetchProjects(); 
-            await fetchEntries();
-            
-            closeEditProjectModal(); 
-            showProjectDetail(id); 
+            await fetchProjects(); await fetchEntries();
+            closeEditProjectModal(); showProjectDetail(id); 
         }
 
         function renderStrategicCharts() {
@@ -1179,19 +1245,20 @@
             }
             
             const marginEl = document.getElementById('kpi-margin'); marginEl.innerText = `€ ${margin.toFixed(2)}`;
-            if (margin < 0) marginEl.classList.replace('text-indigo-600', 'text-red-500'); else marginEl.classList.replace('text-red-500', 'text-indigo-600');
+            if (margin < 0) marginEl.classList.replace('text-primary-600', 'text-red-500'); else marginEl.classList.replace('text-red-500', 'text-primary-600');
             
             let topBurner = "-", maxSpent = 0; for(let name in projectSpend) if(projectSpend[name] > maxSpent) { maxSpent = projectSpend[name]; topBurner = name; } 
             document.getElementById('kpi-burner').innerText = topBurner;
             
+            const theme = THEMES[currentBusinessType];
             Chart.defaults.font.family = "'Inter', sans-serif";
             if(charts.global) charts.global.destroy();
-            charts.global = new Chart(document.getElementById('chart-global'), { type: 'bar', data: { labels: ['Portafoglio Attivo'], datasets: [ { label: 'Costi (Ore+Spese)', data: [totalSpent], backgroundColor: '#4f46e5', borderRadius: 6 }, { label: 'Budget', data: [totalBudget], backgroundColor: '#f1f5f9', hoverBackgroundColor: '#e2e8f0', borderRadius: 6 } ]}, options: { responsive: true, maintainAspectRatio: false } });
+            charts.global = new Chart(document.getElementById('chart-global'), { type: 'bar', data: { labels: ['Portafoglio Attivo'], datasets: [ { label: 'Costi (Ore+Spese)', data: [totalSpent], backgroundColor: theme.chartMainColor, borderRadius: 6 }, { label: 'Budget', data: [totalBudget], backgroundColor: '#f1f5f9', hoverBackgroundColor: '#e2e8f0', borderRadius: 6 } ]}, options: { responsive: true, maintainAspectRatio: false } });
             const taskStats = {}; entries.filter(e => activeProjects.find(p => p.id === e.project_id)).forEach(e => { const hrs = Number(e.duration); taskStats[e.task||'Altro'] = (taskStats[e.task||'Altro']||0) + hrs; totalTaskHours += hrs; });
             const topTasks = Object.entries(taskStats).sort((a,b) => b[1] - a[1]).slice(0, 5);
             const taskLabelsWithPerc = topTasks.map(t => `${t[0]} - ${totalTaskHours > 0 ? Math.round((t[1] / totalTaskHours) * 100) : 0}%`);
             if(charts.tasks) charts.tasks.destroy();
-            charts.tasks = new Chart(document.getElementById('chart-tasks-dist'), { type: 'doughnut', data: { labels: taskLabelsWithPerc, datasets: [{ data: topTasks.map(t=>t[1]), backgroundColor: ['#312e81','#4338ca','#4f46e5','#6366f1','#818cf8'], borderWidth: 0 }]}, options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { position: 'right', labels: { boxWidth: 10, font: { size: 10, weight: 'bold' } } } } } });
+            charts.tasks = new Chart(document.getElementById('chart-tasks-dist'), { type: 'doughnut', data: { labels: taskLabelsWithPerc, datasets: [{ data: topTasks.map(t=>t[1]), backgroundColor: theme.chartPalette, borderWidth: 0 }]}, options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { position: 'right', labels: { boxWidth: 10, font: { size: 10, weight: 'bold' } } } } } });
         }
 
         function prevWeek() { currentWeekStart.setDate(currentWeekStart.getDate() - 7); renderEntries(); }
@@ -1202,8 +1269,8 @@
             document.getElementById('week-display').innerText = `${start.toLocaleDateString('it-IT', {day:'2-digit',month:'short'})} - ${end.toLocaleDateString('it-IT', {day:'2-digit',month:'short',year:'numeric'})}`;
             const weekly = entries.filter(e => { const d = new Date(e.created_at).getTime(); return d >= start.getTime() && d <= end.getTime(); });
             document.getElementById('entries-empty-state').classList.toggle('force-hide', weekly.length > 0); table.parentElement.classList.toggle('force-hide', weekly.length === 0);
-            table.innerHTML = weekly.map(e => `<tr class="hover:bg-slate-50 border-b border-slate-100 transition-colors"><td class="p-5 font-bold text-slate-500 text-xs">${new Date(e.created_at).toLocaleDateString('it-IT', {weekday:'short', day:'2-digit'})}</td><td class="p-5 text-center"><span class="bg-slate-100 text-slate-600 text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider">${e.user_name}</span></td><td class="p-5 font-black text-slate-800 tracking-tight">${e.project_name}</td><td class="p-5"><div class="text-xs font-bold text-slate-600">${e.task}</div><div class="text-[11px] text-slate-400 mt-0.5">${e.notes||''}</div></td><td class="p-5 font-mono font-black text-indigo-600">${Number(e.duration).toFixed(2)}h</td><td class="p-5 text-right admin-only"><div class="flex justify-end gap-3 items-center"><span class="font-mono text-slate-400 text-sm font-bold">€${Number(e.rate).toFixed(2)}</span><button onclick="openEditEntryModal('${e.id}')" class="text-slate-300 hover:text-indigo-600 p-1.5 hover:bg-indigo-50 rounded-lg transition-colors"><i data-lucide="pencil" class="w-4 h-4"></i></button><button onclick="deleteEntry('${e.id}')" class="text-slate-300 hover:text-red-600 p-1.5 hover:bg-red-50 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div></td></tr>`).join('');
-            mobile.innerHTML = weekly.map(e => `<div class="p-5 border-b border-slate-100 bg-white"><div class="flex justify-between mb-3"><div><div class="flex gap-2 mb-1.5"><span class="text-[9px] font-bold text-slate-600 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded-md uppercase tracking-wider">${e.user_name}</span><span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">${new Date(e.created_at).toLocaleDateString('it-IT', {weekday:'short', day:'2-digit'})}</span></div><h4 class="font-black text-sm text-slate-800 tracking-tight">${e.project_name}</h4></div><span class="font-mono font-black text-indigo-600 bg-indigo-50 border border-indigo-100 px-2 py-1 rounded-lg h-fit">${Number(e.duration).toFixed(2)}h</span></div><div class="flex flex-col gap-3"><div class="max-w-[90%]"><span class="text-xs text-slate-600 font-bold">${e.task}</span><div class="text-[11px] text-slate-400 mt-0.5">${e.notes||''}</div></div><div class="admin-only flex justify-between border-t border-slate-100 pt-3"><span class="font-mono text-slate-500 font-bold text-xs">Costo: €${Number(e.rate).toFixed(2)}</span><div class="flex gap-2"><button onclick="openEditEntryModal('${e.id}')" class="text-slate-400 p-1.5 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button><button onclick="deleteEntry('${e.id}')" class="text-slate-400 p-1.5 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></div></div></div></div>`).join('');
+            table.innerHTML = weekly.map(e => `<tr class="hover:bg-slate-50 border-b border-slate-100 transition-colors"><td class="p-5 font-bold text-slate-500 text-xs">${new Date(e.created_at).toLocaleDateString('it-IT', {weekday:'short', day:'2-digit'})}</td><td class="p-5 text-center"><span class="bg-slate-100 text-slate-600 text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider">${e.user_name}</span></td><td class="p-5 font-black text-slate-800 tracking-tight">${e.project_name}</td><td class="p-5"><div class="text-xs font-bold text-slate-600">${e.task}</div><div class="text-[11px] text-slate-400 mt-0.5">${e.notes||''}</div></td><td class="p-5 font-mono font-black text-primary-600">${Number(e.duration).toFixed(2)}h</td><td class="p-5 text-right admin-only"><div class="flex justify-end gap-3 items-center"><span class="font-mono text-slate-400 text-sm font-bold">€${Number(e.rate).toFixed(2)}</span><button onclick="openEditEntryModal('${e.id}')" class="text-slate-300 hover:text-primary-600 p-1.5 hover:bg-primary-50 rounded-lg transition-colors"><i data-lucide="pencil" class="w-4 h-4"></i></button><button onclick="deleteEntry('${e.id}')" class="text-slate-300 hover:text-red-600 p-1.5 hover:bg-red-50 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div></td></tr>`).join('');
+            mobile.innerHTML = weekly.map(e => `<div class="p-5 border-b border-slate-100 bg-white"><div class="flex justify-between mb-3"><div><div class="flex gap-2 mb-1.5"><span class="text-[9px] font-bold text-slate-600 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded-md uppercase tracking-wider">${e.user_name}</span><span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">${new Date(e.created_at).toLocaleDateString('it-IT', {weekday:'short', day:'2-digit'})}</span></div><h4 class="font-black text-sm text-slate-800 tracking-tight">${e.project_name}</h4></div><span class="font-mono font-black text-primary-600 bg-primary-50 border border-primary-100 px-2 py-1 rounded-lg h-fit">${Number(e.duration).toFixed(2)}h</span></div><div class="flex flex-col gap-3"><div class="max-w-[90%]"><span class="text-xs text-slate-600 font-bold">${e.task}</span><div class="text-[11px] text-slate-400 mt-0.5">${e.notes||''}</div></div><div class="admin-only flex justify-between border-t border-slate-100 pt-3"><span class="font-mono text-slate-500 font-bold text-xs">Costo: €${Number(e.rate).toFixed(2)}</span><div class="flex gap-2"><button onclick="openEditEntryModal('${e.id}')" class="text-slate-400 p-1.5 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button><button onclick="deleteEntry('${e.id}')" class="text-slate-400 p-1.5 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></div></div></div></div>`).join('');
             lucide.createIcons();
         }
 
@@ -1223,39 +1290,30 @@
             const totalHours = pEntries.reduce((s,e) => s + Number(e.duration), 0); const totalHrsCost = pEntries.reduce((s,e) => s + Number(e.rate), 0); const totalExp = pExpenses.reduce((s,ex) => s + Number(ex.amount), 0);
             doc.setFontSize(10); doc.setTextColor(15, 23, 42); doc.text(`Totale: €${(totalHrsCost+totalExp).toFixed(2)} | Ore: €${totalHrsCost.toFixed(2)} (${totalHours.toFixed(1)}h) | Spese: €${totalExp.toFixed(2)}`, 14, startY + 18);
             
-            doc.setFontSize(12); doc.setTextColor(79, 70, 229); doc.text("Registro Ore", 14, startY + 28);
-            doc.autoTable({ startY: startY + 32, head: [['Data', 'Team', 'Attività', 'Ore', 'Costo']], body: pEntries.map(e => [new Date(e.created_at).toLocaleDateString(), e.user_name, e.notes ? `${e.task}\n(${e.notes})` : e.task, `${Number(e.duration).toFixed(1)}h`, `€${Number(e.rate).toFixed(2)}`]), theme: 'striped', headStyles: { fillColor: [79, 70, 229] }, styles: { fontSize: 9 } });
+            const pdfColor = THEMES[currentBusinessType].pdfColor;
+            doc.setFontSize(12); doc.setTextColor(...pdfColor); doc.text("Registro Ore", 14, startY + 28);
+            doc.autoTable({ startY: startY + 32, head: [['Data', 'Team', 'Attività', 'Ore', 'Costo']], body: pEntries.map(e => [new Date(e.created_at).toLocaleDateString(), e.user_name, e.notes ? `${e.task}\n(${e.notes})` : e.task, `${Number(e.duration).toFixed(1)}h`, `€${Number(e.rate).toFixed(2)}`]), theme: 'striped', headStyles: { fillColor: pdfColor }, styles: { fontSize: 9 } });
 
             if(pExpenses.length > 0) {
                 const finalY = doc.lastAutoTable.finalY || startY + 50; doc.setFontSize(12); doc.setTextColor(217, 119, 6); doc.text("Spese Extra", 14, finalY + 15);
                 doc.autoTable({ startY: finalY + 19, head: [['Data', 'Da', 'Descrizione', 'Importo']], body: pExpenses.map(ex => [new Date(ex.created_at).toLocaleDateString(), ex.user_name, ex.description, `€${Number(ex.amount).toFixed(2)}`]), theme: 'striped', headStyles: { fillColor: [245, 158, 11] }, styles: { fontSize: 9 } });
             }
-            doc.save(`Progetto_${p.name.replace(/\s+/g,'_')}.pdf`);
+            doc.save(`Lavoro_${p.name.replace(/\s+/g,'_')}.pdf`);
         }
 
         function openReportModal() { 
             if(activePlan === 'starter') return openUpgradeModal('Generazione Report PDF Cumulativi');
-            
-            const today = new Date(); 
-            const fmt = (d) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+            const today = new Date(); const fmt = (d) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
             const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-            
             const content = document.getElementById('report-modal-content');
             content.innerHTML = `
                 <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Dal</label>
-                        <input type="date" id="report-start" value="${fmt(firstDay)}" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all">
-                    </div>
-                    <div>
-                        <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Al</label>
-                        <input type="date" id="report-end" value="${fmt(today)}" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all">
-                    </div>
+                    <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Dal</label><input type="date" id="report-start" value="${fmt(firstDay)}" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div>
+                    <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Al</label><input type="date" id="report-end" value="${fmt(today)}" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div>
                 </div>
                 <button onclick="generatePDFReport()" class="w-full bg-slate-900 text-white py-3.5 mt-6 rounded-xl font-bold hover:bg-slate-800 transition-all active:scale-[0.98] shadow-sm flex items-center justify-center gap-2"><i data-lucide="file-text" class="w-4 h-4"></i> Genera PDF</button>
             `;
-            document.getElementById('modal-report').classList.remove('force-hide'); 
-            lucide.createIcons();
+            document.getElementById('modal-report').classList.remove('force-hide'); lucide.createIcons();
         }
         
         function closeReportModal() { document.getElementById('modal-report').classList.add('force-hide'); }
@@ -1271,45 +1329,40 @@
             if (filE.length === 0) return await appAlert("Informazione", "Nessuna attività registrata nel periodo selezionato.", "info");
 
             const { jsPDF } = window.jspdf; const doc = new jsPDF();
+            const pdfColor = THEMES[currentBusinessType].pdfColor;
             let logoData = null, startY = 30; if(studioData?.logo_url) { try { logoData = await getBase64FromUrl(studioData.logo_url); } catch(err) {} }
             if(logoData) { const imgH = 12; const imgW = (logoData.width/logoData.height)*imgH; doc.addImage(logoData.url, 'PNG', 14, 15, imgW, imgH); startY = 40; }
 
-            doc.setFontSize(26); doc.setTextColor(15, 23, 42); doc.text(studioData?.name||"Studio", 14, startY);
+            doc.setFontSize(26); doc.setTextColor(15, 23, 42); doc.text(studioData?.name||"Azienda", 14, startY);
             doc.setFontSize(16); doc.setTextColor(15, 23, 42); doc.text(`Rapporto Attività`, 14, startY + 15);
             doc.setFontSize(12); doc.setTextColor(100, 116, 139); doc.text(`Dal ${start.toLocaleDateString()} al ${end.toLocaleDateString()}`, 14, startY + 23);
             
             const totalH = filE.reduce((sum, ent) => sum + Number(ent.duration), 0); const totalC = filE.reduce((sum, ent) => sum + Number(ent.rate), 0);
             doc.setDrawColor(226, 232, 240); doc.line(14, startY+30, 196, startY+30);
-            doc.setFontSize(12); doc.setTextColor(15, 23, 42); doc.text(`Riepilogo Globale Studio:`, 14, startY + 45);
+            doc.setFontSize(12); doc.setTextColor(15, 23, 42); doc.text(`Riepilogo Globale:`, 14, startY + 45);
             doc.setFontSize(10); doc.text(`Ore Totali: ${totalH.toFixed(1)}h`, 14, startY + 53); doc.text(`Valore Economico: €${totalC.toFixed(2)}`, 14, startY + 60);
+
+            const projLabel = currentBusinessType === 'impresa' ? 'Cantiere' : 'Progetto';
 
             [...new Set(filE.map(ent => ent.project_id))].forEach((pid) => {
                 const p = projects.find(x => x.id === pid); const pE = filE.filter(ent => ent.project_id === pid).sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
                 doc.addPage(); let pY = 20; if(logoData) { doc.addImage(logoData.url, 'PNG', 14, 10, (logoData.width/logoData.height)*8, 8); pY = 28; }
-                doc.setFontSize(18); doc.setTextColor(79, 70, 229); doc.text(p?p.name:"Eliminato", 14, pY);
+                doc.setFontSize(18); doc.setTextColor(...pdfColor); doc.text(p?p.name:"Eliminato", 14, pY);
                 doc.setFontSize(10); doc.setTextColor(100, 116, 139); doc.text(`Cliente: ${p?p.client:'-'} | Periodo: ${s} / ${e}`, 14, pY+7);
                 doc.text(`Ore Periodo: ${pE.reduce((sum,ent)=>sum+Number(ent.duration),0).toFixed(1)}h | Valore: €${pE.reduce((sum,ent)=>sum+Number(ent.rate),0).toFixed(2)}`, 14, pY+13);
-                doc.autoTable({ startY: pY+20, head: [['Data', 'Team', 'Attività', 'Ore', 'Costo']], body: pE.map(ent => [new Date(ent.created_at).toLocaleDateString(), ent.user_name, ent.notes ? `${ent.task}\n(${ent.notes})` : ent.task, `${Number(ent.duration).toFixed(1)}h`, `€${Number(ent.rate).toFixed(2)}`]), theme: 'striped', headStyles: { fillColor: [79, 70, 229] }, styles: { fontSize: 9 } });
+                doc.autoTable({ startY: pY+20, head: [['Data', 'Team', 'Attività', 'Ore', 'Costo']], body: pE.map(ent => [new Date(ent.created_at).toLocaleDateString(), ent.user_name, ent.notes ? `${ent.task}\n(${ent.notes})` : ent.task, `${Number(ent.duration).toFixed(1)}h`, `€${Number(ent.rate).toFixed(2)}`]), theme: 'striped', headStyles: { fillColor: pdfColor }, styles: { fontSize: 9 } });
             });
             doc.save(`Report_${start.toISOString().split('T')[0]}.pdf`); closeReportModal();
         }
 
-        // NUOVA FUNZIONE: REPORT TEAM (PDF)
         function openTeamReportModal() { 
             if(activePlan === 'starter') return openUpgradeModal('Report Team PDF');
-            
-            const today = new Date(); 
-            const fmt = (d) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+            const today = new Date(); const fmt = (d) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
             const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-            
-            document.getElementById('team-report-start').value = fmt(firstDay);
-            document.getElementById('team-report-end').value = fmt(today);
-            
+            document.getElementById('team-report-start').value = fmt(firstDay); document.getElementById('team-report-end').value = fmt(today);
             const userSelect = document.getElementById('team-report-user');
             userSelect.innerHTML = '<option value="all">Tutto il Team</option>' + profiles.map(pr => `<option value="${pr.full_name}">${pr.full_name}</option>`).join('');
-            
-            document.getElementById('modal-team-report').classList.remove('force-hide'); 
-            lucide.createIcons();
+            document.getElementById('modal-team-report').classList.remove('force-hide'); lucide.createIcons();
         }
 
         function closeTeamReportModal() { document.getElementById('modal-team-report').classList.add('force-hide'); }
@@ -1324,16 +1377,12 @@
             if(start > end) return await appAlert("Attenzione", "La data di inizio deve essere precedente a quella di fine.", "danger");
             
             let filE = entries.filter(ent => { const d = new Date(ent.created_at); return d >= start && d <= end; });
-            
-            if (selectedUser !== 'all') {
-                filE = filE.filter(ent => ent.user_name === selectedUser);
-            }
-
+            if (selectedUser !== 'all') { filE = filE.filter(ent => ent.user_name === selectedUser); }
             if (filE.length === 0) return await appAlert("Informazione", "Nessuna attività registrata per il periodo e il collaboratore selezionati.", "info");
 
             const { jsPDF } = window.jspdf; const doc = new jsPDF();
-            let logoData = null; 
-            if(studioData?.logo_url) { try { logoData = await getBase64FromUrl(studioData.logo_url); } catch(err) {} }
+            const pdfColor = THEMES[currentBusinessType].pdfColor;
+            let logoData = null; if(studioData?.logo_url) { try { logoData = await getBase64FromUrl(studioData.logo_url); } catch(err) {} }
 
             const usersInReport = [...new Set(filE.map(ent => ent.user_name))].sort();
 
@@ -1342,25 +1391,16 @@
                 const uTotalH = uEntries.reduce((sum, ent) => sum + Number(ent.duration), 0);
                 const uTotalC = uEntries.reduce((sum, ent) => sum + Number(ent.rate), 0);
 
-                if(index > 0) { 
-                    doc.addPage(); 
-                }
+                if(index > 0) doc.addPage(); 
                 
                 let currentY = 20; 
-                if(logoData) { 
-                    doc.addImage(logoData.url, 'PNG', 14, 10, (logoData.width/logoData.height)*8, 8); 
-                    currentY = 28; 
-                } 
+                if(logoData) { doc.addImage(logoData.url, 'PNG', 14, 10, (logoData.width/logoData.height)*8, 8); currentY = 28; } 
 
-                doc.setFontSize(18); doc.setTextColor(79, 70, 229); 
-                doc.text(`Collaboratore: ${uname}`, 14, currentY);
-                
-                doc.setFontSize(10); doc.setTextColor(100, 116, 139);
-                doc.text(`Totale Periodo: ${uTotalH.toFixed(1)}h | Costo Totale: €${uTotalC.toFixed(2)}`, 14, currentY+7);
+                doc.setFontSize(18); doc.setTextColor(...pdfColor); doc.text(`Collaboratore: ${uname}`, 14, currentY);
+                doc.setFontSize(10); doc.setTextColor(100, 116, 139); doc.text(`Totale Periodo: ${uTotalH.toFixed(1)}h | Costo Totale: €${uTotalC.toFixed(2)}`, 14, currentY+7);
 
                 currentY += 15;
-
-                // Estrai i progetti su cui ha lavorato questo utente e raggruppa le entries
+                const projLabel = currentBusinessType === 'impresa' ? 'Cantiere' : 'Progetto';
                 const projectsForUser = [...new Set(uEntries.map(ent => ent.project_name))].sort();
 
                 projectsForUser.forEach(projName => {
@@ -1368,40 +1408,22 @@
                     const pTotalH = pEntries.reduce((sum, ent) => sum + Number(ent.duration), 0);
                     const pTotalC = pEntries.reduce((sum, ent) => sum + Number(ent.rate), 0);
 
-                    // Se siamo troppo in basso nella pagina, aggiungi una nuova pagina per il prossimo progetto
-                    if(currentY > doc.internal.pageSize.height - 30) {
-                        doc.addPage();
-                        currentY = 20;
-                    }
+                    if(currentY > doc.internal.pageSize.height - 30) { doc.addPage(); currentY = 20; }
 
-                    // Intestazione del singolo progetto
-                    doc.setFontSize(12); doc.setTextColor(15, 23, 42);
-                    doc.text(`Progetto: ${projName}`, 14, currentY);
-                    
-                    doc.setFontSize(9); doc.setTextColor(100, 116, 139);
-                    doc.text(`Subtotale: ${pTotalH.toFixed(1)}h | €${pTotalC.toFixed(2)}`, 14, currentY + 5);
+                    doc.setFontSize(12); doc.setTextColor(15, 23, 42); doc.text(`${projLabel}: ${projName}`, 14, currentY);
+                    doc.setFontSize(9); doc.setTextColor(100, 116, 139); doc.text(`Subtotale: ${pTotalH.toFixed(1)}h | €${pTotalC.toFixed(2)}`, 14, currentY + 5);
 
                     doc.autoTable({
                         startY: currentY + 8,
                         head: [['Data', 'Attività', 'Ore', 'Costo']],
-                        body: pEntries.map(ent => [
-                            new Date(ent.created_at).toLocaleDateString(),
-                            ent.notes ? `${ent.task}\n(${ent.notes})` : ent.task,
-                            `${Number(ent.duration).toFixed(1)}h`,
-                            `€${Number(ent.rate).toFixed(2)}`
-                        ]),
-                        theme: 'striped',
-                        headStyles: { fillColor: [79, 70, 229] },
-                        styles: { fontSize: 9 },
-                        margin: { bottom: 15 }
+                        body: pEntries.map(ent => [ new Date(ent.created_at).toLocaleDateString(), ent.notes ? `${ent.task}\n(${ent.notes})` : ent.task, `${Number(ent.duration).toFixed(1)}h`, `€${Number(ent.rate).toFixed(2)}` ]),
+                        theme: 'striped', headStyles: { fillColor: pdfColor }, styles: { fontSize: 9 }, margin: { bottom: 15 }
                     });
-
-                    currentY = doc.lastAutoTable.finalY + 12; // Spazio per la tabella successiva
+                    currentY = doc.lastAutoTable.finalY + 12; 
                 });
             });
 
-            doc.save(`Report_Team_${start.toISOString().split('T')[0]}.pdf`); 
-            closeTeamReportModal();
+            doc.save(`Report_Team_${start.toISOString().split('T')[0]}.pdf`); closeTeamReportModal();
         }
 
         checkUser();
