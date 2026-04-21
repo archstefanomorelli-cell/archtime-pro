@@ -91,7 +91,7 @@
 <body class="text-slate-800 pb-20 lg:pb-0">
 
     <div id="auth-container" class="min-h-screen flex flex-col lg:flex-row bg-white">
-        <div class="hidden lg:flex lg:w-1/2 bg-slate-900 flex-col justify-center px-20 relative overflow-hidden">
+        <div class="hidden lg:flex lg:w-1/2 bg-slate-900 flex-col justify-center px-20 relative overflow-hidden lg:h-screen lg:sticky lg:top-0">
             <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
             <div class="relative z-10">
                 <h1 id="landing-title" class="text-6xl font-black text-white mb-6 tracking-tight">Arch <span class="text-primary-500">Time</span> Pro</h1>
@@ -109,18 +109,18 @@
                 <div class="flex p-1 bg-slate-100 rounded-xl mb-8 border border-slate-200"><button id="tab-login" onclick="switchAuthTab('login')" class="flex-1 py-2.5 text-sm font-bold rounded-lg bg-white shadow-sm text-slate-900 transition-all border border-slate-200/50">Accedi</button><button id="tab-signup" onclick="switchAuthTab('signup')" class="flex-1 py-2.5 text-sm font-bold text-slate-500 hover:text-slate-700 transition-all">Nuovo Utente</button></div>
                 <div class="space-y-4">
                     <div id="signup-fields" class="force-hide space-y-4">
-                        <input type="text" id="full-name" placeholder="Nome e Cognome" class="w-full border border-slate-200 rounded-xl p-3.5 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all bg-white">
+                        
                         <div class="p-5 bg-slate-50 rounded-xl border border-slate-200">
                             <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-3">Tipo di Account</label>
                             
                             <div class="space-y-3">
                                 <div>
                                     <label class="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200 cursor-pointer hover:border-primary-300 transition-all shadow-sm">
-                                        <input type="radio" name="main-role" value="admin" checked onchange="toggleSignupOptions()" class="w-4 h-4 text-primary-600 focus:ring-primary-500">
+                                        <input type="radio" name="main-role" value="admin" onchange="toggleSignupOptions()" class="w-4 h-4 text-primary-600 focus:ring-primary-500">
                                         <span class="text-sm font-bold text-slate-700">Manager (Crea Spazio di Lavoro)</span>
                                     </label>
                                     
-                                    <div id="sector-selection" class="pl-4 border-l-2 border-primary-200 ml-3 mt-3 transition-all duration-300">
+                                    <div id="sector-selection" class="force-hide pl-4 border-l-2 border-primary-200 ml-3 mt-3 transition-all duration-300">
                                         <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-2">Seleziona il tuo settore:</label>
                                         <div class="flex gap-2">
                                             <label class="flex-1 flex items-center justify-center gap-2 p-2.5 bg-white rounded-lg border border-slate-200 cursor-pointer hover:border-primary-300 transition-all shadow-sm relative has-[:checked]:border-primary-500 has-[:checked]:ring-1 has-[:checked]:ring-primary-500">
@@ -141,10 +141,14 @@
                                 </label>
                             </div>
 
-                            <div id="trial-info-container" class="mt-4 p-3.5 bg-primary-50 border border-primary-100 rounded-xl flex gap-3 items-start"><i data-lucide="gift" class="w-5 h-5 text-primary-600 shrink-0"></i><p class="text-xs text-primary-900 leading-relaxed"><strong class="font-black">15 giorni di prova gratuita!</strong><br>Nessuna carta richiesta.</p></div>
+                            <div id="trial-info-container" class="force-hide mt-4 p-3.5 bg-primary-50 border border-primary-100 rounded-xl flex gap-3 items-start"><i data-lucide="gift" class="w-5 h-5 text-primary-600 shrink-0"></i><p class="text-xs text-primary-900 leading-relaxed"><strong class="font-black">15 giorni di prova gratuita!</strong><br>Nessuna carta richiesta.</p></div>
                         </div>
+                        
                         <div id="invite-code-container" class="force-hide"><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Codice Invito Manager</label><input type="text" id="invite-code-input" placeholder="Incolla codice" class="w-full border border-primary-200 bg-primary-50/30 rounded-xl p-3.5 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div>
+                        
+                        <input type="text" id="full-name" placeholder="Nome e Cognome" class="w-full border border-slate-200 rounded-xl p-3.5 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all bg-white">
                     </div>
+                    
                     <input type="email" id="email" placeholder="Email professionale" class="w-full border border-slate-200 rounded-xl p-3.5 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all bg-white">
                     <input type="password" id="password" placeholder="Password" class="w-full border border-slate-200 rounded-xl p-3.5 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all bg-white">
                     
@@ -726,7 +730,15 @@
         }
         
         function toggleSignupOptions() { 
-            const role = document.querySelector('input[name="main-role"]:checked').value; 
+            const checkedRole = document.querySelector('input[name="main-role"]:checked');
+            if(!checkedRole) {
+                document.getElementById('invite-code-container').classList.add('force-hide'); 
+                document.getElementById('sector-selection').classList.add('force-hide');
+                const trialInfo = document.getElementById('trial-info-container'); 
+                if (trialInfo) trialInfo.classList.add('force-hide');
+                return;
+            }
+            const role = checkedRole.value; 
             const isStaff = role === 'staff';
             document.getElementById('invite-code-container').classList.toggle('force-hide', !isStaff); 
             document.getElementById('sector-selection').classList.toggle('force-hide', isStaff);
@@ -751,12 +763,16 @@
                 const acceptTerms = document.getElementById('accept-terms').checked;
                 if(!acceptTerms) return await appAlert("Attenzione", "Devi accettare i Termini di Servizio e la Privacy Policy per registrarti.", "danger");
                 
-                const role = document.querySelector('input[name="main-role"]:checked').value; 
+                const checkedRole = document.querySelector('input[name="main-role"]:checked');
+                if(!checkedRole) return await appAlert("Attenzione", "Seleziona prima il tipo di account (Manager o Collaboratore).", "danger");
+                
+                const role = checkedRole.value; 
                 const isStaff = role === 'staff';
                 const businessType = isStaff ? 'studio' : document.querySelector('input[name="business-type"]:checked').value;
                 const code = document.getElementById('invite-code-input').value.trim();
                 
                 if(isStaff && !code) return await appAlert("Attenzione", "Inserisci il codice invito!", "danger");
+                if(!fullName) return await appAlert("Attenzione", "Inserisci il tuo Nome e Cognome.", "danger");
                 
                 const { error } = await supabaseClient.auth.signUp({ 
                     email, password, 
