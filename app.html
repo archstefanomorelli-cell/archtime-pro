@@ -219,7 +219,7 @@
 
         <main class="max-w-7xl mx-auto px-4 lg:px-6 py-6 lg:py-10 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 flex-grow w-full">
             
-            <div class="lg:col-span-4 space-y-6 lg:space-y-8">
+            <div class="lg:col-span-4 flex flex-col gap-6 lg:gap-8">
                 <section class="bg-slate-100 border border-slate-200/80 rounded-2xl p-6 shadow-md mobile-tab active" data-tab="operate">
                     <div>
                         <div class="flex justify-between items-center mb-6"><h2 class="text-lg font-black text-slate-800 tracking-tight flex items-center gap-2"><i data-lucide="clock" class="text-primary-500 w-5 h-5"></i> Timer</h2><button onclick="openManualEntry()" class="text-[10px] font-bold text-slate-500 hover:text-primary-600 bg-white border border-slate-200 hover:border-primary-200 hover:bg-primary-50 px-2 py-1 rounded-md uppercase tracking-wider transition-colors shadow-sm">Manuale</button></div>
@@ -273,10 +273,10 @@
                 </section>
             </div>
 
-            <div class="lg:col-span-8 space-y-6 lg:space-y-8">
-                <section class="admin-only space-y-4 mobile-tab" data-tab="analyze">
-                    <h2 class="text-lg lg:text-xl font-black text-slate-800 tracking-tight pl-1">Salute Finanziaria</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="lg:col-span-8 flex flex-col gap-6 lg:gap-8">
+                <section class="admin-only mobile-tab" data-tab="analyze">
+                    <h2 class="text-lg lg:text-xl font-black text-slate-800 tracking-tight pl-1 mb-4">Salute Finanziaria</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                         <div class="bg-primary-50/60 border border-primary-100 rounded-2xl p-5 shadow-sm relative overflow-hidden">
                             <div class="absolute inset-0 z-0 pointer-events-none">
                                 <i data-lucide="trending-up" class="absolute -right-4 -bottom-4 w-24 h-24 text-primary-200 opacity-60"></i>
@@ -319,7 +319,16 @@
                 <section class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden mobile-tab active" data-tab="operate">
                     <div class="p-5 border-b border-slate-100 flex flex-col md:flex-row md:justify-between items-start md:items-center gap-4 bg-white sticky top-0 z-10">
                         <h2 class="text-base font-black text-slate-800 tracking-tight flex items-center gap-2"><i data-lucide="align-left" class="text-primary-500 w-4 h-4"></i> Registro Attività</h2>
-                        <div class="flex items-center gap-1.5 bg-slate-50 rounded-lg p-1 border border-slate-200"><button onclick="prevWeek()" class="p-1.5 text-slate-400 hover:text-primary-600 hover:bg-white rounded-md shadow-sm transition-colors border border-transparent hover:border-slate-200"><i data-lucide="chevron-left" class="w-4 h-4"></i></button><span id="week-display" class="text-[11px] font-bold text-slate-600 min-w-[130px] text-center uppercase tracking-wider"></span><button onclick="nextWeek()" class="p-1.5 text-slate-400 hover:text-primary-600 hover:bg-white rounded-md shadow-sm transition-colors border border-transparent hover:border-slate-200"><i data-lucide="chevron-right" class="w-4 h-4"></i></button></div>
+                        
+                        <div class="flex items-center gap-1.5 bg-slate-50 rounded-lg p-1 border border-slate-200">
+                            <button onclick="prevWeek()" class="p-1.5 text-slate-400 hover:text-primary-600 hover:bg-white rounded-md shadow-sm transition-colors border border-transparent hover:border-slate-200"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
+                            <div class="relative cursor-pointer group px-2 flex items-center justify-center">
+                                <input type="date" id="week-picker" onchange="jumpToDate(this.value)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                                <span id="week-display" class="text-[11px] font-bold text-slate-600 min-w-[130px] text-center uppercase tracking-wider group-hover:text-primary-600 transition-colors"></span>
+                            </div>
+                            <button onclick="nextWeek()" class="p-1.5 text-slate-400 hover:text-primary-600 hover:bg-white rounded-md shadow-sm transition-colors border border-transparent hover:border-slate-200"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+                        </div>
+
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm text-left hidden lg:table"><thead class="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold tracking-wider border-b border-slate-200"><tr><th class="px-5 py-4 font-bold">Data</th><th class="px-5 py-4 text-center font-bold">Team</th><th class="px-5 py-4 font-bold">Progetto</th><th class="px-5 py-4 font-bold">Attività / Note</th><th class="px-5 py-4 font-bold">Tempo</th><th class="px-5 py-4 admin-only text-right font-bold">Costo / Azioni</th></tr></thead><tbody id="entries-table-desktop" class="divide-y divide-slate-100"></tbody></table>
@@ -337,16 +346,45 @@
         </nav>
     </div>
 
+    <div id="modal-edit-team" class="force-hide fixed inset-0 z-[100] modal flex items-center justify-center p-4">
+        <div class="w-full max-w-md p-6 lg:p-8 shadow-xl border border-slate-200 rounded-2xl relative bg-white">
+            <button onclick="closeEditTeamMemberModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>
+            <h2 class="text-lg font-black text-slate-800 tracking-tight mb-6 flex items-center gap-2"><i data-lucide="user-cog" class="text-primary-500 w-5 h-5"></i> Modifica Collaboratore</h2>
+            <input type="hidden" id="edit-team-id">
+            <div class="space-y-4">
+                <div>
+                    <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Nome e Cognome</label>
+                    <input type="text" id="edit-team-name" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Ruolo</label>
+                        <select id="edit-team-role" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none text-slate-700">
+                            <option value="staff">Staff</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Costo Orario (€)</label>
+                        <input type="number" step="0.01" id="edit-team-cost" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all font-bold">
+                    </div>
+                </div>
+                <div class="flex gap-2 pt-4 mt-2 border-t border-slate-100">
+                    <button id="btn-delete-team" onclick="deleteTeamMemberFromModal()" class="bg-white text-slate-500 border border-slate-200 hover:bg-red-50 hover:text-red-600 hover:border-red-200 px-4 py-3.5 rounded-xl transition-colors shadow-sm flex items-center justify-center shrink-0" title="Rimuovi"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    <button onclick="saveTeamMemberEdit()" class="flex-1 bg-slate-900 text-white py-3.5 rounded-xl font-bold shadow-sm hover:bg-slate-800 transition-all active:scale-[0.98]">Salva Modifiche</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="modal-account" class="force-hide fixed inset-0 z-[200] modal flex items-center justify-center p-4">
         <div class="w-full max-w-sm p-5 lg:p-6 shadow-xl border border-slate-200 rounded-2xl relative bg-white max-h-[95vh] overflow-y-auto">
             <button onclick="closeAccountModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>
-            
             <div class="text-center mb-4">
                 <h2 class="text-xl font-black text-slate-900 tracking-tight" id="account-name">Nome Utente</h2>
                 <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mt-1" id="account-email">email@studio.it</p>
                 <div class="mt-2 inline-block px-2.5 py-1 bg-slate-100 text-slate-600 text-[10px] font-bold uppercase rounded-md border border-slate-200 tracking-wider" id="account-role">RUOLO</div>
             </div>
-
             <div class="border-t border-slate-100 pt-4 admin-only">
                 <h3 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2.5 flex items-center gap-1.5"><i data-lucide="credit-card" class="w-3.5 h-3.5"></i> Abbonamento</h3>
                 <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl flex justify-between items-center mb-3">
@@ -356,12 +394,10 @@
                     </div>
                     <div id="account-plan-status" class="w-2 h-2 bg-emerald-500 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.5)]"></div>
                 </div>
-
                 <div id="account-upgrade-btn-container" class="force-hide"><button onclick="handlePlanChange('premium')" class="w-full bg-slate-900 text-white py-3 rounded-xl font-bold hover:bg-slate-800 transition-all shadow-sm text-sm mb-2 flex items-center justify-center gap-2"><i data-lucide="zap" class="w-4 h-4 text-amber-400"></i> Passa a Premium (59,99€)</button></div>
                 <div id="account-downgrade-btn-container" class="force-hide"><button onclick="handlePlanChange('starter')" class="w-full bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 py-3 rounded-xl font-bold transition-all shadow-sm text-sm mb-2 flex items-center justify-center gap-2">Passa a Starter (29,99€)</button></div>
                 <p class="text-[10px] text-center text-slate-400 leading-tight mb-4">Gestione sicura fatture via Stripe.</p>
             </div>
-
             <div class="border-t border-slate-100 pt-4 admin-only">
                 <h3 id="lbl-identity-title" class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2.5 flex items-center gap-1.5"><i data-lucide="image" class="w-3.5 h-3.5"></i> Identità Studio</h3>
                 <div class="flex items-center gap-3 mb-3">
@@ -377,7 +413,6 @@
                     <input type="text" id="account-studio-name" placeholder="Nome Studio" class="flex-1 border border-slate-200 rounded-xl p-2.5 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all">
                     <button onclick="saveStudioName()" class="bg-primary-600 text-white px-3.5 rounded-xl hover:bg-primary-700 transition-all shadow-sm flex items-center justify-center"><i data-lucide="save" class="w-4 h-4"></i></button>
                 </div>
-                
                 <div class="mt-4 pt-4 border-t border-slate-100 flex justify-between items-center">
                     <div>
                         <p id="lbl-catalog-title" class="text-[11px] font-bold text-slate-700 uppercase tracking-wider">Catalogo Attività</p>
@@ -386,12 +421,9 @@
                     <button onclick="openCatalogModal()" class="text-[10px] font-bold bg-white text-slate-600 border border-slate-200 px-3 py-2 rounded-lg hover:border-primary-200 hover:text-primary-600 hover:bg-primary-50 flex items-center gap-1.5 shadow-sm transition-all"><i data-lucide="book-open" class="w-3.5 h-3.5"></i> Apri Catalogo</button>
                 </div>
             </div>
-
             <div class="border-t border-slate-100 mt-5 pt-4 text-center flex flex-col gap-2">
                 <button onclick="exportUserData()" class="text-[10px] font-bold uppercase tracking-wider text-primary-500 hover:text-primary-700 py-1.5 px-4 rounded-lg transition-all flex items-center justify-center gap-1.5 mx-auto mb-2"><i data-lucide="download" class="w-3.5 h-3.5"></i> Esporta i miei dati (JSON)</button>
-
                 <button onclick="handleLogout()" class="text-[11px] font-bold uppercase tracking-wider text-slate-500 hover:text-slate-800 py-2 px-4 rounded-lg transition-all flex items-center justify-center gap-1.5 mx-auto"><i data-lucide="log-out" class="w-3.5 h-3.5"></i> Esci dall'account</button>
-                
                 <button onclick="deleteAccount()" class="text-[10px] font-bold uppercase tracking-wider text-red-400 hover:text-red-600 py-1.5 px-4 rounded-lg transition-all flex items-center justify-center gap-1.5 mx-auto mt-2"><i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i> Elimina Definitivamente Account</button>
             </div>
         </div>
@@ -400,30 +432,24 @@
     <div id="modal-task-builder" class="force-hide fixed inset-0 z-[200] modal flex items-center justify-center p-4">
         <div class="w-full max-w-md p-6 lg:p-8 shadow-xl border border-slate-200 rounded-2xl relative bg-white flex flex-col max-h-[90vh]">
             <button onclick="closeTaskBuilder()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>
-            
             <h2 class="text-lg font-black text-slate-800 tracking-tight mb-1 flex items-center gap-2"><i data-lucide="layers" class="text-primary-500 w-5 h-5"></i> Costruttore Attività</h2>
             <p class="text-[11px] text-slate-500 mb-6 uppercase tracking-wider font-bold">Aggiungi e ordina le fasi.</p>
-            
             <div class="flex-1 overflow-y-auto mb-6 pr-2 space-y-6">
                 <div>
                     <div class="flex justify-between items-center mb-2.5">
                         <h3 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Attività Selezionate</h3>
                         <span class="text-[9px] text-primary-600 font-bold bg-primary-50 px-1.5 py-0.5 rounded-md border border-primary-100 uppercase tracking-wider">Ordine Salvato</span>
                     </div>
-                    <div id="builder-selected-tasks" class="space-y-2 min-h-[60px] p-3.5 bg-slate-50 border border-slate-200 rounded-xl">
-                    </div>
+                    <div id="builder-selected-tasks" class="space-y-2 min-h-[60px] p-3.5 bg-slate-50 border border-slate-200 rounded-xl"></div>
                 </div>
-                
                 <div class="space-y-5">
                     <div>
                         <div class="flex justify-between items-center mb-2.5">
                             <h3 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Aggiungi dal Catalogo</h3>
                             <button onclick="openCatalogModal()" class="text-[9px] font-bold text-slate-500 hover:text-primary-600 bg-white border border-slate-200 hover:border-primary-200 hover:bg-primary-50 px-2 py-1 rounded-md transition-all flex items-center gap-1 shadow-sm"><i data-lucide="settings" class="w-3 h-3"></i> Gestisci</button>
                         </div>
-                        <div id="builder-catalog-tasks" class="flex flex-wrap gap-1.5">
-                        </div>
+                        <div id="builder-catalog-tasks" class="flex flex-wrap gap-1.5"></div>
                     </div>
-                    
                     <div class="pt-4 border-t border-slate-100">
                         <h3 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">Creane una nuova al volo</h3>
                         <div class="flex gap-2">
@@ -433,7 +459,6 @@
                     </div>
                 </div>
             </div>
-            
             <button onclick="confirmTaskBuilder()" class="w-full bg-slate-900 text-white py-3.5 rounded-xl font-bold hover:bg-slate-800 transition-all active:scale-[0.98] shrink-0 shadow-sm flex items-center justify-center gap-2"><i data-lucide="check" class="w-4 h-4"></i> Conferma Ordine</button>
         </div>
     </div>
@@ -474,7 +499,7 @@
     
     <div id="modal-manual" class="force-hide fixed inset-0 z-[100] modal flex items-center justify-center p-4"><div class="w-full max-w-md p-6 lg:p-8 shadow-xl border border-slate-200 rounded-2xl relative bg-white"><button onclick="closeManualEntry()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button><h2 class="text-lg font-black text-slate-800 tracking-tight mb-6">Inserimento Manuale</h2><div class="space-y-4"><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Progetto</label><select id="manual-project" onchange="updateManualTaskDropdown()" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none"></select></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Attività</label><select id="manual-task" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none"></select></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Note</label><input type="text" id="manual-notes" placeholder="Opzionale" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div><div class="grid grid-cols-2 gap-4"><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Data</label><input type="date" id="manual-date" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Ore</label><input type="number" step="0.1" id="manual-hours" placeholder="0.0" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div></div><button onclick="saveManualEntry()" class="w-full bg-slate-900 text-white py-3.5 mt-4 rounded-xl font-bold shadow-sm hover:bg-slate-800 transition-all active:scale-[0.98]">Salva Ore</button></div></div></div>
     
-    <div id="modal-edit-entry" class="force-hide fixed inset-0 z-[100] modal flex items-center justify-center p-4"><div class="w-full max-w-md p-6 lg:p-8 shadow-xl border border-slate-200 rounded-2xl relative bg-white"><button onclick="closeEditEntryModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button><h2 class="text-lg font-black text-slate-800 tracking-tight mb-6 flex items-center gap-2"><i data-lucide="edit" class="text-primary-500 w-5 h-5"></i> Modifica Attività</h2><input type="hidden" id="edit-entry-id"><div class="space-y-4"><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Data</label><input type="date" id="edit-entry-date" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Team</label><select id="edit-entry-user" onchange="updateEditCost()" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></select></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Progetto</label><select id="edit-entry-project" onchange="updateEditTaskDropdown()" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></select></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Attività</label><select id="edit-entry-task" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></select></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Note</label><input type="text" id="edit-entry-notes" placeholder="Note" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div><div class="grid grid-cols-2 gap-4"><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Ore</label><input type="number" step="0.1" id="edit-entry-hours" oninput="updateEditCost()" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Costo (€)</label><input type="number" id="edit-entry-cost" readonly class="w-full border border-slate-200 bg-slate-50 text-slate-500 font-bold rounded-xl p-3 text-sm outline-none"></div></div><button onclick="saveEntryEdit()" class="w-full bg-slate-900 text-white py-3.5 mt-4 rounded-xl font-bold shadow-sm hover:bg-slate-800 transition-all active:scale-[0.98]">Salva Modifiche</button></div></div></div>
+    <div id="modal-edit-entry" class="force-hide fixed inset-0 z-[100] modal flex items-center justify-center p-4"><div class="w-full max-w-md p-6 lg:p-8 shadow-xl border border-slate-200 rounded-2xl relative bg-white"><button onclick="closeEditEntryModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button><h2 class="text-lg font-black text-slate-800 tracking-tight mb-6 flex items-center gap-2"><i data-lucide="edit" class="text-primary-500 w-5 h-5"></i> Modifica Attività</h2><input type="hidden" id="edit-entry-id"><div class="space-y-4"><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Data</label><input type="date" id="edit-entry-date" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div><div class="admin-only"><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Team</label><select id="edit-entry-user" onchange="updateEditCost()" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none"></select></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Progetto</label><select id="edit-entry-project" onchange="updateEditTaskDropdown()" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none"></select></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Attività</label><select id="edit-entry-task" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none"></select></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Note</label><input type="text" id="edit-entry-notes" placeholder="Note" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div><div class="grid grid-cols-2 gap-4"><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Ore</label><input type="number" step="0.1" id="edit-entry-hours" oninput="updateEditCost()" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div><div class="admin-only"><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Costo (€)</label><input type="number" step="0.01" id="edit-entry-cost" readonly class="w-full border border-slate-200 bg-slate-50 text-slate-500 font-bold rounded-xl p-3 text-sm outline-none"></div></div><button onclick="saveEntryEdit()" class="w-full bg-slate-900 text-white py-3.5 mt-4 rounded-xl font-bold shadow-sm hover:bg-slate-800 transition-all active:scale-[0.98]">Salva Modifiche</button></div></div></div>
     
     <div id="modal-edit-project" class="force-hide fixed inset-0 z-[100] modal flex items-center justify-center p-4"><div class="w-full max-w-md p-6 lg:p-8 shadow-xl border border-slate-200 rounded-2xl relative bg-white overflow-visible"><button onclick="closeEditProjectModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button><h2 class="text-lg font-black text-slate-800 tracking-tight mb-6 flex items-center gap-2"><i data-lucide="edit-3" class="text-primary-500 w-5 h-5"></i> Modifica Dati</h2><input type="hidden" id="edit-modal-proj-id"><div class="space-y-4"><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Nome</label><input type="text" id="edit-modal-name" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Cliente</label><input type="text" id="edit-modal-client" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Budget Totale</label><div class="flex gap-2 bg-white p-3 rounded-xl border border-slate-200 focus-within:border-primary-500 focus-within:ring-4 focus-within:ring-primary-500/10 transition-all"><span class="text-slate-400 font-bold text-sm">€</span><input type="number" id="edit-modal-budget" class="bg-transparent w-full outline-none text-sm font-bold text-slate-800"></div></div><div class="pt-5 mt-2 border-t border-slate-100"><div class="bg-white border border-slate-200 rounded-xl p-3.5 shadow-sm"><div class="flex justify-between items-center mb-2.5"><span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Attività Incluse</span><button onclick="openTaskBuilder('edit')" class="text-[10px] font-bold text-primary-600 hover:text-primary-700 bg-white border border-slate-200 hover:border-primary-200 hover:bg-primary-50 px-2 py-1 rounded-md transition-all flex items-center gap-1 shadow-sm"><i data-lucide="settings" class="w-3 h-3"></i> Configura</button></div><div id="edit-proj-selected-tasks" class="flex flex-wrap gap-1.5 min-h-[28px]"></div></div></div><button onclick="saveModalProjectEdit()" class="w-full bg-slate-900 text-white py-3.5 mt-4 rounded-xl font-bold shadow-sm hover:bg-slate-800 transition-all active:scale-[0.98]">Salva Modifiche</button></div></div></div>
 
@@ -984,28 +1009,62 @@
         async function fetchExpenses() { const { data } = await supabaseClient.from('expenses').select('*').order('created_at', { ascending: false }); expenses = data || []; renderProjects(); if(userProfile && userProfile.role === 'admin') renderStrategicCharts(); }
         async function fetchProfiles() { const { data } = await supabaseClient.from('profiles').select('*').order('full_name'); profiles = data || []; renderProfiles(); }
 
-        // Salvataggio automatico del team (su onchange)
         function renderProfiles() {
             document.getElementById('team-list').innerHTML = profiles.map(pr => {
-                const isMe = pr.id === userProfile.id;
-                return `<div class="p-5 border border-slate-200 rounded-2xl bg-white flex flex-col gap-4 shadow-sm"><div><input type="text" id="name-${pr.id}" value="${pr.full_name || ''}" onchange="updateTeamMember('${pr.id}', true)" class="bg-transparent font-black text-slate-800 text-sm w-full outline-none border-b border-transparent focus:border-primary-500 pb-1 transition-colors"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">${pr.email}</p></div><div class="flex items-center justify-between gap-2 mt-1"><select id="role-${pr.id}" onchange="updateTeamMember('${pr.id}', true)" class="text-[11px] font-bold bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 outline-none uppercase text-slate-600 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"><option value="staff" ${pr.role==='staff'?'selected':''}>Staff</option><option value="admin" ${pr.role==='admin'?'selected':''}>Admin</option></select><div class="flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 flex-1 focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500/20 transition-all"><span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">€/h</span><input type="number" id="cost-${pr.id}" value="${pr.hourly_cost}" onchange="updateTeamMember('${pr.id}', true)" class="w-full text-sm text-center font-black bg-transparent outline-none text-slate-800"></div><div class="flex gap-1.5 shrink-0"><button id="btn-save-${pr.id}" onclick="updateTeamMember('${pr.id}', false)" class="bg-slate-900 text-white p-2.5 rounded-xl hover:bg-slate-800 transition-all shadow-sm active:scale-95"><i data-lucide="save" class="w-4 h-4"></i></button>${!isMe ? `<button onclick="deleteTeamMember('${pr.id}')" class="bg-white text-slate-400 p-2.5 rounded-xl border border-slate-200 hover:bg-red-50 hover:border-red-200 hover:text-red-600 transition-colors shadow-sm active:scale-95"><i data-lucide="trash-2" class="w-4 h-4"></i></button>` : ''}</div></div></div>`;
+                const roleBadge = pr.role === 'admin' 
+                    ? '<span class="bg-indigo-50 text-indigo-600 border border-indigo-100 text-[9px] px-2 py-0.5 rounded-md uppercase font-bold tracking-wider">Admin</span>' 
+                    : '<span class="bg-slate-100 text-slate-500 border border-slate-200 text-[9px] px-2 py-0.5 rounded-md uppercase font-bold tracking-wider">Staff</span>';
+                return `
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 flex justify-between items-center shadow-sm hover:shadow-md transition-shadow group">
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <h4 class="font-black text-slate-800 text-sm tracking-tight">${pr.full_name}</h4>
+                                ${roleBadge}
+                            </div>
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">${pr.email}</p>
+                        </div>
+                        <button onclick="openEditTeamMemberModal('${pr.id}')" class="text-slate-400 hover:text-primary-600 bg-slate-50 hover:bg-primary-50 p-2 rounded-lg border border-slate-200 hover:border-primary-200 transition-all shadow-sm">
+                            <i data-lucide="edit-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>`;
             }).join('');
             lucide.createIcons();
         }
 
-        async function updateTeamMember(id, silent = false) { 
-            const newName = document.getElementById('name-'+id).value;
-            const newCost = parseFloat(document.getElementById('cost-'+id).value) || 0;
-            const newRole = document.getElementById('role-'+id).value;
+        function openEditTeamMemberModal(id) {
+            const pr = profiles.find(p => p.id === id);
+            if(!pr) return;
+            document.getElementById('edit-team-id').value = pr.id;
+            document.getElementById('edit-team-name').value = pr.full_name || '';
+            document.getElementById('edit-team-role').value = pr.role || 'staff';
+            document.getElementById('edit-team-cost').value = pr.hourly_cost || 0;
             
-            // Effetto grafico di salvataggio avvenuto
-            const btn = document.getElementById('btn-save-'+id);
-            if(btn) { btn.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i>'; btn.classList.replace('bg-slate-900', 'bg-emerald-500'); btn.classList.replace('hover:bg-slate-800', 'hover:bg-emerald-600'); lucide.createIcons(); }
+            const btnDelete = document.getElementById('btn-delete-team');
+            if(pr.id === userProfile.id) {
+                btnDelete.classList.add('force-hide');
+            } else {
+                btnDelete.classList.remove('force-hide');
+            }
+            
+            document.getElementById('modal-edit-team').classList.remove('force-hide');
+            lucide.createIcons();
+        }
 
-            const oldProf = profiles.find(p => p.id === id);
-            await supabaseClient.from('profiles').update({ full_name: newName, hourly_cost: newCost, role: newRole }).eq('id', id); 
+        function closeEditTeamMemberModal() {
+            document.getElementById('modal-edit-team').classList.add('force-hide');
+        }
+
+        async function saveTeamMemberEdit() {
+            const id = document.getElementById('edit-team-id').value;
+            const newName = document.getElementById('edit-team-name').value.trim();
+            const newRole = document.getElementById('edit-team-role').value;
+            const newCost = parseFloat(document.getElementById('edit-team-cost').value) || 0;
             
-            // Ricalcolo Storico
+            if(!newName) return await appAlert("Attenzione", "Inserisci il nome", "danger");
+            
+            const oldProf = profiles.find(p => p.id === id);
+            await supabaseClient.from('profiles').update({ full_name: newName, hourly_cost: newCost, role: newRole }).eq('id', id);
+            
             if (oldProf && oldProf.hourly_cost !== newCost) {
                 if(await appConfirm("Ricalcolo Storico", `Hai modificato la tariffa oraria di ${newName}.\nVuoi ricalcolare automaticamente il costo di TUTTE le ore che ha già registrato in passato con questa nuova tariffa?`, "info")) {
                     const { data: userEntries } = await supabaseClient.from('entries').select('id, duration').eq('user_name', oldProf.full_name);
@@ -1016,15 +1075,25 @@
                     }
                 }
             }
-
-            if(!silent && (!oldProf || oldProf.hourly_cost === newCost)) {
-                await appAlert("Fatto", "Profilo aggiornato!", "success"); 
-            }
             
-            setTimeout(async () => { await fetchProfiles(); await fetchEntries(); if (userProfile.role === 'admin') { await fetchProjects(); renderStrategicCharts(); } }, 600);
+            closeEditTeamMemberModal();
+            await fetchProfiles(); 
+            await fetchEntries(); 
+            if (userProfile.role === 'admin') { 
+                await fetchProjects(); 
+                renderStrategicCharts(); 
+            }
+            await appAlert("Fatto", "Profilo aggiornato!", "success");
         }
-
-        async function deleteTeamMember(id) { if(await appConfirm("Rimuovi Collaboratore", "Vuoi davvero rimuovere questo collaboratore dal team?", "danger")) { await supabaseClient.from('profiles').delete().eq('id', id); fetchProfiles(); } }
+        
+        async function deleteTeamMemberFromModal() {
+            const id = document.getElementById('edit-team-id').value;
+            if(await appConfirm("Rimuovi Collaboratore", "Vuoi davvero rimuovere questo collaboratore dal team?", "danger")) { 
+                await supabaseClient.from('profiles').delete().eq('id', id); 
+                closeEditTeamMemberModal();
+                fetchProfiles(); 
+            }
+        }
 
         function openCatalogModal() { document.getElementById('modal-catalog').classList.remove('force-hide'); }
         function closeCatalogModal() { document.getElementById('modal-catalog').classList.add('force-hide'); cancelCatalogEdit(); }
@@ -1342,13 +1411,39 @@
 
         function prevWeek() { currentWeekStart.setDate(currentWeekStart.getDate() - 7); renderEntries(); }
         function nextWeek() { currentWeekStart.setDate(currentWeekStart.getDate() + 7); renderEntries(); }
+        
+        function jumpToDate(dateString) {
+            if(!dateString) return;
+            currentWeekStart = getMonday(new Date(dateString));
+            renderEntries();
+        }
+
         function renderEntries() {
-            const table = document.getElementById('entries-table-desktop'); const mobile = document.getElementById('entries-list-mobile');
-            const start = new Date(currentWeekStart); start.setHours(0,0,0,0); const end = new Date(start); end.setDate(end.getDate() + 6); end.setHours(23,59,59,999);
+            const table = document.getElementById('entries-table-desktop'); 
+            const mobile = document.getElementById('entries-list-mobile');
+            const start = new Date(currentWeekStart); start.setHours(0,0,0,0); 
+            const end = new Date(start); end.setDate(end.getDate() + 6); end.setHours(23,59,59,999);
+            
             document.getElementById('week-display').innerText = `${start.toLocaleDateString('it-IT', {day:'2-digit',month:'short'})} - ${end.toLocaleDateString('it-IT', {day:'2-digit',month:'short',year:'numeric'})}`;
-            const weekly = entries.filter(e => { const d = new Date(e.created_at).getTime(); return d >= start.getTime() && d <= end.getTime(); });
-            document.getElementById('entries-empty-state').classList.toggle('force-hide', weekly.length > 0); table.parentElement.classList.toggle('force-hide', weekly.length === 0);
+            
+            const isStaff = userProfile.role !== 'admin';
+
+            let weekly = entries.filter(e => {
+                const d = new Date(e.created_at).getTime();
+                const inDate = d >= start.getTime() && d <= end.getTime();
+                
+                // Filtro sicurezza: il collaboratore vede solo se stesso
+                if (isStaff) {
+                    return inDate && e.user_email === userProfile.email;
+                }
+                return inDate;
+            });
+
+            document.getElementById('entries-empty-state').classList.toggle('force-hide', weekly.length > 0); 
+            table.parentElement.classList.toggle('force-hide', weekly.length === 0);
+            
             table.innerHTML = weekly.map(e => `<tr class="hover:bg-slate-50 border-b border-slate-100 transition-colors"><td class="p-5 font-bold text-slate-500 text-xs">${new Date(e.created_at).toLocaleDateString('it-IT', {weekday:'short', day:'2-digit'})}</td><td class="p-5 text-center"><span class="bg-slate-100 text-slate-600 text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider">${e.user_name}</span></td><td class="p-5 font-black text-slate-800 tracking-tight">${e.project_name}</td><td class="p-5"><div class="text-xs font-bold text-slate-600">${e.task}</div><div class="text-[11px] text-slate-400 mt-0.5">${e.notes||''}</div></td><td class="p-5 font-mono font-black text-primary-600">${Number(e.duration).toFixed(2)}h</td><td class="p-5 text-right admin-only"><div class="flex justify-end gap-3 items-center"><span class="font-mono text-slate-400 text-sm font-bold">€${Number(e.rate).toFixed(2)}</span><button onclick="openEditEntryModal('${e.id}')" class="text-slate-300 hover:text-primary-600 p-1.5 hover:bg-primary-50 rounded-lg transition-colors"><i data-lucide="pencil" class="w-4 h-4"></i></button><button onclick="deleteEntry('${e.id}')" class="text-slate-300 hover:text-red-600 p-1.5 hover:bg-red-50 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div></td></tr>`).join('');
+            
             mobile.innerHTML = weekly.map(e => `<div class="p-5 border-b border-slate-100 bg-white"><div class="flex justify-between mb-3"><div><div class="flex gap-2 mb-1.5"><span class="text-[9px] font-bold text-slate-600 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded-md uppercase tracking-wider">${e.user_name}</span><span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">${new Date(e.created_at).toLocaleDateString('it-IT', {weekday:'short', day:'2-digit'})}</span></div><h4 class="font-black text-sm text-slate-800 tracking-tight">${e.project_name}</h4></div><span class="font-mono font-black text-primary-600 bg-primary-50 border border-primary-100 px-2 py-1 rounded-lg h-fit">${Number(e.duration).toFixed(2)}h</span></div><div class="flex flex-col gap-3"><div class="max-w-[90%]"><span class="text-xs text-slate-600 font-bold">${e.task}</span><div class="text-[11px] text-slate-400 mt-0.5">${e.notes||''}</div></div><div class="admin-only flex justify-between border-t border-slate-100 pt-3"><span class="font-mono text-slate-500 font-bold text-xs">Costo: €${Number(e.rate).toFixed(2)}</span><div class="flex gap-2"><button onclick="openEditEntryModal('${e.id}')" class="text-slate-400 p-1.5 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button><button onclick="deleteEntry('${e.id}')" class="text-slate-400 p-1.5 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></div></div></div></div>`).join('');
             lucide.createIcons();
         }
