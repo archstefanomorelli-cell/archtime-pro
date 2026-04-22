@@ -72,7 +72,7 @@
                     </div>
                 </div>
                 <div class="mt-12">
-                    <a href="app.html" class="w-full sm:w-auto bg-indigo-600 text-white text-lg font-bold px-10 py-5 rounded-2xl hover:bg-indigo-700 transition-all shadow-2xl shadow-indigo-500/20 active:scale-95 flex inline-items-center justify-center gap-3">
+                    <a href="app.html" class="w-full sm:w-auto bg-indigo-600 text-white text-lg font-bold px-10 py-5 rounded-2xl hover:bg-indigo-700 transition-all shadow-2xl shadow-indigo-500/20 active:scale-95 flex items-center justify-center gap-3">
                         Configura il tuo Studio <i data-lucide="arrow-right" class="w-5 h-5"></i>
                     </a>
                 </div>
@@ -221,21 +221,21 @@
 
                 <details class="bg-slate-50 border border-slate-200 rounded-2xl group cursor-pointer overflow-hidden transition-all shadow-sm">
                     <summary class="p-6 font-bold text-slate-900 flex justify-between items-center select-none group-open:bg-white transition-colors">
-                        Come funziona la Privacy Finanziaria per il team?
+                        Chi può vedere i miei dati finanziari? L'amministratore può "spiare" i miei incassi?
                         <i data-lucide="chevron-down" class="text-slate-400 group-open:rotate-180 transition-transform"></i>
                     </summary>
                     <div class="px-6 pb-6 pt-4 text-sm text-slate-600 leading-relaxed border-t border-slate-100 bg-white">
-                        Il sistema utilizza una visibilità a livelli per tutelare i dati del tuo Studio. La direzione imposta internamente il costo orario di ogni collaboratore (es. 25€/h) per calcolare la marginalità. Il team traccia le ore lavorate senza mai avere accesso a dati sensibili: non vedranno le tariffe orarie, i costi dei colleghi o i budget dei clienti.
+                        La tua privacy è blindata. Arch Time Pro utilizza un'architettura <strong>Zero-Knowledge-Ready</strong>: i dati sono segregati tramite RLS (Row Level Security) sui server di Supabase. Gestiamo la piattaforma, ma non abbiamo accesso tecnico alla tua istanza di dati. È come se tu affittassi una cassaforte in una banca: noi possediamo l'edificio, ma la combinazione ce l'hai solo tu.
                     </div>
                 </details>
 
                 <details class="bg-slate-50 border border-slate-200 rounded-2xl group cursor-pointer overflow-hidden transition-all shadow-sm">
                     <summary class="p-6 font-bold text-slate-900 flex justify-between items-center select-none group-open:bg-white transition-colors">
-                        Posso usare l'app dal cantiere?
+                        Come funziona la Privacy Finanziaria per il team?
                         <i data-lucide="chevron-down" class="text-slate-400 group-open:rotate-180 transition-transform"></i>
                     </summary>
                     <div class="px-6 pb-6 pt-4 text-sm text-slate-600 leading-relaxed border-t border-slate-100 bg-white">
-                        Sì, è nata per questo. L'interfaccia è completamente ottimizzata per smartphone. Puoi avviare il timer durante un sopralluogo o caricare una spesa extra (es. marche da bollo) mentre sei fuori ufficio.
+                        Il sistema utilizza una visibilità a livelli per tutelare i dati del tuo Studio. La direzione imposta internamente il costo orario di ogni collaboratore (es. 25€/h) per calcolare la marginalità. Il team traccia le ore lavorate senza mai avere accesso a dati sensibili: non vedranno le tariffe orarie, i costi dei colleghi o i budget dei clienti.
                     </div>
                 </details>
 
@@ -265,7 +265,7 @@
                         <i data-lucide="chevron-down" class="text-slate-400 group-open:rotate-180 transition-transform"></i>
                     </summary>
                     <div class="px-6 pb-6 pt-4 text-sm text-slate-600 leading-relaxed border-t border-slate-100 bg-white">
-                        Certamente. Utilizziamo Supabase (Google Cloud) per la gestione dei dati, con crittografia end-to-end. I dati del tuo studio e dei tuoi clienti sono isolati e protetti secondo i massimi standard di sicurezza europei.
+                        Certamente. Utilizziamo Supabase per la gestione dei dati, con crittografia a riposo e segregazione logica. I dati del tuo studio e dei tuoi clienti sono isolati e protetti secondo i massimi standard di sicurezza europei. Nessun altro utente della piattaforma può invocare o vedere i tuoi dati.
                     </div>
                 </details>
 
@@ -275,7 +275,7 @@
                         <i data-lucide="chevron-down" class="text-slate-400 group-open:rotate-180 transition-transform"></i>
                     </summary>
                     <div class="px-6 pb-6 pt-4 text-sm text-slate-600 leading-relaxed border-t border-slate-100 bg-white">
-                        Sì. Se hai il piano Premium puoi scaricare tutti i report dettagliati in PDF. I tuoi dati sono tuoi e non resteranno mai "ostaggi" del software.
+                        Sì. Se hai il piano Premium puoi scaricare tutti i report dettagliati in PDF. Inoltre esiste una funzione di export globale in JSON per permetterti di conservare una copia locale di tutto lo storico del tuo studio.
                     </div>
                 </details>
 
