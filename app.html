@@ -149,8 +149,8 @@
                         <input type="text" id="full-name" placeholder="Nome e Cognome" class="w-full border border-slate-200 rounded-xl p-3.5 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all bg-white">
                     </div>
                     
-                    <input type="email" id="email" placeholder="Email professionale" class="w-full border border-slate-200 rounded-xl p-3.5 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all bg-white">
-                    <input type="password" id="password" placeholder="Password" class="w-full border border-slate-200 rounded-xl p-3.5 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all bg-white">
+                    <input type="email" id="email" onkeypress="if(event.key === 'Enter') handleAuthAction()" placeholder="Email professionale" class="w-full border border-slate-200 rounded-xl p-3.5 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all bg-white">
+                    <input type="password" id="password" onkeypress="if(event.key === 'Enter') handleAuthAction()" placeholder="Password" class="w-full border border-slate-200 rounded-xl p-3.5 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all bg-white">
                     
                     <div id="signup-legal" class="force-hide mt-4 mb-2">
                         <label class="flex items-start gap-2.5 cursor-pointer group">
@@ -322,9 +322,9 @@
                         
                         <div class="flex items-center gap-1.5 bg-slate-50 rounded-lg p-1 border border-slate-200">
                             <button onclick="prevWeek()" class="p-1.5 text-slate-400 hover:text-primary-600 hover:bg-white rounded-md shadow-sm transition-colors border border-transparent hover:border-slate-200"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
-                            <div class="relative cursor-pointer group px-2 flex items-center justify-center">
-                                <input type="date" id="week-picker" onchange="jumpToDate(this.value)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
-                                <span id="week-display" class="text-[11px] font-bold text-slate-600 min-w-[130px] text-center uppercase tracking-wider group-hover:text-primary-600 transition-colors"></span>
+                            <div class="relative cursor-pointer group px-2 flex items-center justify-center" onclick="document.getElementById('week-picker').showPicker()">
+                                <input type="date" id="week-picker" onchange="jumpToDate(this.value)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" style="pointer-events: none;">
+                                <span id="week-display" class="text-[11px] font-bold text-slate-600 min-w-[130px] text-center uppercase tracking-wider group-hover:text-primary-600 transition-colors pointer-events-none"></span>
                             </div>
                             <button onclick="nextWeek()" class="p-1.5 text-slate-400 hover:text-primary-600 hover:bg-white rounded-md shadow-sm transition-colors border border-transparent hover:border-slate-200"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
                         </div>
@@ -362,6 +362,7 @@
                         <select id="edit-team-role" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none text-slate-700">
                             <option value="staff">Staff</option>
                             <option value="admin">Admin</option>
+                            <option value="inactive">Inattivo (Sospeso)</option>
                         </select>
                     </div>
                     <div>
@@ -370,7 +371,7 @@
                     </div>
                 </div>
                 <div class="flex gap-2 pt-4 mt-2 border-t border-slate-100">
-                    <button id="btn-delete-team" onclick="deleteTeamMemberFromModal()" class="bg-white text-slate-500 border border-slate-200 hover:bg-red-50 hover:text-red-600 hover:border-red-200 px-4 py-3.5 rounded-xl transition-colors shadow-sm flex items-center justify-center shrink-0" title="Rimuovi"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    <button id="btn-delete-team" onclick="deleteTeamMemberFromModal()" class="bg-white text-slate-500 border border-slate-200 hover:bg-red-50 hover:text-red-600 hover:border-red-200 px-4 py-3.5 rounded-xl transition-colors shadow-sm flex items-center justify-center shrink-0" title="Rimuovi Definitivamente"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                     <button onclick="saveTeamMemberEdit()" class="flex-1 bg-slate-900 text-white py-3.5 rounded-xl font-bold shadow-sm hover:bg-slate-800 transition-all active:scale-[0.98]">Salva Modifiche</button>
                 </div>
             </div>
@@ -552,7 +553,7 @@
         <div class="bg-white rounded-2xl p-6 lg:p-8 max-w-sm w-full text-center shadow-xl border border-slate-200 transform transition-all scale-95 opacity-0" id="custom-dialog-card">
             <div id="custom-dialog-icon" class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6"></div>
             <h2 id="custom-dialog-title" class="text-xl font-black text-slate-900 mb-2 tracking-tight"></h2>
-            <p id="custom-dialog-msg" class="text-slate-500 text-sm mb-6 leading-relaxed"></p>
+            <p id="custom-dialog-msg" class="text-slate-500 text-sm mb-6 leading-relaxed whitespace-pre-wrap"></p>
             <input type="text" id="custom-dialog-input" class="force-hide w-full border border-slate-200 rounded-xl p-3 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all mb-6 text-center font-bold">
             <div class="flex gap-3 justify-center w-full" id="custom-dialog-buttons"></div>
         </div>
@@ -1013,9 +1014,12 @@
             document.getElementById('team-list').innerHTML = profiles.map(pr => {
                 const roleBadge = pr.role === 'admin' 
                     ? '<span class="bg-indigo-50 text-indigo-600 border border-indigo-100 text-[9px] px-2 py-0.5 rounded-md uppercase font-bold tracking-wider">Admin</span>' 
-                    : '<span class="bg-slate-100 text-slate-500 border border-slate-200 text-[9px] px-2 py-0.5 rounded-md uppercase font-bold tracking-wider">Staff</span>';
+                    : (pr.role === 'inactive' ? '<span class="bg-red-50 text-red-500 border border-red-200 text-[9px] px-2 py-0.5 rounded-md uppercase font-bold tracking-wider">Inattivo</span>' : '<span class="bg-slate-100 text-slate-500 border border-slate-200 text-[9px] px-2 py-0.5 rounded-md uppercase font-bold tracking-wider">Staff</span>');
+                
+                const opacityClass = pr.role === 'inactive' ? 'opacity-60 grayscale' : '';
+                
                 return `
-                    <div class="bg-white p-4 rounded-xl border border-slate-200 flex justify-between items-center shadow-sm hover:shadow-md transition-shadow group">
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 flex justify-between items-center shadow-sm hover:shadow-md transition-shadow group ${opacityClass}">
                         <div>
                             <div class="flex items-center gap-2 mb-1">
                                 <h4 class="font-black text-slate-800 text-sm tracking-tight">${pr.full_name}</h4>
@@ -1088,7 +1092,7 @@
         
         async function deleteTeamMemberFromModal() {
             const id = document.getElementById('edit-team-id').value;
-            if(await appConfirm("Rimuovi Collaboratore", "Vuoi davvero rimuovere questo collaboratore dal team?", "danger")) { 
+            if(await appConfirm("Rimuovi Collaboratore", "ATTENZIONE: Eliminando il collaboratore si perderà il collegamento con le sue ore.\n\nConsiglio: se ha smesso di collaborare, usa Annulla e cambia il suo ruolo in 'Inattivo' così manterrai lo storico.\n\nVuoi davvero eliminarlo definitivamente?", "danger")) { 
                 await supabaseClient.from('profiles').delete().eq('id', id); 
                 closeEditTeamMemberModal();
                 fetchProfiles(); 
@@ -1270,7 +1274,11 @@
             const e = entries.find(x => x.id === id); if(!e) return;
             document.getElementById('edit-entry-id').value = id;
             const d = new Date(e.created_at); document.getElementById('edit-entry-date').value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-            const userSelect = document.getElementById('edit-entry-user'); userSelect.innerHTML = profiles.map(pr => `<option value="${pr.full_name}" ${pr.full_name === e.user_name ? 'selected' : ''}>${pr.full_name}</option>`).join(''); if (!profiles.find(pr => pr.full_name === e.user_name)) userSelect.innerHTML += `<option value="${e.user_name}" selected>${e.user_name} (Rimosso)</option>`;
+            
+            const userSelect = document.getElementById('edit-entry-user'); 
+            userSelect.innerHTML = profiles.filter(p => p.role !== 'inactive' || p.full_name === e.user_name).map(pr => `<option value="${pr.full_name}" ${pr.full_name === e.user_name ? 'selected' : ''}>${pr.full_name}</option>`).join(''); 
+            if (!profiles.find(pr => pr.full_name === e.user_name)) userSelect.innerHTML += `<option value="${e.user_name}" selected>${e.user_name} (Rimosso)</option>`;
+            
             const projectSelect = document.getElementById('edit-entry-project'); projectSelect.innerHTML = projects.map(p => `<option value="${p.id}" ${p.id === e.project_id ? 'selected' : ''}>${p.name}</option>`).join(''); if (!projects.find(p => p.id === e.project_id)) projectSelect.innerHTML += `<option value="${e.project_id}" selected>${e.project_name} (Eliminato)</option>`;
             updateEditTaskDropdown(e.task);
             document.getElementById('edit-entry-notes').value = e.notes || ''; document.getElementById('edit-entry-hours').value = Number(e.duration).toFixed(2);
@@ -1309,7 +1317,14 @@
         async function addExpense(projId) { const desc = document.getElementById('exp-desc').value.trim(); const amt = parseFloat(document.getElementById('exp-amount').value); if(!desc || isNaN(amt)) return await appAlert("Attenzione", "Inserisci dati spesa.", "danger"); const { error } = await supabaseClient.from('expenses').insert([{ project_id: projId, studio_id: userProfile.studio_id, description: desc, amount: amt, user_name: userProfile.full_name }]); if(error) await appAlert("Errore", error.message, "danger"); else { await fetchExpenses(); showProjectDetail(projId); } }
         async function deleteExpense(id, projId) { if(await appConfirm("Elimina Spesa", "Vuoi eliminare questa spesa?", "danger")) { await supabaseClient.from('expenses').delete().eq('id', id); await fetchExpenses(); showProjectDetail(projId); } }
         async function toggleArchive(id, status) { await supabaseClient.from('projects').update({ is_archived: !status }).eq('id', id); fetchProjects(); }
-        async function deleteProject(id) { if(await appConfirm("Elimina Definitivamente", "Rimuovere il lavoro e tutto lo storico?", "danger")) { await supabaseClient.from('projects').delete().eq('id', id); fetchProjects(); } }
+        
+        async function deleteProject(id) { 
+            if(await appConfirm("Eliminazione Definitiva", "ATTENZIONE: Eliminando questo progetto verranno cancellate anche TUTTE le ore e le spese registrate al suo interno!\n\nSe vuoi conservare lo storico finanziario, chiudi questo avviso e usa il tasto 'Archivia' (icona a forma di scatola).\n\nSei sicuro di volerlo ELIMINARE PER SEMPRE?", "danger")) { 
+                await supabaseClient.from('projects').delete().eq('id', id); 
+                fetchProjects(); 
+            } 
+        }
+
         function toggleViewArchived() { showArchived = !showArchived; document.getElementById('toggle-archived-btn').innerText = showArchived ? "Nascondi Archiviati" : "Archivio"; renderProjects(); }
 
         function showProjectDetail(id) {
@@ -1432,7 +1447,6 @@
                 const d = new Date(e.created_at).getTime();
                 const inDate = d >= start.getTime() && d <= end.getTime();
                 
-                // Filtro sicurezza: il collaboratore vede solo se stesso
                 if (isStaff) {
                     return inDate && e.user_email === userProfile.email;
                 }
@@ -1535,7 +1549,8 @@
             const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
             document.getElementById('team-report-start').value = fmt(firstDay); document.getElementById('team-report-end').value = fmt(today);
             const userSelect = document.getElementById('team-report-user');
-            userSelect.innerHTML = '<option value="all">Tutto il Team</option>' + profiles.map(pr => `<option value="${pr.full_name}">${pr.full_name}</option>`).join('');
+            const activeProfiles = profiles.filter(p => p.role !== 'inactive');
+            userSelect.innerHTML = '<option value="all">Tutto il Team</option>' + activeProfiles.map(pr => `<option value="${pr.full_name}">${pr.full_name}</option>`).join('');
             document.getElementById('modal-team-report').classList.remove('force-hide'); lucide.createIcons();
         }
 
