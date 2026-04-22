@@ -311,7 +311,7 @@
                     </div>
                 </section>
 
-                <section class="mobile-tab active" data-tab="operate">
+                <section class="admin-only mobile-tab active" data-tab="operate">
                     <div class="flex justify-between items-center mb-4 pl-1"><h2 id="lbl-active-projects" class="text-lg lg:text-xl font-black text-slate-800 tracking-tight">Progetti Attivi</h2><button id="toggle-archived-btn" onclick="toggleViewArchived()" class="text-[10px] font-bold uppercase tracking-wider bg-white px-3 py-1.5 rounded-lg border border-slate-200 shadow-sm text-slate-500 hover:text-primary-600 hover:border-primary-200 hover:bg-primary-50 transition-all">Archivio</button></div>
                     <div id="projects-list" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
                 </section>
@@ -548,7 +548,6 @@
         let charts = { global: null, tasks: null };
         let activePlan = 'premium'; 
 
-        // ------------------ LOGICA THEMES (WHITE LABELING) ------------------
         let currentBusinessType = 'studio';
         const THEMES = {
             studio: {
@@ -568,7 +567,7 @@
                 demoClient: 'Famiglia Rossi',
                 demoTask: 'Sopralluogo',
                 demoExpense: 'Marche da bollo',
-                pdfColor: [79, 70, 229], // indigo-600
+                pdfColor: [79, 70, 229], 
                 chartMainColor: '#4f46e5',
                 chartPalette: ['#312e81','#4338ca','#4f46e5','#6366f1','#818cf8']
             },
@@ -589,7 +588,7 @@
                 demoClient: 'Condominio Roma',
                 demoTask: 'Allestimento Cantiere',
                 demoExpense: 'Materiale Edile',
-                pdfColor: [217, 119, 6], // amber-600
+                pdfColor: [217, 119, 6], 
                 chartMainColor: '#d97706',
                 chartPalette: ['#78350f','#b45309','#d97706','#f59e0b','#fbbf24']
             }
@@ -632,7 +631,6 @@
 
             lucide.createIcons();
         }
-        // ----------------------------------------------------------------------
 
         let activityCatalog = [], projectTemplates = [], newProjectTasks = [], editProjectTasks = [], newTemplateTasks = [];
         let editingTemplateIndex = null; 
@@ -901,7 +899,6 @@
                     const status = studioData?.subscription_status || 'trialing';
                     activePlan = studioData?.plan_type || 'premium'; 
 
-                    // GESTIONE TEMA E VOCABOLARIO (WHITE LABELING)
                     let bType = 'studio';
                     if (userProfile.role === 'admin') {
                         bType = user?.user_metadata?.business_type || 'studio';
@@ -987,14 +984,46 @@
         async function fetchExpenses() { const { data } = await supabaseClient.from('expenses').select('*').order('created_at', { ascending: false }); expenses = data || []; renderProjects(); if(userProfile && userProfile.role === 'admin') renderStrategicCharts(); }
         async function fetchProfiles() { const { data } = await supabaseClient.from('profiles').select('*').order('full_name'); profiles = data || []; renderProfiles(); }
 
+        // Salvataggio automatico del team (su onchange)
         function renderProfiles() {
             document.getElementById('team-list').innerHTML = profiles.map(pr => {
                 const isMe = pr.id === userProfile.id;
-                return `<div class="p-5 border border-slate-200 rounded-2xl bg-white flex flex-col gap-4 shadow-sm"><div><input type="text" id="name-${pr.id}" value="${pr.full_name || ''}" class="bg-transparent font-black text-slate-800 text-sm w-full outline-none border-b border-transparent focus:border-primary-500 pb-1 transition-colors"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">${pr.email}</p></div><div class="flex items-center justify-between gap-2 mt-1"><select id="role-${pr.id}" class="text-[11px] font-bold bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 outline-none uppercase text-slate-600 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"><option value="staff" ${pr.role==='staff'?'selected':''}>Staff</option><option value="admin" ${pr.role==='admin'?'selected':''}>Admin</option></select><div class="flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 flex-1 focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500/20 transition-all"><span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">€/h</span><input type="number" id="cost-${pr.id}" value="${pr.hourly_cost}" class="w-full text-sm text-center font-black bg-transparent outline-none text-slate-800"></div><div class="flex gap-1.5 shrink-0"><button onclick="updateTeamMember('${pr.id}')" class="bg-slate-900 text-white p-2.5 rounded-xl hover:bg-slate-800 transition-all shadow-sm active:scale-95"><i data-lucide="save" class="w-4 h-4"></i></button>${!isMe ? `<button onclick="deleteTeamMember('${pr.id}')" class="bg-white text-slate-400 p-2.5 rounded-xl border border-slate-200 hover:bg-red-50 hover:border-red-200 hover:text-red-600 transition-colors shadow-sm active:scale-95"><i data-lucide="trash-2" class="w-4 h-4"></i></button>` : ''}</div></div></div>`;
+                return `<div class="p-5 border border-slate-200 rounded-2xl bg-white flex flex-col gap-4 shadow-sm"><div><input type="text" id="name-${pr.id}" value="${pr.full_name || ''}" onchange="updateTeamMember('${pr.id}', true)" class="bg-transparent font-black text-slate-800 text-sm w-full outline-none border-b border-transparent focus:border-primary-500 pb-1 transition-colors"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">${pr.email}</p></div><div class="flex items-center justify-between gap-2 mt-1"><select id="role-${pr.id}" onchange="updateTeamMember('${pr.id}', true)" class="text-[11px] font-bold bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 outline-none uppercase text-slate-600 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"><option value="staff" ${pr.role==='staff'?'selected':''}>Staff</option><option value="admin" ${pr.role==='admin'?'selected':''}>Admin</option></select><div class="flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 flex-1 focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500/20 transition-all"><span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">€/h</span><input type="number" id="cost-${pr.id}" value="${pr.hourly_cost}" onchange="updateTeamMember('${pr.id}', true)" class="w-full text-sm text-center font-black bg-transparent outline-none text-slate-800"></div><div class="flex gap-1.5 shrink-0"><button id="btn-save-${pr.id}" onclick="updateTeamMember('${pr.id}', false)" class="bg-slate-900 text-white p-2.5 rounded-xl hover:bg-slate-800 transition-all shadow-sm active:scale-95"><i data-lucide="save" class="w-4 h-4"></i></button>${!isMe ? `<button onclick="deleteTeamMember('${pr.id}')" class="bg-white text-slate-400 p-2.5 rounded-xl border border-slate-200 hover:bg-red-50 hover:border-red-200 hover:text-red-600 transition-colors shadow-sm active:scale-95"><i data-lucide="trash-2" class="w-4 h-4"></i></button>` : ''}</div></div></div>`;
             }).join('');
             lucide.createIcons();
         }
-        async function updateTeamMember(id) { await supabaseClient.from('profiles').update({ full_name: document.getElementById('name-'+id).value, hourly_cost: parseFloat(document.getElementById('cost-'+id).value) || 0, role: document.getElementById('role-'+id).value }).eq('id', id); await appAlert("Fatto", "Salvato!", "success"); fetchProfiles(); }
+
+        async function updateTeamMember(id, silent = false) { 
+            const newName = document.getElementById('name-'+id).value;
+            const newCost = parseFloat(document.getElementById('cost-'+id).value) || 0;
+            const newRole = document.getElementById('role-'+id).value;
+            
+            // Effetto grafico di salvataggio avvenuto
+            const btn = document.getElementById('btn-save-'+id);
+            if(btn) { btn.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i>'; btn.classList.replace('bg-slate-900', 'bg-emerald-500'); btn.classList.replace('hover:bg-slate-800', 'hover:bg-emerald-600'); lucide.createIcons(); }
+
+            const oldProf = profiles.find(p => p.id === id);
+            await supabaseClient.from('profiles').update({ full_name: newName, hourly_cost: newCost, role: newRole }).eq('id', id); 
+            
+            // Ricalcolo Storico
+            if (oldProf && oldProf.hourly_cost !== newCost) {
+                if(await appConfirm("Ricalcolo Storico", `Hai modificato la tariffa oraria di ${newName}.\nVuoi ricalcolare automaticamente il costo di TUTTE le ore che ha già registrato in passato con questa nuova tariffa?`, "info")) {
+                    const { data: userEntries } = await supabaseClient.from('entries').select('id, duration').eq('user_name', oldProf.full_name);
+                    if(userEntries && userEntries.length > 0) {
+                        for(let e of userEntries) {
+                            await supabaseClient.from('entries').update({ rate: (e.duration * newCost) }).eq('id', e.id);
+                        }
+                    }
+                }
+            }
+
+            if(!silent && (!oldProf || oldProf.hourly_cost === newCost)) {
+                await appAlert("Fatto", "Profilo aggiornato!", "success"); 
+            }
+            
+            setTimeout(async () => { await fetchProfiles(); await fetchEntries(); if (userProfile.role === 'admin') { await fetchProjects(); renderStrategicCharts(); } }, 600);
+        }
+
         async function deleteTeamMember(id) { if(await appConfirm("Rimuovi Collaboratore", "Vuoi davvero rimuovere questo collaboratore dal team?", "danger")) { await supabaseClient.from('profiles').delete().eq('id', id); fetchProfiles(); } }
 
         function openCatalogModal() { document.getElementById('modal-catalog').classList.remove('force-hide'); }
