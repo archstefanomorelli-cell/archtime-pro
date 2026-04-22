@@ -106,20 +106,20 @@
         <div class="w-full lg:w-1/2 min-h-screen flex items-center justify-center p-6 bg-slate-50 lg:bg-white relative">
             <div class="w-full max-w-md p-8 bg-white border border-slate-200 lg:border-none shadow-sm lg:shadow-none rounded-2xl">
                 <div class="text-center mb-8 lg:hidden"><h2 class="text-3xl font-black text-slate-900 tracking-tight">Arch Time Pro</h2></div>
-                <div class="flex p-1 bg-slate-100 rounded-xl mb-8 border border-slate-200"><button id="tab-login" onclick="switchAuthTab('login')" class="flex-1 py-2.5 text-sm font-bold rounded-lg bg-white shadow-sm text-slate-900 transition-all border border-slate-200/50">Accedi</button><button id="tab-signup" onclick="switchAuthTab('signup')" class="flex-1 py-2.5 text-sm font-bold text-slate-500 hover:text-slate-700 transition-all">Nuovo Utente</button></div>
+                <div class="flex p-1 bg-slate-100 rounded-xl mb-8 border border-slate-200">
+                    <button id="tab-login" onclick="switchAuthTab('login')" class="flex-1 py-2.5 text-sm font-bold rounded-lg bg-white shadow-sm text-slate-900 transition-all border border-slate-200/50">Accedi</button>
+                    <button id="tab-signup" onclick="switchAuthTab('signup')" class="flex-1 py-2.5 text-sm font-bold text-slate-500 hover:text-slate-700 transition-all">Nuovo Utente</button>
+                </div>
                 <div class="space-y-4">
                     <div id="signup-fields" class="force-hide space-y-4">
-                        
                         <div class="p-5 bg-slate-50 rounded-xl border border-slate-200">
                             <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-3">Tipo di Account</label>
-                            
                             <div class="space-y-3">
                                 <div>
                                     <label class="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200 cursor-pointer hover:border-primary-300 transition-all shadow-sm">
                                         <input type="radio" name="main-role" value="admin" onchange="toggleSignupOptions()" class="w-4 h-4 text-primary-600 focus:ring-primary-500">
                                         <span class="text-sm font-bold text-slate-700">Manager (Crea Spazio di Lavoro)</span>
                                     </label>
-                                    
                                     <div id="sector-selection" class="force-hide pl-4 border-l-2 border-primary-200 ml-3 mt-3 transition-all duration-300">
                                         <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-2">Seleziona il tuo settore:</label>
                                         <div class="flex gap-2">
@@ -134,18 +134,20 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <label class="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200 cursor-pointer hover:border-primary-300 transition-all shadow-sm">
                                     <input type="radio" name="main-role" value="staff" onchange="toggleSignupOptions()" class="w-4 h-4 text-primary-600 focus:ring-primary-500">
                                     <span class="text-sm font-bold text-slate-700">Collaboratore (Unisciti)</span>
                                 </label>
                             </div>
-
-                            <div id="trial-info-container" class="force-hide mt-4 p-3.5 bg-primary-50 border border-primary-100 rounded-xl flex gap-3 items-start"><i data-lucide="gift" class="w-5 h-5 text-primary-600 shrink-0"></i><p class="text-xs text-primary-900 leading-relaxed"><strong class="font-black">15 giorni di prova gratuita!</strong><br>Nessuna carta richiesta.</p></div>
+                            <div id="trial-info-container" class="force-hide mt-4 p-3.5 bg-primary-50 border border-primary-100 rounded-xl flex gap-3 items-start">
+                                <i data-lucide="gift" class="w-5 h-5 text-primary-600 shrink-0"></i>
+                                <p class="text-xs text-primary-900 leading-relaxed"><strong class="font-black">15 giorni di prova gratuita!</strong><br>Nessuna carta richiesta.</p>
+                            </div>
                         </div>
-                        
-                        <div id="invite-code-container" class="force-hide"><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Codice Invito Manager</label><input type="text" id="invite-code-input" placeholder="Incolla codice" class="w-full border border-primary-200 bg-primary-50/30 rounded-xl p-3.5 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div>
-                        
+                        <div id="invite-code-container" class="force-hide">
+                            <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Codice Invito Manager</label>
+                            <input type="text" id="invite-code-input" placeholder="Incolla codice" class="w-full border border-primary-200 bg-primary-50/30 rounded-xl p-3.5 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all">
+                        </div>
                         <input type="text" id="full-name" placeholder="Nome e Cognome" class="w-full border border-slate-200 rounded-xl p-3.5 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all bg-white">
                     </div>
                     
@@ -172,7 +174,6 @@
             <div class="w-16 h-16 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-red-100"><i data-lucide="lock" class="w-8 h-8"></i></div>
             <h2 class="text-2xl font-black text-slate-900 mb-2 tracking-tight">Abbonamento Scaduto</h2>
             <p class="text-slate-500 text-sm mb-8 leading-relaxed">La tua prova gratuita è terminata. Scegli il piano più adatto al tuo Studio per continuare.</p>
-            
             <div class="flex flex-col gap-3 mb-6">
                 <button onclick="redirectToStripe('premium')" class="w-full bg-primary-600 text-white py-3.5 rounded-xl font-bold hover:bg-primary-700 transition-all shadow-sm active:scale-[0.98] flex justify-center items-center gap-2">
                     <i data-lucide="zap" class="w-4 h-4"></i> Attiva PREMIUM (59,99€/mese)
@@ -181,7 +182,6 @@
                     Attiva STARTER (29,99€/mese)
                 </button>
             </div>
-            
             <button onclick="handleLogout()" class="text-xs font-bold text-slate-400 hover:text-slate-600 transition-colors">Esci dall'account</button>
         </div>
     </div>
@@ -220,9 +220,13 @@
         <main class="max-w-7xl mx-auto px-4 lg:px-6 py-6 lg:py-10 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 flex-grow w-full">
             
             <div class="lg:col-span-4 flex flex-col gap-6 lg:gap-8">
+                
                 <section class="bg-slate-100 border border-slate-200/80 rounded-2xl p-6 shadow-md mobile-tab active" data-tab="operate">
                     <div>
-                        <div class="flex justify-between items-center mb-6"><h2 class="text-lg font-black text-slate-800 tracking-tight flex items-center gap-2"><i data-lucide="clock" class="text-primary-500 w-5 h-5"></i> Timer</h2><button onclick="openManualEntry()" class="text-[10px] font-bold text-slate-500 hover:text-primary-600 bg-white border border-slate-200 hover:border-primary-200 hover:bg-primary-50 px-2 py-1 rounded-md uppercase tracking-wider transition-colors shadow-sm">Manuale</button></div>
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-lg font-black text-slate-800 tracking-tight flex items-center gap-2"><i data-lucide="clock" class="text-primary-500 w-5 h-5"></i> Timer</h2>
+                            <button onclick="openManualEntry()" class="text-[10px] font-bold text-slate-500 hover:text-primary-600 bg-white border border-slate-200 hover:border-primary-200 hover:bg-primary-50 px-2 py-1 rounded-md uppercase tracking-wider transition-colors shadow-sm">Manuale</button>
+                        </div>
                         <div class="space-y-4">
                             <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1" id="lbl-timer-project">Progetto</label><select id="project-select" onchange="updateTaskDropdown()" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white shadow-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none cursor-pointer text-slate-700"></select></div>
                             <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Attività</label><select id="task-select" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white shadow-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none cursor-pointer text-slate-700"></select></div>
@@ -269,7 +273,9 @@
                             <button onclick="generateInviteLink()" class="bg-white border border-slate-200 shadow-sm text-slate-600 text-[10px] font-bold px-2.5 py-1.5 rounded-lg hover:bg-slate-50 hover:text-primary-600 transition-all flex items-center gap-1.5 uppercase tracking-wider"><i data-lucide="link" class="w-3 h-3"></i> Invita</button>
                         </div>
                     </div>
+                    
                     <div id="team-list" class="space-y-3 mb-6"></div>
+                    
                     <div class="flex justify-start">
                         <button id="btn-toggle-inactive" onclick="toggleInactiveMembers()" class="text-[9px] font-bold uppercase tracking-wider text-slate-400 hover:text-primary-600 transition-colors flex items-center gap-1.5">
                             <i data-lucide="eye-off" class="w-3 h-3" id="icon-toggle-inactive"></i>
@@ -280,7 +286,8 @@
             </div>
 
             <div class="lg:col-span-8 flex flex-col gap-6 lg:gap-8">
-                <section class="admin-only space-y-4 mobile-tab" data-tab="analyze">
+                
+                <section class="admin-only mobile-tab" data-tab="analyze">
                     <h2 class="text-lg lg:text-xl font-black text-slate-800 tracking-tight pl-1 mb-4">Salute Finanziaria</h2>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                         <div class="bg-primary-50/60 border border-primary-100 rounded-2xl p-5 shadow-sm relative overflow-hidden">
@@ -312,13 +319,22 @@
                         </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm"><h3 class="text-[11px] font-bold uppercase text-slate-500 tracking-wider mb-4">Budget vs Costi Totali</h3><div class="relative w-full h-48 lg:h-64"><canvas id="chart-global"></canvas></div></div>
-                        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm"><h3 class="text-[11px] font-bold uppercase text-slate-500 tracking-wider mb-4">Distribuzione Attività</h3><div class="relative w-full h-48 lg:h-64"><canvas id="chart-tasks-dist"></canvas></div></div>
+                        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+                            <h3 class="text-[11px] font-bold uppercase text-slate-500 tracking-wider mb-4">Budget vs Costi Totali</h3>
+                            <div class="relative w-full h-48 lg:h-64"><canvas id="chart-global"></canvas></div>
+                        </div>
+                        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+                            <h3 class="text-[11px] font-bold uppercase text-slate-500 tracking-wider mb-4">Distribuzione Attività</h3>
+                            <div class="relative w-full h-48 lg:h-64"><canvas id="chart-tasks-dist"></canvas></div>
+                        </div>
                     </div>
                 </section>
 
                 <section class="admin-only mobile-tab active" data-tab="operate">
-                    <div class="flex justify-between items-center mb-4 pl-1"><h2 id="lbl-active-projects" class="text-lg lg:text-xl font-black text-slate-800 tracking-tight">Progetti Attivi</h2><button id="toggle-archived-btn" onclick="toggleViewArchived()" class="text-[10px] font-bold uppercase tracking-wider bg-white px-3 py-1.5 rounded-lg border border-slate-200 shadow-sm text-slate-500 hover:text-primary-600 hover:border-primary-200 hover:bg-primary-50 transition-all">Archivio</button></div>
+                    <div class="flex justify-between items-center mb-4 pl-1">
+                        <h2 id="lbl-active-projects" class="text-lg lg:text-xl font-black text-slate-800 tracking-tight">Progetti Attivi</h2>
+                        <button id="toggle-archived-btn" onclick="toggleViewArchived()" class="text-[10px] font-bold uppercase tracking-wider bg-white px-3 py-1.5 rounded-lg border border-slate-200 shadow-sm text-slate-500 hover:text-primary-600 hover:border-primary-200 hover:bg-primary-50 transition-all">Archivio</button>
+                    </div>
                     <div id="projects-list" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
                 </section>
 
@@ -334,10 +350,21 @@
                             </div>
                             <button onclick="nextWeek()" class="p-1.5 text-slate-400 hover:text-primary-600 hover:bg-white rounded-md shadow-sm transition-colors border border-transparent hover:border-slate-200"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
                         </div>
-
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="w-full text-sm text-left hidden lg:table"><thead class="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold tracking-wider border-b border-slate-200"><tr><th class="px-5 py-4 font-bold">Data</th><th class="px-5 py-4 text-center font-bold">Team</th><th class="px-5 py-4 font-bold">Progetto</th><th class="px-5 py-4 font-bold">Attività / Note</th><th class="px-5 py-4 font-bold">Tempo</th><th class="px-5 py-4 admin-only text-right font-bold">Costo / Azioni</th></tr></thead><tbody id="entries-table-desktop" class="divide-y divide-slate-100"></tbody></table>
+                        <table class="w-full text-sm text-left hidden lg:table">
+                            <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold tracking-wider border-b border-slate-200">
+                                <tr>
+                                    <th class="px-5 py-4 font-bold">Data</th>
+                                    <th class="px-5 py-4 text-center font-bold">Team</th>
+                                    <th class="px-5 py-4 font-bold">Progetto</th>
+                                    <th class="px-5 py-4 font-bold">Attività / Note</th>
+                                    <th class="px-5 py-4 font-bold">Tempo</th>
+                                    <th class="px-5 py-4 admin-only text-right font-bold">Costo / Azioni</th>
+                                </tr>
+                            </thead>
+                            <tbody id="entries-table-desktop" class="divide-y divide-slate-100"></tbody>
+                        </table>
                         <div id="entries-empty-state" class="force-hide p-10 text-center text-slate-400 font-medium text-sm">Nessuna attività registrata in questa settimana.</div>
                         <div id="entries-list-mobile" class="lg:hidden divide-y divide-slate-100 bg-slate-50/30"></div>
                     </div>
@@ -392,6 +419,7 @@
                 <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mt-1" id="account-email">email@studio.it</p>
                 <div class="mt-2 inline-block px-2.5 py-1 bg-slate-100 text-slate-600 text-[10px] font-bold uppercase rounded-md border border-slate-200 tracking-wider" id="account-role">RUOLO</div>
             </div>
+            
             <div class="border-t border-slate-100 pt-4 admin-only">
                 <h3 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2.5 flex items-center gap-1.5"><i data-lucide="credit-card" class="w-3.5 h-3.5"></i> Abbonamento</h3>
                 <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl flex justify-between items-center mb-3">
@@ -405,6 +433,7 @@
                 <div id="account-downgrade-btn-container" class="force-hide"><button onclick="handlePlanChange('starter')" class="w-full bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 py-3 rounded-xl font-bold transition-all shadow-sm text-sm mb-2 flex items-center justify-center gap-2">Passa a Starter (29,99€)</button></div>
                 <p class="text-[10px] text-center text-slate-400 leading-tight mb-4">Gestione sicura fatture via Stripe.</p>
             </div>
+
             <div class="border-t border-slate-100 pt-4 admin-only">
                 <h3 id="lbl-identity-title" class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2.5 flex items-center gap-1.5"><i data-lucide="image" class="w-3.5 h-3.5"></i> Identità Studio</h3>
                 <div class="flex items-center gap-3 mb-3">
@@ -428,6 +457,7 @@
                     <button onclick="openCatalogModal()" class="text-[10px] font-bold bg-white text-slate-600 border border-slate-200 px-3 py-2 rounded-lg hover:border-primary-200 hover:text-primary-600 hover:bg-primary-50 flex items-center gap-1.5 shadow-sm transition-all"><i data-lucide="book-open" class="w-3.5 h-3.5"></i> Apri Catalogo</button>
                 </div>
             </div>
+
             <div class="border-t border-slate-100 mt-5 pt-4 text-center flex flex-col gap-2">
                 <button onclick="exportUserData()" class="text-[10px] font-bold uppercase tracking-wider text-primary-500 hover:text-primary-700 py-1.5 px-4 rounded-lg transition-all flex items-center justify-center gap-1.5 mx-auto mb-2"><i data-lucide="download" class="w-3.5 h-3.5"></i> Esporta i miei dati (JSON)</button>
                 <button onclick="handleLogout()" class="text-[11px] font-bold uppercase tracking-wider text-slate-500 hover:text-slate-800 py-2 px-4 rounded-lg transition-all flex items-center justify-center gap-1.5 mx-auto"><i data-lucide="log-out" class="w-3.5 h-3.5"></i> Esci dall'account</button>
@@ -502,13 +532,72 @@
         </div>
     </div>
 
-    <div id="modal-detail" class="force-hide fixed inset-0 z-[100] modal flex items-end lg:items-center justify-center lg:p-4"><div class="w-full h-[90vh] lg:h-auto lg:max-w-4xl lg:max-h-[90vh] overflow-y-auto p-6 lg:p-10 shadow-xl border border-slate-200 relative rounded-t-3xl lg:rounded-2xl bg-white"><button onclick="closeDetail()" class="absolute top-4 right-4 lg:top-6 lg:right-6 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors z-10"><i data-lucide="x"></i></button><div id="detail-content" class="mt-2 lg:mt-0"></div></div></div>
+    <div id="modal-detail" class="force-hide fixed inset-0 z-[100] modal flex items-end lg:items-center justify-center lg:p-4">
+        <div class="w-full h-[90vh] lg:h-auto lg:max-w-4xl lg:max-h-[90vh] overflow-y-auto p-6 lg:p-10 shadow-xl border border-slate-200 relative rounded-t-3xl lg:rounded-2xl bg-white">
+            <button onclick="closeDetail()" class="absolute top-4 right-4 lg:top-6 lg:right-6 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors z-10"><i data-lucide="x"></i></button>
+            <div id="detail-content" class="mt-2 lg:mt-0"></div>
+        </div>
+    </div>
     
-    <div id="modal-manual" class="force-hide fixed inset-0 z-[100] modal flex items-center justify-center p-4"><div class="w-full max-w-md p-6 lg:p-8 shadow-xl border border-slate-200 rounded-2xl relative bg-white"><button onclick="closeManualEntry()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button><h2 class="text-lg font-black text-slate-800 tracking-tight mb-6">Inserimento Manuale</h2><div class="space-y-4"><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Progetto</label><select id="manual-project" onchange="updateManualTaskDropdown()" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none"></select></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Attività</label><select id="manual-task" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none"></select></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Note</label><input type="text" id="manual-notes" placeholder="Opzionale" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div><div class="grid grid-cols-2 gap-4"><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Data</label><input type="date" id="manual-date" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Ore</label><input type="number" step="0.1" id="manual-hours" placeholder="0.0" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div></div><button onclick="saveManualEntry()" class="w-full bg-slate-900 text-white py-3.5 mt-4 rounded-xl font-bold shadow-sm hover:bg-slate-800 transition-all active:scale-[0.98]">Salva Ore</button></div></div></div>
+    <div id="modal-manual" class="force-hide fixed inset-0 z-[100] modal flex items-center justify-center p-4">
+        <div class="w-full max-w-md p-6 lg:p-8 shadow-xl border border-slate-200 rounded-2xl relative bg-white">
+            <button onclick="closeManualEntry()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>
+            <h2 class="text-lg font-black text-slate-800 tracking-tight mb-6">Inserimento Manuale</h2>
+            <div class="space-y-4">
+                <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Progetto</label><select id="manual-project" onchange="updateManualTaskDropdown()" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none"></select></div>
+                <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Attività</label><select id="manual-task" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none"></select></div>
+                <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Note</label><input type="text" id="manual-notes" placeholder="Opzionale" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Data</label><input type="date" id="manual-date" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div>
+                    <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Ore</label><input type="number" step="0.1" id="manual-hours" placeholder="0.0" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div>
+                </div>
+                <button onclick="saveManualEntry()" class="w-full bg-slate-900 text-white py-3.5 mt-4 rounded-xl font-bold shadow-sm hover:bg-slate-800 transition-all active:scale-[0.98]">Salva Ore</button>
+            </div>
+        </div>
+    </div>
     
-    <div id="modal-edit-entry" class="force-hide fixed inset-0 z-[100] modal flex items-center justify-center p-4"><div class="w-full max-w-md p-6 lg:p-8 shadow-xl border border-slate-200 rounded-2xl relative bg-white"><button onclick="closeEditEntryModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button><h2 class="text-lg font-black text-slate-800 tracking-tight mb-6 flex items-center gap-2"><i data-lucide="edit" class="text-primary-500 w-5 h-5"></i> Modifica Attività</h2><input type="hidden" id="edit-entry-id"><div class="space-y-4"><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Data</label><input type="date" id="edit-entry-date" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div><div class="admin-only"><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Team</label><select id="edit-entry-user" onchange="updateEditCost()" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none"></select></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Progetto</label><select id="edit-entry-project" onchange="updateEditTaskDropdown()" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none"></select></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Attività</label><select id="edit-entry-task" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none"></select></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Note</label><input type="text" id="edit-entry-notes" placeholder="Note" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div><div class="grid grid-cols-2 gap-4"><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Ore</label><input type="number" step="0.1" id="edit-entry-hours" oninput="updateEditCost()" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div><div class="admin-only"><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Costo (€)</label><input type="number" step="0.01" id="edit-entry-cost" readonly class="w-full border border-slate-200 bg-slate-50 text-slate-500 font-bold rounded-xl p-3 text-sm outline-none"></div></div><button onclick="saveEntryEdit()" class="w-full bg-slate-900 text-white py-3.5 mt-4 rounded-xl font-bold shadow-sm hover:bg-slate-800 transition-all active:scale-[0.98]">Salva Modifiche</button></div></div></div>
+    <div id="modal-edit-entry" class="force-hide fixed inset-0 z-[100] modal flex items-center justify-center p-4">
+        <div class="w-full max-w-md p-6 lg:p-8 shadow-xl border border-slate-200 rounded-2xl relative bg-white">
+            <button onclick="closeEditEntryModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>
+            <h2 class="text-lg font-black text-slate-800 tracking-tight mb-6 flex items-center gap-2"><i data-lucide="edit" class="text-primary-500 w-5 h-5"></i> Modifica Attività</h2>
+            <input type="hidden" id="edit-entry-id">
+            <div class="space-y-4">
+                <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Data</label><input type="date" id="edit-entry-date" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div>
+                <div class="admin-only"><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Team</label><select id="edit-entry-user" onchange="updateEditCost()" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none"></select></div>
+                <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Progetto</label><select id="edit-entry-project" onchange="updateEditTaskDropdown()" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none"></select></div>
+                <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Attività</label><select id="edit-entry-task" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none"></select></div>
+                <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Note</label><input type="text" id="edit-entry-notes" placeholder="Note" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Ore</label><input type="number" step="0.1" id="edit-entry-hours" oninput="updateEditCost()" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div>
+                    <div class="admin-only"><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Costo (€)</label><input type="number" step="0.01" id="edit-entry-cost" readonly class="w-full border border-slate-200 bg-slate-50 text-slate-500 font-bold rounded-xl p-3 text-sm outline-none"></div>
+                </div>
+                <button onclick="saveEntryEdit()" class="w-full bg-slate-900 text-white py-3.5 mt-4 rounded-xl font-bold shadow-sm hover:bg-slate-800 transition-all active:scale-[0.98]">Salva Modifiche</button>
+            </div>
+        </div>
+    </div>
     
-    <div id="modal-edit-project" class="force-hide fixed inset-0 z-[100] modal flex items-center justify-center p-4"><div class="w-full max-w-md p-6 lg:p-8 shadow-xl border border-slate-200 rounded-2xl relative bg-white overflow-visible"><button onclick="closeEditProjectModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button><h2 class="text-lg font-black text-slate-800 tracking-tight mb-6 flex items-center gap-2"><i data-lucide="edit-3" class="text-primary-500 w-5 h-5"></i> Modifica Dati</h2><input type="hidden" id="edit-modal-proj-id"><div class="space-y-4"><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Nome</label><input type="text" id="edit-modal-name" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Cliente</label><input type="text" id="edit-modal-client" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div><div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Budget Totale</label><div class="flex gap-2 bg-white p-3 rounded-xl border border-slate-200 focus-within:border-primary-500 focus-within:ring-4 focus-within:ring-primary-500/10 transition-all"><span class="text-slate-400 font-bold text-sm">€</span><input type="number" id="edit-modal-budget" class="bg-transparent w-full outline-none text-sm font-bold text-slate-800"></div></div><div class="pt-5 mt-2 border-t border-slate-100"><div class="bg-white border border-slate-200 rounded-xl p-3.5 shadow-sm"><div class="flex justify-between items-center mb-2.5"><span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Attività Incluse</span><button onclick="openTaskBuilder('edit')" class="text-[10px] font-bold text-primary-600 hover:text-primary-700 bg-white border border-slate-200 hover:border-primary-200 hover:bg-primary-50 px-2 py-1 rounded-md transition-all flex items-center gap-1 shadow-sm"><i data-lucide="settings" class="w-3 h-3"></i> Configura</button></div><div id="edit-proj-selected-tasks" class="flex flex-wrap gap-1.5 min-h-[28px]"></div></div></div><button onclick="saveModalProjectEdit()" class="w-full bg-slate-900 text-white py-3.5 mt-4 rounded-xl font-bold shadow-sm hover:bg-slate-800 transition-all active:scale-[0.98]">Salva Modifiche</button></div></div></div>
+    <div id="modal-edit-project" class="force-hide fixed inset-0 z-[100] modal flex items-center justify-center p-4">
+        <div class="w-full max-w-md p-6 lg:p-8 shadow-xl border border-slate-200 rounded-2xl relative bg-white overflow-visible">
+            <button onclick="closeEditProjectModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>
+            <h2 class="text-lg font-black text-slate-800 tracking-tight mb-6 flex items-center gap-2"><i data-lucide="edit-3" class="text-primary-500 w-5 h-5"></i> Modifica Dati</h2>
+            <input type="hidden" id="edit-modal-proj-id">
+            <div class="space-y-4">
+                <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Nome</label><input type="text" id="edit-modal-name" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div>
+                <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Cliente</label><input type="text" id="edit-modal-client" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div>
+                <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Budget Totale</label><div class="flex gap-2 bg-white p-3 rounded-xl border border-slate-200 focus-within:border-primary-500 focus-within:ring-4 focus-within:ring-primary-500/10 transition-all"><span class="text-slate-400 font-bold text-sm">€</span><input type="number" id="edit-modal-budget" class="bg-transparent w-full outline-none text-sm font-bold text-slate-800"></div></div>
+                <div class="pt-5 mt-2 border-t border-slate-100">
+                    <div class="bg-white border border-slate-200 rounded-xl p-3.5 shadow-sm">
+                        <div class="flex justify-between items-center mb-2.5">
+                            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Attività Incluse</span>
+                            <button onclick="openTaskBuilder('edit')" class="text-[10px] font-bold text-primary-600 hover:text-primary-700 bg-white border border-slate-200 hover:border-primary-200 hover:bg-primary-50 px-2 py-1 rounded-md transition-all flex items-center gap-1 shadow-sm"><i data-lucide="settings" class="w-3 h-3"></i> Configura</button>
+                        </div>
+                        <div id="edit-proj-selected-tasks" class="flex flex-wrap gap-1.5 min-h-[28px]"></div>
+                    </div>
+                </div>
+                <button onclick="saveModalProjectEdit()" class="w-full bg-slate-900 text-white py-3.5 mt-4 rounded-xl font-bold shadow-sm hover:bg-slate-800 transition-all active:scale-[0.98]">Salva Modifiche</button>
+            </div>
+        </div>
+    </div>
 
     <div id="modal-report" class="force-hide fixed inset-0 z-[100] modal flex items-center justify-center p-4">
         <div class="w-full max-w-sm p-6 lg:p-8 shadow-xl border border-slate-200 rounded-2xl relative bg-white">
@@ -548,13 +637,6 @@
         </div>
     </div>
 
-    <div id="cookie-banner" class="force-hide fixed bottom-0 left-0 w-full bg-slate-900 text-white p-5 z-[9999] flex flex-col md:flex-row justify-between items-center gap-4 border-t border-slate-800 shadow-[0_-10px_20px_rgba(0,0,0,0.2)]">
-        <div class="text-xs text-slate-300 leading-relaxed max-w-4xl">
-            <strong>Informativa sui Cookie:</strong> Utilizziamo esclusivamente cookie tecnici strettamente necessari (Supabase e Stripe) per mantenere attiva la tua sessione, garantire la sicurezza del tuo account e gestire i pagamenti. Non utilizziamo cookie di profilazione o di tracciamento per scopi di marketing. Continuando a navigare, accetti il loro utilizzo come descritto nella nostra <a href="privacy.html" target="_blank" class="text-white font-bold hover:underline transition-all">Privacy Policy</a>.
-        </div>
-        <button onclick="acceptCookies()" class="bg-primary-600 text-white text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-xl hover:bg-primary-500 transition-colors shadow-sm shrink-0 whitespace-nowrap active:scale-95">Ho capito</button>
-    </div>
-
     <div id="custom-dialog" class="force-hide fixed inset-0 z-[9999] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
         <div class="bg-white rounded-2xl p-6 lg:p-8 max-w-sm w-full text-center shadow-xl border border-slate-200 transform transition-all scale-95 opacity-0" id="custom-dialog-card">
             <div id="custom-dialog-icon" class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6"></div>
@@ -563,6 +645,13 @@
             <input type="text" id="custom-dialog-input" class="force-hide w-full border border-slate-200 rounded-xl p-3 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all mb-6 text-center font-bold">
             <div class="flex gap-3 justify-center w-full" id="custom-dialog-buttons"></div>
         </div>
+    </div>
+
+    <div id="cookie-banner" class="force-hide fixed bottom-0 left-0 w-full bg-slate-900 text-white p-5 z-[9999] flex flex-col md:flex-row justify-between items-center gap-4 border-t border-slate-800 shadow-[0_-10px_20px_rgba(0,0,0,0.2)]">
+        <div class="text-xs text-slate-300 leading-relaxed max-w-4xl">
+            <strong>Informativa sui Cookie:</strong> Utilizziamo esclusivamente cookie tecnici strettamente necessari per mantenere attiva la tua sessione, garantire la sicurezza e gestire i pagamenti. Non utilizziamo cookie di profilazione per scopi di marketing. <a href="privacy.html" target="_blank" class="text-white font-bold hover:underline transition-all">Privacy Policy</a>.
+        </div>
+        <button onclick="acceptCookies()" class="bg-primary-600 text-white text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-xl hover:bg-primary-500 transition-colors shadow-sm shrink-0 whitespace-nowrap active:scale-95">Ho capito</button>
     </div>
 
     <script>
@@ -631,10 +720,32 @@
             currentBusinessType = type;
             const theme = THEMES[type];
             if (type === 'impresa') { document.body.classList.add('theme-impresa'); } else { document.body.classList.remove('theme-impresa'); }
-            const els = { 'landing-title': theme.appNameHtmlLanding, 'header-title': theme.appNameHtmlHeader, 'lbl-new-project': `<i data-lucide="folder-plus" class="text-primary-500 w-5 h-5"></i> ${theme.newProjectTitle}`, 'lbl-active-projects': theme.activeProjectsTitle, 'lbl-identity-title': `<i data-lucide="image" class="w-3.5 h-3.5"></i> ${theme.identityTitle}`, 'lbl-catalog-title': theme.catalogTitle, 'lbl-catalog-desc': theme.catalogDesc };
-            for (let id in els) { let el = document.getElementById(id); if (el) el.innerHTML = els[id]; }
-            let studioInput = document.getElementById('account-studio-name'); if(studioInput) studioInput.placeholder = theme.studioNameLabel;
-            let timerProjLbl = document.getElementById('lbl-timer-project'); if(timerProjLbl) timerProjLbl.innerText = type === 'impresa' ? 'Cantiere' : 'Progetto';
+            
+            const els = {
+                'landing-title': theme.appNameHtmlLanding,
+                'header-title': theme.appNameHtmlHeader,
+                'lbl-new-project': `<i data-lucide="folder-plus" class="text-primary-500 w-5 h-5"></i> ${theme.newProjectTitle}`,
+                'lbl-active-projects': theme.activeProjectsTitle,
+                'lbl-identity-title': `<i data-lucide="image" class="w-3.5 h-3.5"></i> ${theme.identityTitle}`,
+                'lbl-catalog-title': theme.catalogTitle,
+                'lbl-catalog-desc': theme.catalogDesc,
+                'modal-catalog-title': `<i data-lucide="book-open" class="text-primary-500 w-5 h-5"></i> ${theme.catalogTitle}`,
+                'modal-catalog-desc': theme.catalogDesc,
+                'modal-template-title': `<i data-lucide="layers" class="text-primary-500 w-5 h-5"></i> ${theme.templateModalTitle}`,
+                'account-role': userProfile?.role === 'admin' ? theme.managerLabel : 'Collaboratore'
+            };
+
+            for (let id in els) {
+                let el = document.getElementById(id);
+                if (el) el.innerHTML = els[id];
+            }
+            
+            let studioInput = document.getElementById('account-studio-name');
+            if(studioInput) studioInput.placeholder = theme.studioNameLabel;
+            
+            let timerProjLbl = document.getElementById('lbl-timer-project');
+            if(timerProjLbl) timerProjLbl.innerText = type === 'impresa' ? 'Cantiere' : 'Progetto';
+
             lucide.createIcons();
         }
 
@@ -650,23 +761,67 @@
                 const iconEl = document.getElementById('custom-dialog-icon');
                 const inputEl = document.getElementById('custom-dialog-input');
                 const btnsEl = document.getElementById('custom-dialog-buttons');
+                
                 titleEl.innerText = options.title || 'Attenzione';
                 msgEl.innerText = options.message || '';
-                if(options.type === 'danger') { iconEl.className = "w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 bg-red-50 text-red-600 border border-red-100"; iconEl.innerHTML = '<i data-lucide="alert-triangle" class="w-8 h-8"></i>'; } 
-                else if (options.type === 'success') { iconEl.className = "w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 bg-emerald-50 text-emerald-600 border border-emerald-100"; iconEl.innerHTML = '<i data-lucide="check-circle" class="w-8 h-8"></i>'; } 
-                else { iconEl.className = "w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 bg-primary-50 text-primary-600 border border-primary-100"; iconEl.innerHTML = '<i data-lucide="info" class="w-8 h-8"></i>'; }
-                inputEl.value = '';
-                if(options.prompt) { inputEl.classList.remove('force-hide'); inputEl.placeholder = options.promptPlaceholder || ''; } else { inputEl.classList.add('force-hide'); }
-                btnsEl.innerHTML = '';
-                const closeAndResolve = (val) => { card.classList.remove('scale-100', 'opacity-100'); card.classList.add('scale-95', 'opacity-0'); setTimeout(() => { modal.classList.add('force-hide'); resolve(val); }, 200); };
-                if(options.confirm) {
-                    const btnCancel = document.createElement('button'); btnCancel.className = "flex-1 bg-white border border-slate-200 text-slate-700 py-3 rounded-xl font-bold hover:bg-slate-50 transition-all text-sm"; btnCancel.innerText = "Annulla"; btnCancel.onclick = () => closeAndResolve(options.prompt ? null : false); btnsEl.appendChild(btnCancel);
-                    const btnOk = document.createElement('button'); btnOk.className = `flex-1 text-white py-3 rounded-xl font-bold transition-all shadow-sm active:scale-95 text-sm ${options.type === 'danger' ? 'bg-red-600 hover:bg-red-700' : 'bg-primary-600 hover:bg-primary-700'}`; btnOk.innerText = "Conferma"; btnOk.onclick = () => { if(options.prompt) closeAndResolve(inputEl.value.trim()); else closeAndResolve(true); }; btnsEl.appendChild(btnOk);
+                
+                if(options.type === 'danger') {
+                    iconEl.className = "w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 bg-red-50 text-red-600 border border-red-100";
+                    iconEl.innerHTML = '<i data-lucide="alert-triangle" class="w-8 h-8"></i>';
+                } else if (options.type === 'success') {
+                    iconEl.className = "w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 bg-emerald-50 text-emerald-600 border border-emerald-100";
+                    iconEl.innerHTML = '<i data-lucide="check-circle" class="w-8 h-8"></i>';
                 } else {
-                    const btnOk = document.createElement('button'); btnOk.className = "w-full bg-slate-900 text-white py-3 rounded-xl font-bold hover:bg-slate-800 transition-all shadow-sm active:scale-95 text-sm"; btnOk.innerText = "OK"; btnOk.onclick = () => closeAndResolve(true); btnsEl.appendChild(btnOk);
+                    iconEl.className = "w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 bg-primary-50 text-primary-600 border border-primary-100";
+                    iconEl.innerHTML = '<i data-lucide="info" class="w-8 h-8"></i>';
                 }
-                lucide.createIcons(); modal.classList.remove('force-hide');
-                setTimeout(() => { card.classList.remove('scale-95', 'opacity-0'); card.classList.add('scale-100', 'opacity-100'); }, 10);
+
+                inputEl.value = '';
+                if(options.prompt) {
+                    inputEl.classList.remove('force-hide');
+                    inputEl.placeholder = options.promptPlaceholder || '';
+                } else {
+                    inputEl.classList.add('force-hide');
+                }
+
+                btnsEl.innerHTML = '';
+                
+                const closeAndResolve = (val) => {
+                    card.classList.remove('scale-100', 'opacity-100');
+                    card.classList.add('scale-95', 'opacity-0');
+                    setTimeout(() => { modal.classList.add('force-hide'); resolve(val); }, 200);
+                };
+
+                if(options.confirm) {
+                    const btnCancel = document.createElement('button');
+                    btnCancel.className = "flex-1 bg-white border border-slate-200 text-slate-700 py-3 rounded-xl font-bold hover:bg-slate-50 transition-all text-sm";
+                    btnCancel.innerText = "Annulla";
+                    btnCancel.onclick = () => closeAndResolve(options.prompt ? null : false);
+                    btnsEl.appendChild(btnCancel);
+
+                    const btnOk = document.createElement('button');
+                    btnOk.className = `flex-1 text-white py-3 rounded-xl font-bold transition-all shadow-sm active:scale-95 text-sm ${options.type === 'danger' ? 'bg-red-600 hover:bg-red-700' : 'bg-primary-600 hover:bg-primary-700'}`;
+                    btnOk.innerText = "Conferma";
+                    btnOk.onclick = () => {
+                        if(options.prompt) closeAndResolve(inputEl.value.trim());
+                        else closeAndResolve(true);
+                    };
+                    btnsEl.appendChild(btnOk);
+                } else {
+                    const btnOk = document.createElement('button');
+                    btnOk.className = "w-full bg-slate-900 text-white py-3 rounded-xl font-bold hover:bg-slate-800 transition-all shadow-sm active:scale-95 text-sm";
+                    btnOk.innerText = "OK";
+                    btnOk.onclick = () => closeAndResolve(true);
+                    btnsEl.appendChild(btnOk);
+                }
+
+                lucide.createIcons();
+                modal.classList.remove('force-hide');
+                setTimeout(() => {
+                    card.classList.remove('scale-95', 'opacity-0');
+                    card.classList.add('scale-100', 'opacity-100');
+                }, 10);
+                
                 if(options.prompt) inputEl.focus();
             });
         }
@@ -675,100 +830,376 @@
         window.appConfirm = (title, message, type='danger') => showCustomDialog({title, message, type, confirm: true});
         window.appPrompt = (title, message, placeholder) => showCustomDialog({title, message, type:'danger', confirm: true, prompt: true, promptPlaceholder: placeholder});
 
-        function getMonday(d) { d = new Date(d); const day = d.getDay(); const diff = d.getDate() - day + (day === 0 ? -6 : 1); const monday = new Date(d.setDate(diff)); monday.setHours(0,0,0,0); return monday; }
+        function getMonday(d) {
+            d = new Date(d);
+            const day = d.getDay();
+            const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+            const monday = new Date(d.setDate(diff));
+            monday.setHours(0,0,0,0);
+            return monday;
+        }
         let currentWeekStart = getMonday(new Date());
 
         function switchAuthTab(mode) { 
             isSignupMode = (mode === 'signup'); 
             document.getElementById('tab-login').className = !isSignupMode ? "flex-1 py-2.5 text-sm font-bold rounded-lg bg-white shadow-sm text-slate-900 transition-all border border-slate-200/50" : "flex-1 py-2.5 text-sm font-bold text-slate-500 hover:text-slate-700 transition-all"; 
             document.getElementById('tab-signup').className = isSignupMode ? "flex-1 py-2.5 text-sm font-bold rounded-lg bg-white shadow-sm text-slate-900 transition-all border border-slate-200/50" : "flex-1 py-2.5 text-sm font-bold text-slate-500 hover:text-slate-700 transition-all"; 
+            
             document.getElementById('signup-fields').classList.toggle('force-hide', !isSignupMode); 
             document.getElementById('signup-legal').classList.toggle('force-hide', !isSignupMode);
+            
             document.getElementById('btn-auth').innerText = isSignupMode ? "Crea Account Utente" : "Accedi ora"; 
         }
         
         function toggleSignupOptions() { 
             const checkedRole = document.querySelector('input[name="main-role"]:checked');
-            if(!checkedRole) { document.getElementById('invite-code-container').classList.add('force-hide'); document.getElementById('sector-selection').classList.add('force-hide'); if (document.getElementById('trial-info-container')) document.getElementById('trial-info-container').classList.add('force-hide'); return; }
-            const role = checkedRole.value; const isStaff = role === 'staff';
-            document.getElementById('invite-code-container').classList.toggle('force-hide', !isStaff); document.getElementById('sector-selection').classList.toggle('force-hide', isStaff);
-            if (document.getElementById('trial-info-container')) document.getElementById('trial-info-container').classList.toggle('force-hide', isStaff); 
+            if(!checkedRole) {
+                document.getElementById('invite-code-container').classList.add('force-hide'); 
+                document.getElementById('sector-selection').classList.add('force-hide');
+                const trialInfo = document.getElementById('trial-info-container'); 
+                if (trialInfo) trialInfo.classList.add('force-hide');
+                return;
+            }
+            const role = checkedRole.value; 
+            const isStaff = role === 'staff';
+            document.getElementById('invite-code-container').classList.toggle('force-hide', !isStaff); 
+            document.getElementById('sector-selection').classList.toggle('force-hide', isStaff);
+            const trialInfo = document.getElementById('trial-info-container'); 
+            if (trialInfo) trialInfo.classList.toggle('force-hide', isStaff); 
+        }
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        if(urlParams.get('invite')) { 
+            switchAuthTab('signup'); 
+            document.querySelectorAll('input[name="main-role"]').forEach(input => { if(input.value === 'staff') input.checked = true; }); 
+            document.getElementById('invite-code-input').value = urlParams.get('invite'); 
+            toggleSignupOptions(); 
         }
 
         async function handleAuthAction() {
-            const email = document.getElementById('email').value.trim(); const password = document.getElementById('password').value; const fullName = document.getElementById('full-name').value.trim();
+            const email = document.getElementById('email').value.trim(); 
+            const password = document.getElementById('password').value; 
+            const fullName = document.getElementById('full-name').value.trim();
+            
             if(isSignupMode) {
-                if(!document.getElementById('accept-terms').checked) return await appAlert("Attenzione", "Devi accettare i Termini e la Privacy per registrarti.", "danger");
-                const checkedRole = document.querySelector('input[name="main-role"]:checked'); if(!checkedRole) return await appAlert("Attenzione", "Seleziona tipo account.", "danger");
-                const role = checkedRole.value; const isStaff = role === 'staff'; const businessType = isStaff ? 'studio' : document.querySelector('input[name="business-type"]:checked').value; const code = document.getElementById('invite-code-input').value.trim();
-                if(isStaff && !code) return await appAlert("Attenzione", "Codice invito mancante.", "danger"); if(!fullName) return await appAlert("Attenzione", "Inserisci nome e cognome.", "danger");
-                const { error } = await supabaseClient.auth.signUp({ email, password, options: { data: { full_name: fullName, role: role, business_type: businessType, studio_id: isStaff ? code : null } } });
+                const acceptTerms = document.getElementById('accept-terms').checked;
+                if(!acceptTerms) return await appAlert("Attenzione", "Devi accettare i Termini di Servizio e la Privacy Policy per registrarti.", "danger");
+                
+                const checkedRole = document.querySelector('input[name="main-role"]:checked');
+                if(!checkedRole) return await appAlert("Attenzione", "Seleziona prima il tipo di account (Manager o Collaboratore).", "danger");
+                
+                const role = checkedRole.value; 
+                const isStaff = role === 'staff';
+                const businessType = isStaff ? 'studio' : document.querySelector('input[name="business-type"]:checked').value;
+                const code = document.getElementById('invite-code-input').value.trim();
+                
+                if(isStaff && !code) return await appAlert("Attenzione", "Inserisci il codice invito!", "danger");
+                if(!fullName) return await appAlert("Attenzione", "Inserisci il tuo Nome e Cognome.", "danger");
+                
+                const { error } = await supabaseClient.auth.signUp({ 
+                    email, password, 
+                    options: { data: { full_name: fullName, role: role, business_type: businessType, studio_id: isStaff ? code : null } } 
+                });
+                
                 if(error) await appAlert("Errore", error.message, "danger"); else { await appAlert("Ottimo!", "Registrazione OK!", "success"); switchAuthTab('login'); }
-            } else { const { error } = await supabaseClient.auth.signInWithPassword({ email, password }); if(error) await appAlert("Errore", "Credenziali errate", "danger"); else checkUser(); }
-        }
-
-        function acceptCookies() { localStorage.setItem('cookie_consent_archtime', 'true'); document.getElementById('cookie-banner').classList.add('force-hide'); }
-        async function exportUserData() { if(!userProfile) return; const exportData = { profile: userProfile, studio: studioData, projects, entries, expenses, exportDate: new Date().toISOString() }; const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2)); const dl = document.createElement('a'); dl.setAttribute("href", dataStr); dl.setAttribute("download", "Export_" + userProfile.full_name.replace(/\s+/g, '_') + ".json"); dl.click(); }
-        function redirectToStripe(plan) { if(!userProfile?.studio_id) return; const link = plan === 'starter' ? STRIPE_LINK_STARTER : STRIPE_LINK_PREMIUM; window.location.href = `${link}?client_reference_id=${userProfile.studio_id}`; }
-        function showPaywall() { document.getElementById('auth-container').classList.add('force-hide'); document.getElementById('app-container').classList.add('force-hide'); document.getElementById('paywall-container').classList.remove('force-hide'); lucide.createIcons(); }
-        function openUpgradeModal(feature) { document.getElementById('upgrade-message').innerText = `La funzione ${feature} è Premium.`; document.getElementById('modal-upgrade').classList.remove('force-hide'); }
-        function closeUpgradeModal() { document.getElementById('modal-upgrade').classList.add('force-hide'); }
-        function openAccountModal() { document.getElementById('account-name').innerText = userProfile.full_name; document.getElementById('account-email').innerText = userProfile.email; if(userProfile.role === 'admin') { document.getElementById('account-plan-name').innerText = activePlan.toUpperCase(); document.getElementById('account-upgrade-btn-container').classList.toggle('force-hide', activePlan !== 'starter'); document.getElementById('account-downgrade-btn-container').classList.toggle('force-hide', activePlan !== 'premium'); } document.getElementById('modal-account').classList.remove('force-hide'); }
-        function closeAccountModal() { document.getElementById('modal-account').classList.add('force-hide'); }
-
-        async function deleteAccount() {
-            if (userProfile.role === 'admin' && activePlan === 'premium' && studioData?.subscription_status === 'active') return await appAlert("Abbonamento Attivo", "Annulla prima l'abbonamento Premium da 'Gestione Fatture'.", "danger");
-            if(await appConfirm("Elimina Account", "Questa operazione distruggerà tutto lo spazio di lavoro. Procedere?", "danger")) {
-                if(await appPrompt("Sicurezza", "Scrivi ELIMINA:", "ELIMINA") === "ELIMINA") { await supabaseClient.rpc('delete_user_account'); await supabaseClient.auth.signOut(); location.reload(); }
+            } else { 
+                const { error } = await supabaseClient.auth.signInWithPassword({ email, password }); 
+                if(error) await appAlert("Errore", "Credenziali errate", "danger"); else checkUser(); 
             }
         }
 
-        async function handleLogout() { await supabaseClient.auth.signOut(); location.reload(); }
-        function switchAppTab(tab) { document.querySelectorAll('.mobile-tab').forEach(el => el.classList.toggle('active', el.dataset.tab === tab)); document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.toggle('text-primary-600', btn.dataset.tab === tab)); if(tab === 'analyze' && userProfile.role === 'admin') setTimeout(renderStrategicCharts, 50); window.scrollTo(0,0); }
-        async function generateInviteLink() { await navigator.clipboard.writeText(userProfile.studio_id); await appAlert("Fatto", "Codice copiato!", "success"); }
+        function checkCookies() {
+            if (!localStorage.getItem('cookie_consent_archtime')) { document.getElementById('cookie-banner').classList.remove('force-hide'); }
+        }
+        function acceptCookies() {
+            localStorage.setItem('cookie_consent_archtime', 'true'); document.getElementById('cookie-banner').classList.add('force-hide');
+        }
+        document.addEventListener('DOMContentLoaded', checkCookies);
 
-        async function checkUser() {
-            const { data: { user } } = await supabaseClient.auth.getUser();
-            if(user) {
-                const { data: profile } = await supabaseClient.from('profiles').select('*').eq('id', user.id).single();
-                if(profile) {
-                    userProfile = profile;
-                    const { data: studio } = await supabaseClient.from('studios').select('*').eq('id', userProfile.studio_id).single();
-                    if(studio) studioData = studio;
-                    const status = studioData?.subscription_status || 'trialing';
-                    activePlan = studioData?.plan_type || 'premium';
-                    applyTheme(userProfile.role === 'admin' ? (user?.user_metadata?.business_type || 'studio') : (studioData?.business_type || 'studio'));
-                    if (['canceled', 'past_due', 'inactive'].includes(status)) { showPaywall(); return; }
-                    const trialLeft = Math.ceil((new Date(new Date(studioData?.created_at).getTime() + 15*86400000) - Date.now()) / 86400000);
-                    if (status !== 'active' && trialLeft <= 0) { showPaywall(); return; }
-                    if(profile.role === 'admin') {
-                        document.body.classList.add('is-admin');
-                        activityCatalog = studioData?.activity_catalog || THEMES[currentBusinessType].defaultCatalog;
-                        projectTemplates = studioData?.project_templates || THEMES[currentBusinessType].defaultTemplates;
+        async function exportUserData() {
+            if(!userProfile) return await appAlert("Errore", "Utente non trovato.", "danger");
+            try {
+                const exportData = { profile: userProfile, studio: userProfile.role === 'admin' ? studioData : "Dati Studio non accessibili.", projects: projects, entries: entries, expenses: expenses, exportDate: new Date().toISOString() };
+                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
+                const downloadAnchorNode = document.createElement('a'); downloadAnchorNode.setAttribute("href", dataStr); downloadAnchorNode.setAttribute("download", "Export_" + userProfile.full_name.replace(/\s+/g, '_') + ".json");
+                document.body.appendChild(downloadAnchorNode); downloadAnchorNode.click(); downloadAnchorNode.remove();
+            } catch (err) { await appAlert("Errore", "Errore: " + err.message, "danger"); }
+        }
+
+        function redirectToStripe(plan) { 
+            if(!userProfile || !userProfile.studio_id) return; 
+            const link = plan === 'starter' ? STRIPE_LINK_STARTER : STRIPE_LINK_PREMIUM;
+            window.location.href = `${link}?client_reference_id=${userProfile.studio_id}`; 
+        }
+
+        function showPaywall() { 
+            document.getElementById('auth-container').classList.add('force-hide'); 
+            document.getElementById('app-container').classList.add('force-hide'); 
+            document.getElementById('paywall-container').classList.remove('force-hide'); 
+            lucide.createIcons(); 
+        }
+        
+        function openUpgradeModal(featureName) { 
+            document.getElementById('upgrade-message').innerText = `La funzione ${featureName} è riservata agli abbonamenti Premium.`; 
+            document.getElementById('modal-upgrade').classList.remove('force-hide'); 
+            if (document.getElementById('modal-detail')) document.getElementById('modal-detail').classList.add('force-hide'); 
+            if (document.getElementById('modal-report')) document.getElementById('modal-report').classList.add('force-hide'); 
+            if (document.getElementById('modal-team-report')) document.getElementById('modal-team-report').classList.add('force-hide'); 
+        }
+
+        function closeUpgradeModal() { document.getElementById('modal-upgrade').classList.add('force-hide'); }
+
+        function openAccountModal() {
+            document.getElementById('account-name').innerText = userProfile.full_name;
+            document.getElementById('account-email').innerText = userProfile.email;
+            
+            if(userProfile.role === 'admin') {
+                document.getElementById('account-plan-name').innerText = activePlan.toUpperCase();
+                document.getElementById('account-upgrade-btn-container').classList.toggle('force-hide', activePlan !== 'starter');
+                document.getElementById('account-downgrade-btn-container').classList.toggle('force-hide', activePlan !== 'premium');
+            }
+            document.getElementById('modal-account').classList.remove('force-hide');
+        }
+        
+        function closeAccountModal() { document.getElementById('modal-account').classList.add('force-hide'); }
+
+        async function deleteAccount() {
+            if (userProfile.role === 'admin' && activePlan === 'premium' && studioData?.subscription_status === 'active') {
+                return await appAlert("Abbonamento Attivo", "Prima di poter eliminare definitivamente l'account e distruggere tutti i dati, devi annullare il tuo abbonamento Premium attivo dal portale pagamenti (pulsante Gestione Fatture via Stripe).", "danger");
+            }
+
+            const warning = currentBusinessType === 'impresa' ? "Se sei il Titolare, eliminerai anche l'intera Impresa, tutti i cantieri e i dati." : "Se sei il Manager, eliminerai anche l'intero Studio, tutti i progetti e i dati.";
+            
+            if(await appConfirm("Eliminazione Account", `ATTENZIONE: Stai per eliminare il tuo account. ${warning}\nQuesta operazione è IRREVERSIBILE e tutti i collaboratori verranno espulsi. Vuoi procedere?`, "danger")) {
+                const check = await appPrompt("Conferma di sicurezza", "Scrivi ELIMINA per confermare la cancellazione:", "ELIMINA");
+                if(check === "ELIMINA") {
+                    const { error } = await supabaseClient.rpc('delete_user_account');
+                    if(error) await appAlert("Errore", error.message, "danger"); 
+                    else { 
+                        await supabaseClient.auth.signOut(); 
+                        await appAlert("Account Eliminato", "Lo Spazio di Lavoro e tutti i dati sono stati distrutti.", "success"); 
+                        location.reload(); 
                     }
-                    document.getElementById('user-display').innerText = profile.full_name;
-                    document.getElementById('auth-container').classList.add('force-hide'); document.getElementById('app-container').classList.remove('force-hide');
-                    initApp();
+                } else if(check !== null) { 
+                    await appAlert("Annullato", "Operazione annullata.", "info"); 
                 }
             }
         }
 
-        async function initApp() { lucide.createIcons(); await fetchProjects(); await fetchEntries(); await fetchExpenses(); if(userProfile.role === 'admin') { await fetchProfiles(); renderCatalogAndTemplatesUI(); applyPlanLimitsUI(); } await restoreCloudTimer(); }
-        async function fetchProjects() { const { data } = await supabaseClient.from('projects').select('*').order('name'); projects = data || []; renderProjects(); if(userProfile.role === 'admin') renderStrategicCharts(); }
-        async function fetchEntries() { const { data } = await supabaseClient.from('entries').select('*').order('created_at', { ascending: false }).limit(2000); entries = data || []; renderEntries(); renderProjects(); }
-        async function fetchExpenses() { const { data } = await supabaseClient.from('expenses').select('*'); expenses = data || []; }
-        async function fetchProfiles() { const { data } = await supabaseClient.from('profiles').select('*').order('full_name'); profiles = data || []; renderProfiles(); }
+        async function handlePlanChange(targetPlan) {
+            if (targetPlan === 'starter') {
+                const activeCount = projects.filter(p => !p.is_archived).length;
+                if (activeCount > 5) { return await appAlert("Attenzione", `Il piano Starter ha un limite di 5 lavori attivi. Ne hai ${activeCount}.\nArchivia o elimina i lavori in eccesso prima di procedere.`, "danger"); }
+            }
+            if(STRIPE_CUSTOMER_PORTAL && STRIPE_CUSTOMER_PORTAL.includes('http')) window.location.href = STRIPE_CUSTOMER_PORTAL; else redirectToStripe(targetPlan);
+        }
+
+        async function saveStudioName() { 
+            const name = document.getElementById('account-studio-name').value.trim(); 
+            if(!name) return; 
+            await supabaseClient.from('studios').update({ name }).eq('id', userProfile.studio_id); 
+            if(studioData) studioData.name = name; 
+            await appAlert("Fatto", "Nome aggiornato!", "success"); 
+        }
+
+        async function uploadLogo(event) { 
+            const file = event.target.files[0]; 
+            if(!file) return; 
+            const fileExt = file.name.split('.').pop(); 
+            const filePath = `${userProfile.studio_id}_logo.${fileExt}`; 
+            const { error: uploadError } = await supabaseClient.storage.from('studio-logos').upload(filePath, file, { upsert: true }); 
+            if(uploadError) return await appAlert("Errore", uploadError.message, "danger"); 
+            const { data: { publicUrl } } = supabaseClient.storage.from('studio-logos').getPublicUrl(filePath); 
+            await supabaseClient.from('studios').update({ logo_url: publicUrl }).eq('id', userProfile.studio_id); 
+            if(studioData) studioData.logo_url = publicUrl; 
+            document.getElementById('account-logo-preview').src = publicUrl; 
+            document.getElementById('account-logo-preview').classList.remove('force-hide'); 
+            document.getElementById('header-logo').src = publicUrl; 
+            document.getElementById('header-logo').classList.remove('force-hide'); 
+        }
+
+        async function checkUser() {
+            const { data: { user } } = await supabaseClient.auth.getUser();
+            if(user) {
+                const { data: profile, error } = await supabaseClient.from('profiles').select('*').eq('id', user.id).single();
+                if(profile) {
+                    userProfile = profile;
+                    const { data: studio } = await supabaseClient.from('studios').select('*').eq('id', userProfile.studio_id).single();
+                    if(studio) studioData = studio;
+
+                    const status = studioData?.subscription_status || 'trialing';
+                    activePlan = studioData?.plan_type || 'premium'; 
+
+                    let bType = 'studio';
+                    if (userProfile.role === 'admin') {
+                        bType = user?.user_metadata?.business_type || 'studio';
+                        if (studioData && !studioData.business_type) {
+                            await supabaseClient.from('studios').update({ business_type: bType }).eq('id', studioData.id);
+                            studioData.business_type = bType;
+                        }
+                    } else {
+                        bType = studioData?.business_type || 'studio';
+                    }
+                    applyTheme(bType);
+                    
+                    if (status === 'canceled' || status === 'past_due' || status === 'inactive') { showPaywall(); return; }
+
+                    const trialBadge = document.getElementById('trial-badge');
+                    const planBadge = document.getElementById('plan-badge');
+
+                    if (status === 'active') {
+                        trialBadge.classList.add('force-hide'); 
+                        planBadge.innerText = activePlan === 'starter' ? 'STARTER' : 'PREMIUM'; 
+                        planBadge.classList.remove('force-hide');
+                    } else {
+                        const createdAt = new Date(studioData?.created_at || new Date()); 
+                        const expireDate = new Date(createdAt.getTime() + 15 * 24 * 60 * 60 * 1000); 
+                        const daysLeft = Math.ceil((expireDate.getTime() - Date.now()) / (1000 * 3600 * 24));
+                        if (daysLeft > 0) {
+                            trialBadge.innerText = `PROVA: ${daysLeft} GG`; 
+                            trialBadge.className = daysLeft <= 3 ? "admin-only text-[9px] bg-red-50 text-red-600 border-red-200 px-1.5 py-0.5 rounded-md font-bold border whitespace-nowrap" : "admin-only text-[9px] bg-primary-50 text-primary-600 border-primary-200 px-1.5 py-0.5 rounded-md font-bold border whitespace-nowrap"; 
+                            trialBadge.classList.remove('force-hide'); 
+                            planBadge.innerText = 'TUTTO SBLOCCATO'; 
+                            planBadge.classList.remove('force-hide');
+                        } else { 
+                            showPaywall(); 
+                            return; 
+                        }
+                    }
+
+                    if(profile.role === 'admin') {
+                        document.body.classList.add('is-admin');
+                        activityCatalog = studioData?.activity_catalog ? studioData.activity_catalog : [...THEMES[currentBusinessType].defaultCatalog];
+                        projectTemplates = studioData?.project_templates ? studioData.project_templates : [...THEMES[currentBusinessType].defaultTemplates];
+                        if(studioData) {
+                            document.getElementById('account-studio-name').value = studioData.name || '';
+                            if(studioData.logo_url) { 
+                                document.getElementById('account-logo-preview').src = studioData.logo_url; 
+                                document.getElementById('account-logo-preview').classList.remove('force-hide'); 
+                                document.getElementById('header-logo').src = studioData.logo_url; 
+                                document.getElementById('header-logo').classList.remove('force-hide'); 
+                            }
+                        }
+                    }
+
+                    document.getElementById('user-display').innerText = profile.full_name;
+                    document.getElementById('auth-container').classList.add('force-hide'); 
+                    document.getElementById('app-container').classList.remove('force-hide');
+                    initApp();
+                } else if (error) {
+                    await appAlert("Errore", "Errore accesso database.", "danger");
+                }
+            }
+        }
+
+        async function handleLogout() { 
+            await supabaseClient.auth.signOut(); 
+            location.reload(); 
+        }
+
+        function switchAppTab(tabName) { 
+            document.querySelectorAll('.mobile-tab').forEach(el => el.classList.toggle('active', el.dataset.tab === tabName)); 
+            document.querySelectorAll('.nav-btn').forEach(btn => { 
+                btn.classList.toggle('text-primary-600', btn.dataset.tab === tabName); 
+                btn.classList.toggle('text-slate-400', btn.dataset.tab !== tabName); 
+            }); 
+            if(tabName === 'analyze' && userProfile.role === 'admin') {
+                setTimeout(renderStrategicCharts, 50); 
+            }
+            window.scrollTo(0, 0); 
+        }
+
+        async function generateInviteLink() { 
+            await navigator.clipboard.writeText(userProfile.studio_id); 
+            await appAlert("Fatto", "Codice invito copiato negli appunti! Condividilo col tuo team.", "success"); 
+        }
+
+        async function initApp() {
+            lucide.createIcons();
+            await fetchProjects(); 
+            await fetchEntries(); 
+            await fetchExpenses();
+            if(userProfile.role === 'admin') { 
+                await fetchProfiles(); 
+                renderCatalogAndTemplatesUI(); 
+                await checkAndGenerateDemoData(); 
+                applyPlanLimitsUI(); 
+            }
+            await restoreCloudTimer();
+        }
+
+        function applyPlanLimitsUI() {
+            if(activePlan === 'starter') {
+                const btnHeaderPdf = document.getElementById('btn-header-pdf');
+                if(btnHeaderPdf) { 
+                    btnHeaderPdf.onclick = () => openUpgradeModal('Report PDF Cumulativi'); 
+                    btnHeaderPdf.classList.add('locked-feature'); 
+                }
+                const btnManageTemplates = document.getElementById('btn-manage-templates');
+                if(btnManageTemplates) { 
+                    btnManageTemplates.onclick = () => openUpgradeModal('Template dei Lavori'); 
+                    btnManageTemplates.classList.add('locked-feature'); 
+                    btnManageTemplates.innerHTML = '<i data-lucide="lock" class="w-4 h-4"></i>'; 
+                }
+            }
+            lucide.createIcons();
+        }
+
+        async function checkAndGenerateDemoData() {
+            if (projects.length === 0 && (!studioData || studioData.demo_generated !== true)) {
+                await supabaseClient.from('studios').update({ demo_generated: true }).eq('id', userProfile.studio_id);
+                const t = THEMES[currentBusinessType];
+                const { data: pData } = await supabaseClient.from('projects').insert([ 
+                    { studio_id: userProfile.studio_id, name: t.demoProject, client: t.demoClient, budget: 15000, tasks: [t.demoTask, 'Riunioni'] } 
+                ]).select();
+                
+                if(pData && pData.length > 0) {
+                    const rate = profiles.find(p=>p.id===userProfile.id)?.hourly_cost || 50;
+                    await supabaseClient.from('entries').insert([ 
+                        { studio_id: userProfile.studio_id, project_id: pData[0].id, project_name: pData[0].name, task: t.demoTask, duration: 4, rate: rate*4, user_name: userProfile.full_name, user_email: userProfile.email, created_at: new Date().toISOString() } 
+                    ]);
+                    await supabaseClient.from('expenses').insert([ 
+                        { studio_id: userProfile.studio_id, project_id: pData[0].id, description: t.demoExpense, amount: 150.00, user_name: userProfile.full_name, created_at: new Date().toISOString() } 
+                    ]);
+                }
+                await fetchProjects(); 
+                await fetchEntries(); 
+                await fetchExpenses();
+            }
+        }
+
+        // ================= DATI TEAM =================
+
+        async function fetchProfiles() { 
+            const { data } = await supabaseClient.from('profiles').select('*').order('full_name'); 
+            profiles = data || []; 
+            renderProfiles(); 
+        }
 
         function renderProfiles() {
             const list = document.getElementById('team-list');
-            const visible = profiles.filter(p => showInactiveMembers ? true : p.role !== 'inactive');
-            list.innerHTML = visible.map(pr => {
-                const roleBadge = pr.role === 'admin' ? '<span class="bg-indigo-50 text-indigo-600 text-[9px] px-2 py-0.5 rounded uppercase font-bold">Admin</span>' 
-                                : (pr.role === 'inactive' ? '<span class="bg-red-50 text-red-500 text-[9px] px-2 py-0.5 rounded uppercase font-bold">Inattivo</span>' : '<span class="bg-slate-100 text-slate-500 text-[9px] px-2 py-0.5 rounded uppercase font-bold">Staff</span>');
-                return `<div class="bg-white p-4 rounded-xl border border-slate-200 flex justify-between items-center shadow-sm group ${pr.role === 'inactive' ? 'opacity-60 grayscale' : ''}">
-                    <div><div class="flex items-center gap-2 mb-1"><h4 class="font-black text-slate-800 text-sm">${pr.full_name}</h4>${roleBadge}</div><p class="text-[10px] font-bold text-slate-400 uppercase">${pr.email}</p></div>
-                    <button onclick="openEditTeamMemberModal('${pr.id}')" class="text-slate-400 hover:text-primary-600 bg-slate-50 p-2 rounded-lg border border-slate-200"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
-                </div>`;
+            const visibleProfiles = profiles.filter(p => showInactiveMembers ? true : p.role !== 'inactive');
+            
+            list.innerHTML = visibleProfiles.map(pr => {
+                const roleBadge = pr.role === 'admin' 
+                    ? '<span class="bg-indigo-50 text-indigo-600 border border-indigo-100 text-[9px] px-2 py-0.5 rounded-md uppercase font-bold tracking-wider">Admin</span>' 
+                    : (pr.role === 'inactive' ? '<span class="bg-red-50 text-red-500 border border-red-200 text-[9px] px-2 py-0.5 rounded-md uppercase font-bold tracking-wider">Inattivo</span>' : '<span class="bg-slate-100 text-slate-500 border border-slate-200 text-[9px] px-2 py-0.5 rounded-md uppercase font-bold tracking-wider">Staff</span>');
+                
+                const opacityClass = pr.role === 'inactive' ? 'opacity-60 grayscale' : '';
+                
+                return `
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 flex justify-between items-center shadow-sm hover:shadow-md transition-shadow group ${opacityClass}">
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <h4 class="font-black text-slate-800 text-sm tracking-tight">${pr.full_name}</h4>
+                                ${roleBadge}
+                            </div>
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">${pr.email}</p>
+                        </div>
+                        <button onclick="openEditTeamMemberModal('${pr.id}')" class="text-slate-400 hover:text-primary-600 bg-slate-50 hover:bg-primary-50 p-2 rounded-lg border border-slate-200 hover:border-primary-200 transition-all shadow-sm">
+                            <i data-lucide="edit-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>`;
             }).join('');
             lucide.createIcons();
         }
@@ -781,18 +1212,20 @@
         }
 
         function openEditTeamMemberModal(id) {
-            const pr = profiles.find(p => p.id === id); if(!pr) return;
+            const pr = profiles.find(p => p.id === id); 
+            if(!pr) return;
+            
             document.getElementById('edit-team-id').value = pr.id;
-            document.getElementById('edit-team-name').value = pr.full_name;
+            document.getElementById('edit-team-name').value = pr.full_name || '';
             document.getElementById('edit-team-cost').value = pr.hourly_cost || 0;
             
             const btnDelete = document.getElementById('btn-delete-team');
             const roleSelect = document.getElementById('edit-team-role');
-            roleSelect.value = pr.role;
+            roleSelect.value = pr.role || 'staff';
             
             // LOGICA DI SICUREZZA ANTI-GOLPE
             if (pr.role === 'admin' && pr.id !== userProfile.id) {
-                // Non puoi modificare un altro Admin
+                // Non puoi modificare o eliminare un altro Admin
                 btnDelete.classList.add('force-hide');
                 roleSelect.disabled = true;
                 roleSelect.classList.add('opacity-50', 'cursor-not-allowed');
@@ -812,50 +1245,227 @@
             lucide.createIcons();
         }
 
+        function closeEditTeamMemberModal() {
+            document.getElementById('modal-edit-team').classList.add('force-hide');
+        }
+
         async function saveTeamMemberEdit() {
             const id = document.getElementById('edit-team-id').value;
-            const name = document.getElementById('edit-team-name').value.trim();
-            const cost = parseFloat(document.getElementById('edit-team-cost').value) || 0;
-            const role = document.getElementById('edit-team-role').value;
+            const newName = document.getElementById('edit-team-name').value.trim();
+            const newCost = parseFloat(document.getElementById('edit-team-cost').value) || 0;
+            const newRole = document.getElementById('edit-team-role').value;
             
-            if(!name) return await appAlert("Attenzione", "Inserisci il nome", "danger");
+            if(!newName) return await appAlert("Attenzione", "Inserisci il nome e cognome", "danger");
             
-            // Auto-sospensione Manager Uscente
-            if (id === userProfile.id && role === 'inactive') {
+            // Logica di Auto-sospensione
+            if (id === userProfile.id && newRole === 'inactive') {
                 if(!await appConfirm("Auto-Sospensione", "ATTENZIONE: Stai impostando il tuo stesso account come Inattivo.\nSe confermi, perderai l'accesso come Manager e verrai disconnesso per sempre.\n\nVuoi procedere?", "danger")) {
-                    return; // Interrompe il salvataggio
+                    return; 
                 }
             }
 
-            const old = profiles.find(p => p.id === id);
-            await supabaseClient.from('profiles').update({ full_name: name, hourly_cost: cost, role }).eq('id', id);
+            const oldProf = profiles.find(p => p.id === id);
+            await supabaseClient.from('profiles').update({ full_name: newName, hourly_cost: newCost, role: newRole }).eq('id', id);
             
             // Ricalcolo Storico
-            if (old && old.hourly_cost !== cost && await appConfirm("Ricalcolo Storico", "Ricalcolare il valore economico di TUTTE le ore passate di questa persona con la nuova tariffa?", "info")) {
-                const { data: ent } = await supabaseClient.from('entries').select('id, duration').eq('user_name', old.full_name);
-                for(let e of (ent||[])) await supabaseClient.from('entries').update({ rate: (e.duration * cost) }).eq('id', e.id);
+            if (oldProf && oldProf.hourly_cost !== newCost) {
+                if(await appConfirm("Ricalcolo Storico", `Hai modificato la tariffa oraria di ${newName}.\nVuoi ricalcolare automaticamente il costo di TUTTE le ore che ha già registrato in passato con questa nuova tariffa?`, "info")) {
+                    const { data: userEntries } = await supabaseClient.from('entries').select('id, duration').eq('user_name', oldProf.full_name);
+                    if(userEntries && userEntries.length > 0) {
+                        for(let e of userEntries) {
+                            await supabaseClient.from('entries').update({ rate: (e.duration * newCost) }).eq('id', e.id);
+                        }
+                    }
+                }
             }
             
-            // Se mi sono auto-sospeso, faccio il logout
-            if (id === userProfile.id && role === 'inactive') {
+            // Esecuzione Auto-sospensione
+            if (id === userProfile.id && newRole === 'inactive') {
                 await supabaseClient.auth.signOut();
                 location.reload();
                 return;
             }
 
-            document.getElementById('modal-edit-team').classList.add('force-hide'); 
-            await fetchProfiles(); await fetchEntries(); await fetchProjects(); renderStrategicCharts();
-            await appAlert("Fatto", "Profilo aggiornato!", "success");
+            closeEditTeamMemberModal();
+            await fetchProfiles(); 
+            await fetchEntries(); 
+            if (userProfile.role === 'admin') { 
+                await fetchProjects(); 
+                renderStrategicCharts(); 
+            }
+            await appAlert("Fatto", "Profilo aggiornato con successo!", "success");
         }
 
-        async function deleteTeamMemberFromModal() { if(await appConfirm("Rimuovi Collaboratore", "L'eliminazione cancella i collegamenti. Meglio impostare 'Inattivo' per mantenere lo storico. Procedere comunque?", "danger")) { await supabaseClient.from('profiles').delete().eq('id', document.getElementById('edit-team-id').value); document.getElementById('modal-edit-team').classList.add('force-hide'); fetchProfiles(); } }
+        async function deleteTeamMemberFromModal() {
+            const id = document.getElementById('edit-team-id').value;
+            if(await appConfirm("Rimuovi Definitivamente", "ATTENZIONE: Eliminando il collaboratore si perderà per sempre il collegamento con le sue ore passate nel database.\n\nConsiglio: se ha smesso di lavorare con te, clicca su Annulla e cambia il suo ruolo in 'Inattivo' così manterrai lo storico contabile intatto.\n\nVuoi davvero eliminarlo definitivamente?", "danger")) { 
+                await supabaseClient.from('profiles').delete().eq('id', id); 
+                closeEditTeamMemberModal();
+                fetchProfiles(); 
+            }
+        }
+
+        // ================= GESTIONE PROGETTI =================
+
+        async function fetchProjects() { 
+            const { data } = await supabaseClient.from('projects').select('*').order('name'); 
+            projects = data || []; 
+            renderProjects(); 
+            if(userProfile.role === 'admin') renderStrategicCharts(); 
+        }
+        
+        async function fetchEntries() { 
+            const { data } = await supabaseClient.from('entries').select('*').order('created_at', { ascending: false }).limit(2000); 
+            entries = data || []; 
+            renderEntries(); 
+            renderProjects(); 
+            if(userProfile.role === 'admin') renderStrategicCharts(); 
+        }
+        
+        async function fetchExpenses() { 
+            const { data } = await supabaseClient.from('expenses').select('*').order('created_at', { ascending: false }); 
+            expenses = data || []; 
+            renderProjects(); 
+            if(userProfile && userProfile.role === 'admin') renderStrategicCharts(); 
+        }
+
+        function renderProjects() {
+            const container = document.getElementById('projects-list');
+            let visibleProjects = projects.filter(p => showArchived ? true : p.is_archived !== true);
+            
+            visibleProjects.sort((a, b) => { 
+                if (a.is_archived && !b.is_archived) return 1; 
+                if (!a.is_archived && b.is_archived) return -1; 
+                return 0; 
+            });
+            
+            document.getElementById('project-select').innerHTML = '<option value="" disabled selected>-- Seleziona Lavoro --</option>' + projects.filter(p => !p.is_archived).map((p, i) => `<option value="${projects.indexOf(p)}">${p.name}</option>`).join('');
+
+            container.innerHTML = visibleProjects.map((p, idx) => {
+                const costHrs = entries.filter(e => e.project_id === p.id).reduce((s,e) => s + Number(e.rate||0), 0);
+                const costExp = expenses.filter(ex => ex.project_id === p.id).reduce((s,ex) => s + Number(ex.amount||0), 0);
+                const totalCost = costHrs + costExp;
+                let perc = p.budget > 0 ? (totalCost/p.budget*100) : 0;
+                let color = perc > 90 ? 'bg-red-500' : (perc > 75 ? 'bg-amber-400' : 'bg-primary-500');
+                
+                return `
+                <div class="bg-white border border-slate-200 p-5 lg:p-6 shadow-sm hover:shadow-md rounded-2xl cursor-pointer relative group transition-shadow ${p.is_archived ? 'is-archived' : ''}" onclick="showProjectDetail('${p.id}')">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="font-black text-slate-800 text-base lg:text-lg tracking-tight">${p.name}</h3>
+                            <p class="text-[9px] lg:text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">${p.client || 'Interno'}</p>
+                        </div>
+                        <div class="admin-only opacity-100 lg:opacity-0 group-hover:opacity-100 flex gap-1 bg-white lg:bg-transparent rounded-lg shadow-sm lg:shadow-none p-1 lg:p-0">
+                            <button onclick="event.stopPropagation(); toggleArchive('${p.id}', ${p.is_archived})" class="p-1.5 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"><i data-lucide="archive" class="w-4 h-4"></i></button>
+                            <button onclick="event.stopPropagation(); deleteProject('${p.id}')" class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        </div>
+                    </div>
+                    <div class="flex justify-between text-[10px] uppercase font-bold tracking-wider text-slate-500 mb-2">
+                        <span>Speso: €${totalCost.toFixed(0)}</span>
+                        <span>Target: €${p.budget}</span>
+                    </div>
+                    <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                        <div class="${color} h-full transition-all duration-1000" style="width: ${perc > 100 ? 100 : perc}%"></div>
+                    </div>
+                </div>`;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        async function toggleArchive(id, status) { 
+            await supabaseClient.from('projects').update({ is_archived: !status }).eq('id', id); 
+            fetchProjects(); 
+        }
+
+        async function deleteProject(id) { 
+            if(await appConfirm("Eliminazione Definitiva", "ATTENZIONE: Eliminando questo progetto verranno cancellate anche TUTTE le ore e le spese registrate al suo interno!\n\nSe vuoi conservare lo storico finanziario, chiudi questo avviso e usa il tasto 'Archivia' (icona a forma di scatola).\n\nSei sicuro di volerlo ELIMINARE PER SEMPRE?", "danger")) { 
+                await supabaseClient.from('projects').delete().eq('id', id); 
+                fetchProjects(); 
+            } 
+        }
+
+        function toggleViewArchived() { 
+            showArchived = !showArchived; 
+            document.getElementById('toggle-archived-btn').innerText = showArchived ? "Nascondi Archiviati" : "Archivio"; 
+            renderProjects(); 
+        }
+
+        // ================= TASK BUILDER E TEMPLATE =================
+
+        function openTaskBuilder(mode) { 
+            taskBuilderMode = mode; 
+            tempBuilderTasks = mode === 'new' ? [...newProjectTasks] : [...editProjectTasks]; 
+            renderTaskBuilder(); 
+            document.getElementById('modal-task-builder').classList.remove('force-hide'); 
+        }
+        function closeTaskBuilder() { document.getElementById('modal-task-builder').classList.add('force-hide'); }
+
+        function renderTaskBuilder() {
+            const selectedContainer = document.getElementById('builder-selected-tasks');
+            if(tempBuilderTasks.length === 0) {
+                selectedContainer.innerHTML = '<div class="text-[11px] font-bold text-center text-slate-400 uppercase tracking-wider py-4">Nessuna attività selezionata.</div>';
+            } else {
+                selectedContainer.innerHTML = tempBuilderTasks.map((task, idx) => `
+                    <div class="flex justify-between items-center bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm tag-enter">
+                        <span class="text-xs font-bold text-slate-700 flex items-center gap-2.5"><span class="text-[10px] text-primary-600 bg-primary-50 px-2 py-0.5 rounded-md border border-primary-100 font-black">${idx + 1}</span> ${task}</span>
+                        <div class="flex items-center gap-0.5">
+                            ${idx > 0 ? `<button onclick="moveTaskBuilder(${idx}, -1)" class="p-1.5 text-slate-400 hover:text-primary-600 hover:bg-slate-50 rounded-lg transition-colors"><i data-lucide="chevron-up" class="w-4 h-4"></i></button>` : `<div class="w-7"></div>`}
+                            ${idx < tempBuilderTasks.length - 1 ? `<button onclick="moveTaskBuilder(${idx}, 1)" class="p-1.5 text-slate-400 hover:text-primary-600 hover:bg-slate-50 rounded-lg transition-colors"><i data-lucide="chevron-down" class="w-4 h-4"></i></button>` : `<div class="w-7"></div>`}
+                            <div class="w-[1px] h-4 bg-slate-200 mx-1.5"></div>
+                            <button onclick="removeTaskBuilder(${idx})" class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            const catalogContainer = document.getElementById('builder-catalog-tasks');
+            catalogContainer.innerHTML = activityCatalog.map(task => {
+                if(tempBuilderTasks.includes(task)) return '';
+                return `<button onclick="addTaskBuilder('${task}')" class="bg-white border border-slate-200 text-slate-600 hover:border-primary-300 hover:bg-primary-50 hover:text-primary-700 px-3 py-2 rounded-xl text-[11px] font-bold tracking-wide transition-all shadow-sm tag-enter"><i data-lucide="plus" class="w-3 h-3 inline-block mr-1"></i>${task}</button>`;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        function moveTaskBuilder(idx, dir) { const temp = tempBuilderTasks[idx]; tempBuilderTasks[idx] = tempBuilderTasks[idx + dir]; tempBuilderTasks[idx + dir] = temp; renderTaskBuilder(); }
+        function removeTaskBuilder(idx) { tempBuilderTasks.splice(idx, 1); renderTaskBuilder(); }
+        function addTaskBuilder(task) { tempBuilderTasks.push(task); renderTaskBuilder(); }
+        
+        function confirmTaskBuilder() { 
+            if(taskBuilderMode === 'new') { 
+                newProjectTasks = [...tempBuilderTasks]; 
+                renderNewProjectUI(); 
+            } else { 
+                editProjectTasks = [...tempBuilderTasks]; 
+                renderEditProjectTasks(); 
+            } 
+            closeTaskBuilder(); 
+        }
+        
+        async function addNewTaskFromBuilder() {
+            const input = document.getElementById('builder-new-task-input'); 
+            const val = input.value.trim(); 
+            if(!val) return;
+            
+            if(!activityCatalog.includes(val)) { 
+                activityCatalog.push(val); 
+                syncCatalogAndTemplatesToDB(); 
+            }
+            if(!tempBuilderTasks.includes(val)) { 
+                tempBuilderTasks.push(val); 
+            }
+            input.value = ''; 
+            renderTaskBuilder();
+        }
 
         function openCatalogModal() { document.getElementById('modal-catalog').classList.remove('force-hide'); }
         function closeCatalogModal() { document.getElementById('modal-catalog').classList.add('force-hide'); cancelCatalogEdit(); }
         function openTemplatesModal() { if(activePlan === 'starter') return openUpgradeModal('Gestione Template'); document.getElementById('modal-templates').classList.remove('force-hide'); }
         function closeTemplatesModal() { document.getElementById('modal-templates').classList.add('force-hide'); cancelEditTemplate(); }
 
-        async function syncCatalogAndTemplatesToDB() { if(!studioData) return; await supabaseClient.from('studios').update({ activity_catalog: activityCatalog, project_templates: projectTemplates }).eq('id', userProfile.studio_id); }
+        async function syncCatalogAndTemplatesToDB() { 
+            if(!studioData) return; 
+            await supabaseClient.from('studios').update({ activity_catalog: activityCatalog, project_templates: projectTemplates }).eq('id', userProfile.studio_id); 
+        }
 
         function renderCatalogAndTemplatesUI() {
             document.getElementById('catalog-manage-list').innerHTML = activityCatalog.map(task => `
@@ -871,20 +1481,37 @@
             const isEditCat = editingCatalogTask !== null;
             const btnAddCat = document.getElementById('btn-add-catalog');
             const btnCancelCat = document.getElementById('btn-cancel-catalog');
-            if(btnAddCat) { btnAddCat.innerText = isEditCat ? "Aggiorna" : "Aggiungi"; }
-            if(btnCancelCat) { isEditCat ? btnCancelCat.classList.remove('hidden') : btnCancelCat.classList.add('hidden'); }
+            if(btnAddCat) btnAddCat.innerText = isEditCat ? "Aggiorna" : "Aggiungi"; 
+            if(btnCancelCat) isEditCat ? btnCancelCat.classList.remove('hidden') : btnCancelCat.classList.add('hidden');
 
-            document.getElementById('new-template-catalog-tasks').innerHTML = activityCatalog.map(task => { const isSelected = newTemplateTasks.includes(task); return `<button onclick="toggleTaskInNewTemplate('${task}')" class="px-3 py-1.5 rounded-lg border text-xs font-bold transition-all shadow-sm tag-enter ${isSelected ? 'bg-primary-50 border-primary-200 text-primary-700' : 'bg-white border-slate-200 text-slate-600 hover:border-primary-300 hover:text-primary-600'}">${task}</button>`; }).join('');
+            document.getElementById('new-template-catalog-tasks').innerHTML = activityCatalog.map(task => { 
+                const isSelected = newTemplateTasks.includes(task); 
+                return `<button onclick="toggleTaskInNewTemplate('${task}')" class="px-3 py-1.5 rounded-lg border text-xs font-bold transition-all shadow-sm tag-enter ${isSelected ? 'bg-primary-50 border-primary-200 text-primary-700' : 'bg-white border-slate-200 text-slate-600 hover:border-primary-300 hover:text-primary-600'}">${task}</button>`; 
+            }).join('');
             
-            document.getElementById('templates-manage-list').innerHTML = projectTemplates.map((tpl, i) => `<div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex justify-between items-start group tag-enter"><div><h4 class="font-black text-sm text-slate-800 mb-2 tracking-tight">${tpl.name}</h4><div class="flex flex-wrap gap-1.5">${tpl.tasks.map(t=>`<span class="text-[10px] bg-slate-50 text-slate-500 font-bold px-2 py-0.5 rounded-md border border-slate-200 uppercase tracking-wider">${t}</span>`).join('')}</div></div><div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"><button onclick="editTemplate(${i})" class="text-slate-400 hover:text-primary-600 p-1.5 hover:bg-slate-50 rounded-lg transition-colors"><i data-lucide="edit-2" class="w-4 h-4"></i></button><button onclick="removeTemplate(${i})" class="text-slate-400 hover:text-red-600 p-1.5 hover:bg-slate-50 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div></div>`).join('');
+            document.getElementById('templates-manage-list').innerHTML = projectTemplates.map((tpl, i) => `
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex justify-between items-start group tag-enter">
+                    <div>
+                        <h4 class="font-black text-sm text-slate-800 mb-2 tracking-tight">${tpl.name}</h4>
+                        <div class="flex flex-wrap gap-1.5">
+                            ${tpl.tasks.map(t=>`<span class="text-[10px] bg-slate-50 text-slate-500 font-bold px-2 py-0.5 rounded-md border border-slate-200 uppercase tracking-wider">${t}</span>`).join('')}
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button onclick="editTemplate(${i})" class="text-slate-400 hover:text-primary-600 p-1.5 hover:bg-slate-50 rounded-lg transition-colors"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                        <button onclick="removeTemplate(${i})" class="text-slate-400 hover:text-red-600 p-1.5 hover:bg-slate-50 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    </div>
+                </div>
+            `).join('');
             
             const isEditTpl = editingTemplateIndex !== null;
             const btnSaveTpl = document.getElementById('btn-save-template');
             const btnCancelTpl = document.getElementById('btn-cancel-edit-template');
-            if(btnSaveTpl) { btnSaveTpl.innerText = isEditTpl ? "Aggiorna" : "Salva Nuovo"; }
-            if(btnCancelTpl) { isEditTpl ? btnCancelTpl.classList.remove('hidden') : btnCancelTpl.classList.add('hidden'); }
+            if(btnSaveTpl) btnSaveTpl.innerText = isEditTpl ? "Aggiorna" : "Salva Nuovo";
+            if(btnCancelTpl) isEditTpl ? btnCancelTpl.classList.remove('hidden') : btnCancelTpl.classList.add('hidden');
             
-            lucide.createIcons(); renderNewProjectUI();
+            lucide.createIcons(); 
+            renderNewProjectUI();
         }
 
         function editCatalogTask(task) { editingCatalogTask = task; document.getElementById('new-catalog-item').value = task; renderCatalogAndTemplatesUI(); }
@@ -959,124 +1586,20 @@
             const name = document.getElementById('new-proj-name').value.trim(); const client = document.getElementById('new-proj-client').value.trim(); const budget = parseFloat(document.getElementById('new-proj-budget').value) || 0;
             if(!name) return await appAlert("Attenzione", "Inserisci il nome del lavoro", "danger"); 
             if(newProjectTasks.length === 0) return await appAlert("Attenzione", "Configura almeno un'attività", "danger");
+            
             await supabaseClient.from('projects').insert([{ name: name, client: client, budget: budget, tasks: [...newProjectTasks], studio_id: userProfile.studio_id }]);
-            document.getElementById('new-proj-name').value = ""; document.getElementById('new-proj-client').value = ""; document.getElementById('new-proj-budget').value = ""; document.getElementById('new-proj-template').value = ""; newProjectTasks = [];
-            renderNewProjectUI(); fetchProjects(); await appAlert("Fatto", "Lavoro Creato!", "success"); switchAppTab('operate');
-        }
-
-        function updateTaskDropdown() { const idx = document.getElementById('project-select').value; const taskSel = document.getElementById('task-select'); if(idx === "") return taskSel.innerHTML = '<option disabled selected>Seleziona...</option>'; const p = projects[idx]; taskSel.innerHTML = (p.tasks || []).length > 0 ? p.tasks.map(t => `<option value="${t}">${t}</option>`).join('') : '<option value="Generico">Generico</option>'; }
-
-        async function restoreCloudTimer() {
-            const { data: prof } = await supabaseClient.from('profiles').select('*').eq('id', userProfile.id).single();
-            if (prof && prof.active_timer_start) {
-                timerRunning = true; startTime = parseInt(prof.active_timer_start);
-                const pIdx = prof.active_timer_project; const tVal = prof.active_timer_task; const notes = prof.active_timer_notes || "";
-                if (pIdx !== null && pIdx !== "") { document.getElementById('project-select').value = pIdx; updateTaskDropdown(); }
-                if (tVal) document.getElementById('task-select').value = tVal; if (notes) document.getElementById('timer-notes').value = notes;
-                document.getElementById('btn-text').innerText = "FERMA E SALVA"; document.getElementById('btn-icon').setAttribute("data-lucide", "square"); document.getElementById('btn-toggle-timer').classList.replace('bg-slate-900', 'bg-red-500'); document.getElementById('btn-toggle-timer').classList.replace('hover:bg-slate-800', 'hover:bg-red-600');
-                timerInterval = setInterval(() => { const d = new Date(Date.now() - startTime); document.getElementById('timer-display').innerText = `${String(d.getUTCHours()).padStart(2,'0')}:${String(d.getUTCMinutes()).padStart(2,'0')}:${String(d.getUTCSeconds()).padStart(2,'0')}`; }, 1000); lucide.createIcons();
-            }
-        }
-
-        async function toggleTimer() {
-            const pIdx = document.getElementById('project-select').value; const tVal = document.getElementById('task-select').value; const notes = document.getElementById('timer-notes').value.trim();
-            if(pIdx === "") return await appAlert("Attenzione", "Scegli un lavoro prima di avviare il timer!", "danger");
-            if (!timerRunning) {
-                timerRunning = true; startTime = Date.now();
-                await supabaseClient.from('profiles').update({ active_timer_start: startTime.toString(), active_timer_project: pIdx, active_timer_task: tVal, active_timer_notes: notes }).eq('id', userProfile.id);
-                document.getElementById('btn-text').innerText = "FERMA E SALVA"; document.getElementById('btn-icon').setAttribute("data-lucide", "square"); 
-                document.getElementById('btn-toggle-timer').classList.replace('bg-slate-900', 'bg-red-500'); document.getElementById('btn-toggle-timer').classList.replace('hover:bg-slate-800', 'hover:bg-red-600');
-                timerInterval = setInterval(() => { const d = new Date(Date.now() - startTime); document.getElementById('timer-display').innerText = `${String(d.getUTCHours()).padStart(2,'0')}:${String(d.getUTCMinutes()).padStart(2,'0')}:${String(d.getUTCSeconds()).padStart(2,'0')}`; }, 1000);
-            } else {
-                timerRunning = false; clearInterval(timerInterval);
-                await supabaseClient.from('profiles').update({ active_timer_start: null, active_timer_project: null, active_timer_task: null, active_timer_notes: null }).eq('id', userProfile.id);
-                saveEntry(projects[pIdx], tVal, (Date.now() - startTime) / 3600000, null, document.getElementById('timer-notes').value.trim());
-                document.getElementById('timer-display').innerText = "00:00:00"; document.getElementById('timer-notes').value = ""; document.getElementById('btn-text').innerText = "AVVIA ORA"; document.getElementById('btn-icon').setAttribute("data-lucide", "play-circle"); 
-                document.getElementById('btn-toggle-timer').classList.replace('bg-red-500', 'bg-slate-900'); document.getElementById('btn-toggle-timer').classList.replace('hover:bg-red-600', 'hover:bg-slate-800');
-            }
-            lucide.createIcons();
-        }
-
-        async function saveEntry(proj, task, hours, customDate = null, notes = "") {
-            const { data: prof } = await supabaseClient.from('profiles').select('*').eq('id', userProfile.id).single();
-            const payload = { project_id: proj.id, project_name: proj.name, task, duration: hours, user_email: userProfile.email, user_name: prof.full_name, rate: (prof ? prof.hourly_cost : 0) * hours, studio_id: userProfile.studio_id, notes: notes };
-            if(customDate) payload.created_at = new Date(customDate).toISOString();
-            await supabaseClient.from('entries').insert([payload]); fetchEntries();
-        }
-
-        function openManualEntry() { document.getElementById('modal-manual').classList.remove('force-hide'); document.getElementById('manual-date').valueAsDate = new Date(); document.getElementById('manual-project').innerHTML = '<option value="" disabled selected>Scegli...</option>' + projects.filter(p => !p.is_archived).map((p, i) => `<option value="${projects.indexOf(p)}">${p.name}</option>`).join(''); }
-        function closeManualEntry() { document.getElementById('modal-manual').classList.add('force-hide'); }
-        function updateManualTaskDropdown() { const p = projects[document.getElementById('manual-project').value]; document.getElementById('manual-task').innerHTML = (p.tasks || []).map(t => `<option value="${t}">${t}</option>`).join('') || '<option value="Generico">Generico</option>'; }
-        async function saveManualEntry() { const pIdx = document.getElementById('manual-project').value; const h = parseFloat(document.getElementById('manual-hours').value); const d = document.getElementById('manual-date').value; const t = document.getElementById('manual-task').value; const n = document.getElementById('manual-notes').value.trim(); if(!pIdx || !h || !d) return await appAlert("Attenzione", "Completa tutti i dati obbligatori!", "danger"); await saveEntry(projects[pIdx], t, h, d, n); document.getElementById('manual-notes').value = ""; closeManualEntry(); }
-
-        function updateEditTaskDropdown(forceTask = null) {
-            const isEvent = forceTask && typeof forceTask !== 'string'; const explicitTask = isEvent ? null : forceTask;
-            const p = projects.find(proj => proj.id === document.getElementById('edit-entry-project').value);
-            const taskSelect = document.getElementById('edit-entry-task');
-            let projectTasks = p && p.tasks && p.tasks.length > 0 ? [...p.tasks] : []; if (!projectTasks.includes('Generico')) projectTasks.push('Generico'); if (explicitTask && !projectTasks.includes(explicitTask)) projectTasks.push(explicitTask);
-            const oldVal = explicitTask || taskSelect.value;
-            taskSelect.innerHTML = projectTasks.map(t => `<option value="${t}" ${t === oldVal ? 'selected' : ''}>${t}</option>`).join('');
-            if (!taskSelect.value && projectTasks.length > 0) taskSelect.value = projectTasks[0];
-        }
-
-        function updateEditCost() { const userVal = document.getElementById('edit-entry-user').value; const hoursVal = parseFloat(document.getElementById('edit-entry-hours').value) || 0; const selectedProfile = profiles.find(pr => pr.full_name === userVal); document.getElementById('edit-entry-cost').value = ((selectedProfile ? (selectedProfile.hourly_cost || 0) : 0) * hoursVal).toFixed(2); }
-
-        function openEditEntryModal(id) {
-            const e = entries.find(x => x.id === id); if(!e) return;
-            document.getElementById('edit-entry-id').value = id;
-            const d = new Date(e.created_at); document.getElementById('edit-entry-date').value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
             
-            const userSelect = document.getElementById('edit-entry-user'); 
-            userSelect.innerHTML = profiles.filter(p => p.role !== 'inactive' || p.full_name === e.user_name).map(pr => `<option value="${pr.full_name}" ${pr.full_name === e.user_name ? 'selected' : ''}>${pr.full_name}</option>`).join(''); 
-            if (!profiles.find(pr => pr.full_name === e.user_name)) userSelect.innerHTML += `<option value="${e.user_name}" selected>${e.user_name} (Rimosso)</option>`;
+            document.getElementById('new-proj-name').value = ""; 
+            document.getElementById('new-proj-client').value = ""; 
+            document.getElementById('new-proj-budget').value = ""; 
+            document.getElementById('new-proj-template').value = ""; 
+            newProjectTasks = [];
             
-            const projectSelect = document.getElementById('edit-entry-project'); projectSelect.innerHTML = projects.map(p => `<option value="${p.id}" ${p.id === e.project_id ? 'selected' : ''}>${p.name}</option>`).join(''); if (!projects.find(p => p.id === e.project_id)) projectSelect.innerHTML += `<option value="${e.project_id}" selected>${e.project_name} (Eliminato)</option>`;
-            updateEditTaskDropdown(e.task);
-            document.getElementById('edit-entry-notes').value = e.notes || ''; document.getElementById('edit-entry-hours').value = Number(e.duration).toFixed(2);
-            updateEditCost(); document.getElementById('modal-edit-entry').classList.remove('force-hide'); lucide.createIcons();
+            renderNewProjectUI(); 
+            fetchProjects(); 
+            await appAlert("Fatto", "Lavoro Creato!", "success"); 
+            switchAppTab('operate');
         }
-        function closeEditEntryModal() { document.getElementById('modal-edit-entry').classList.add('force-hide'); }
-
-        async function saveEntryEdit() {
-            const id = document.getElementById('edit-entry-id').value; const dateVal = document.getElementById('edit-entry-date').value; const userVal = document.getElementById('edit-entry-user').value; const projId = document.getElementById('edit-entry-project').value; const taskVal = document.getElementById('edit-entry-task').value; const notesVal = document.getElementById('edit-entry-notes').value.trim(); const hoursVal = parseFloat(document.getElementById('edit-entry-hours').value); const costVal = parseFloat(document.getElementById('edit-entry-cost').value);
-            if (!dateVal || isNaN(hoursVal) || isNaN(costVal) || !projId) return await appAlert("Attenzione", "Compila tutti i campi!", "danger");
-            const selectedProj = projects.find(p => p.id === projId); const projName = selectedProj ? selectedProj.name : document.getElementById('edit-entry-project').options[document.getElementById('edit-entry-project').selectedIndex].text;
-            await supabaseClient.from('entries').update({ created_at: new Date(`${dateVal}T12:00:00Z`).toISOString(), user_name: userVal, project_id: projId, project_name: projName, task: taskVal, notes: notesVal, duration: hoursVal, rate: costVal }).eq('id', id); 
-            closeEditEntryModal(); fetchEntries();
-        }
-
-        async function deleteEntry(id) { if(await appConfirm("Elimina", "Rimuovere definitivamente questa voce?", "danger")) { await supabaseClient.from('entries').delete().eq('id', id); fetchEntries(); } }
-
-        function renderProjects() {
-            const container = document.getElementById('projects-list');
-            let visibleProjects = projects.filter(p => showArchived ? true : p.is_archived !== true);
-            visibleProjects.sort((a, b) => { if (a.is_archived && !b.is_archived) return 1; if (!a.is_archived && b.is_archived) return -1; return 0; });
-            document.getElementById('project-select').innerHTML = '<option value="" disabled selected>-- Seleziona --</option>' + projects.filter(p => !p.is_archived).map((p, i) => `<option value="${projects.indexOf(p)}">${p.name}</option>`).join('');
-
-            container.innerHTML = visibleProjects.map((p, idx) => {
-                const costHrs = entries.filter(e => e.project_id === p.id).reduce((s,e) => s + Number(e.rate||0), 0);
-                const costExp = expenses.filter(ex => ex.project_id === p.id).reduce((s,ex) => s + Number(ex.amount||0), 0);
-                const totalCost = costHrs + costExp;
-                let perc = p.budget > 0 ? (totalCost/p.budget*100) : 0;
-                let color = perc > 90 ? 'bg-red-500' : (perc > 75 ? 'bg-amber-400' : 'bg-primary-500');
-                
-                return `<div class="bg-white border border-slate-200 p-5 lg:p-6 shadow-sm hover:shadow-md rounded-2xl cursor-pointer relative group transition-shadow ${p.is_archived ? 'is-archived' : ''}" onclick="showProjectDetail('${p.id}')"><div class="flex justify-between items-start mb-4"><div><h3 class="font-black text-slate-800 text-base lg:text-lg tracking-tight">${p.name}</h3><p class="text-[9px] lg:text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">${p.client || 'Interno'}</p></div><div class="admin-only opacity-100 lg:opacity-0 group-hover:opacity-100 flex gap-1 bg-white lg:bg-transparent rounded-lg shadow-sm lg:shadow-none p-1 lg:p-0"><button onclick="event.stopPropagation(); toggleArchive('${p.id}', ${p.is_archived})" class="p-1.5 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"><i data-lucide="archive" class="w-4 h-4"></i></button><button onclick="event.stopPropagation(); deleteProject('${p.id}')" class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div></div><div class="flex justify-between text-[10px] uppercase font-bold tracking-wider text-slate-500 mb-2"><span>Speso: €${totalCost.toFixed(0)}</span><span>Target: €${p.budget}</span></div><div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden"><div class="${color} h-full transition-all duration-1000" style="width: ${perc > 100 ? 100 : perc}%"></div></div></div>`;
-            }).join('');
-            lucide.createIcons();
-        }
-
-        async function addExpense(projId) { const desc = document.getElementById('exp-desc').value.trim(); const amt = parseFloat(document.getElementById('exp-amount').value); if(!desc || isNaN(amt)) return await appAlert("Attenzione", "Inserisci dati spesa.", "danger"); const { error } = await supabaseClient.from('expenses').insert([{ project_id: projId, studio_id: userProfile.studio_id, description: desc, amount: amt, user_name: userProfile.full_name }]); if(error) await appAlert("Errore", error.message, "danger"); else { await fetchExpenses(); showProjectDetail(projId); } }
-        async function deleteExpense(id, projId) { if(await appConfirm("Elimina Spesa", "Vuoi eliminare questa spesa?", "danger")) { await supabaseClient.from('expenses').delete().eq('id', id); await fetchExpenses(); showProjectDetail(projId); } }
-        async function toggleArchive(id, status) { await supabaseClient.from('projects').update({ is_archived: !status }).eq('id', id); fetchProjects(); }
-        
-        async function deleteProject(id) { 
-            if(await appConfirm("Eliminazione Definitiva", "ATTENZIONE: Eliminando questo progetto verranno cancellate anche TUTTE le ore e le spese registrate al suo interno!\n\nSe vuoi conservare lo storico finanziario, chiudi questo avviso e usa il tasto 'Archivia' (icona a forma di scatola).\n\nSei sicuro di volerlo ELIMINARE PER SEMPRE?", "danger")) { 
-                await supabaseClient.from('projects').delete().eq('id', id); 
-                fetchProjects(); 
-            } 
-        }
-
-        function toggleViewArchived() { showArchived = !showArchived; document.getElementById('toggle-archived-btn').innerText = showArchived ? "Nascondi Archiviati" : "Archivio"; renderProjects(); }
 
         function showProjectDetail(id) {
             const p = projects.find(x => x.id === id); if(!p) return;
@@ -1092,25 +1615,113 @@
                 ? `<button onclick="openUpgradeModal('Report PDF Singolo')" class="text-xs font-bold bg-white text-slate-400 border border-slate-200 px-3.5 py-2.5 rounded-xl flex items-center justify-center gap-2 transition opacity-60 shadow-sm"><i data-lucide="lock" class="w-4 h-4"></i> Report PDF</button>`
                 : `<button onclick="exportProjectPDF('${p.id}')" class="text-xs font-bold bg-white text-primary-600 border border-slate-200 px-3.5 py-2.5 rounded-xl hover:border-primary-200 hover:bg-primary-50 flex items-center justify-center gap-2 shadow-sm transition-all"><i data-lucide="file-text" class="w-4 h-4"></i> Esporta in PDF</button>`;
 
-            let html = `<div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6 lg:mb-8 gap-4"><div><h2 class="text-2xl lg:text-3xl font-black text-slate-800 mb-1 leading-tight pr-8 tracking-tight">${p.name}</h2><p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">${p.client || 'Interno'}</p></div><div class="admin-only w-full lg:w-auto flex flex-col sm:flex-row gap-2"><button onclick="openEditProjectModal('${p.id}')" class="text-xs font-bold bg-white text-slate-600 border border-slate-200 px-3.5 py-2.5 rounded-xl hover:bg-slate-50 flex items-center justify-center gap-2 shadow-sm transition-all"><i data-lucide="edit" class="w-4 h-4"></i> Modifica</button>${btnPdfHtml}</div></div><div class="grid grid-cols-2 md:grid-cols-4 gap-3 lg:gap-4 mb-8"><div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-center"><p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Spesa Totale</p><p class="text-lg lg:text-xl font-black text-primary-600 mt-1 tracking-tight">€${totalSpent.toFixed(0)} <span class="text-[10px] text-slate-400">/ ${p.budget}</span></p></div><div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-center"><p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Costo Team</p><p class="text-lg lg:text-xl font-black text-slate-800 mt-1 tracking-tight">€${totalHoursCost.toFixed(0)} <span class="text-[10px] text-slate-400">(${totalHours.toFixed(1)}h)</span></p></div><div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-center"><p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Spese Extra</p><p class="text-lg lg:text-xl font-black text-amber-600 mt-1 tracking-tight">€${totalExpenses.toFixed(0)}</p></div><div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-center"><p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Resa Oraria</p><p class="text-lg lg:text-xl font-black ${effectiveRate > 0 ? 'text-emerald-500' : 'text-red-500'} mt-1 tracking-tight">€${effectiveRate} <span class="text-[10px] text-slate-400">/h</span></p></div></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 pb-8 lg:pb-0"><div class="space-y-8"><div><h3 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200 pb-2 mb-4 flex items-center gap-1.5"><i data-lucide="layers" class="w-3.5 h-3.5"></i> Per Attività (Ore)</h3><div class="space-y-4">`;
-            const sortedTaskNames = Object.keys(taskStats).sort((a, b) => taskStats[b].h - taskStats[a].h);
-            sortedTaskNames.forEach(t => { const perc = p.budget > 0 ? (taskStats[t].c / p.budget * 100).toFixed(1) : 0; const isZero = taskStats[t].h === 0; html += `<div><div class="flex justify-between items-end mb-1.5"><span class="font-bold ${isZero?'text-slate-400':'text-slate-700'} text-xs">${t}</span><span class="text-[10px] font-mono font-bold text-slate-500">€${taskStats[t].c.toFixed(0)} (${taskStats[t].h.toFixed(1)}h)</span></div><div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden"><div class="${isZero?'bg-slate-200':'bg-primary-500'} h-full" style="width: ${perc}%"></div></div></div>`; });
-            html += `</div></div><div><h3 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200 pb-2 mb-4 flex items-center gap-1.5"><i data-lucide="users" class="w-3.5 h-3.5"></i> Per Membro Team</h3><div class="space-y-3">`;
-            Object.keys(teamStats).forEach(m => { html += `<div class="flex justify-between items-center bg-white p-3 rounded-xl border border-slate-200 shadow-sm"><span class="font-bold text-slate-700 text-xs uppercase tracking-wide">${m}</span><div class="text-right"><p class="text-[11px] font-mono font-bold text-primary-600">${teamStats[m].h.toFixed(1)}h</p><p class="text-[10px] font-mono font-black text-slate-400 admin-only">€ ${teamStats[m].c.toFixed(2)}</p></div></div>`; });
-            html += `</div></div></div><div class="admin-only bg-slate-50 rounded-2xl p-5 border border-slate-200"><h3 class="text-[11px] font-bold text-slate-600 uppercase tracking-wider border-b border-slate-200 pb-3 mb-4 flex items-center gap-2"><i data-lucide="receipt" class="w-4 h-4 text-amber-500"></i> Spese Vive</h3><div class="flex gap-2 mb-6"><input type="text" id="exp-desc" placeholder="Es. Oneri o Materiali" class="flex-1 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 transition-all bg-white"><div class="w-24 relative flex items-center"><span class="absolute left-3 text-slate-400 font-bold text-xs">€</span><input type="number" step="0.01" id="exp-amount" placeholder="0.00" class="w-full border border-slate-200 rounded-xl p-3 pl-6 text-xs outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 transition-all font-bold bg-white"></div><button onclick="addExpense('${p.id}')" class="bg-amber-500 text-white px-3.5 rounded-xl hover:bg-amber-600 transition-all shadow-sm active:scale-95"><i data-lucide="plus" class="w-4 h-4"></i></button></div><div class="space-y-2 max-h-[300px] overflow-y-auto pr-1">${pExpenses.length === 0 ? '<div class="text-center py-6 text-slate-400 text-xs font-bold uppercase tracking-wider">Nessuna spesa registrata.</div>' : pExpenses.map(ex => `<div class="bg-white p-3 rounded-xl border border-slate-200 flex justify-between items-center shadow-sm group"><div><p class="text-xs font-bold text-slate-700">${ex.description}</p><p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mt-1">${new Date(ex.created_at).toLocaleDateString()} • ${ex.user_name}</p></div><div class="flex items-center gap-3"><span class="font-black text-amber-600 text-sm tracking-tight">€${Number(ex.amount).toFixed(2)}</span><button onclick="deleteExpense('${ex.id}', '${p.id}')" class="text-slate-300 hover:text-red-500 p-1.5 hover:bg-red-50 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></div></div>`).join('')}</div></div></div>`;
+            let html = `
+            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6 lg:mb-8 gap-4">
+                <div>
+                    <h2 class="text-2xl lg:text-3xl font-black text-slate-800 mb-1 leading-tight pr-8 tracking-tight">${p.name}</h2>
+                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">${p.client || 'Interno'}</p>
+                </div>
+                <div class="admin-only w-full lg:w-auto flex flex-col sm:flex-row gap-2">
+                    <button onclick="openEditProjectModal('${p.id}')" class="text-xs font-bold bg-white text-slate-600 border border-slate-200 px-3.5 py-2.5 rounded-xl hover:bg-slate-50 flex items-center justify-center gap-2 shadow-sm transition-all"><i data-lucide="edit" class="w-4 h-4"></i> Modifica</button>
+                    ${btnPdfHtml}
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 lg:gap-4 mb-8">
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-center"><p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Spesa Totale</p><p class="text-lg lg:text-xl font-black text-primary-600 mt-1 tracking-tight">€${totalSpent.toFixed(0)} <span class="text-[10px] text-slate-400">/ ${p.budget}</span></p></div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-center"><p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Costo Team</p><p class="text-lg lg:text-xl font-black text-slate-800 mt-1 tracking-tight">€${totalHoursCost.toFixed(0)} <span class="text-[10px] text-slate-400">(${totalHours.toFixed(1)}h)</span></p></div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-center"><p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Spese Extra</p><p class="text-lg lg:text-xl font-black text-amber-600 mt-1 tracking-tight">€${totalExpenses.toFixed(0)}</p></div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-center"><p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Resa Oraria</p><p class="text-lg lg:text-xl font-black ${effectiveRate > 0 ? 'text-emerald-500' : 'text-red-500'} mt-1 tracking-tight">€${effectiveRate} <span class="text-[10px] text-slate-400">/h</span></p></div>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 pb-8 lg:pb-0">
+                <div class="space-y-8">
+                    <div>
+                        <h3 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200 pb-2 mb-4 flex items-center gap-1.5"><i data-lucide="layers" class="w-3.5 h-3.5"></i> Per Attività (Ore)</h3>
+                        <div class="space-y-4">`;
+                        
+                        const sortedTaskNames = Object.keys(taskStats).sort((a, b) => taskStats[b].h - taskStats[a].h);
+                        sortedTaskNames.forEach(t => { 
+                            const perc = p.budget > 0 ? (taskStats[t].c / p.budget * 100).toFixed(1) : 0; 
+                            const isZero = taskStats[t].h === 0; 
+                            html += `
+                            <div>
+                                <div class="flex justify-between items-end mb-1.5">
+                                    <span class="font-bold ${isZero?'text-slate-400':'text-slate-700'} text-xs">${t}</span>
+                                    <span class="text-[10px] font-mono font-bold text-slate-500">€${taskStats[t].c.toFixed(0)} (${taskStats[t].h.toFixed(1)}h)</span>
+                                </div>
+                                <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                                    <div class="${isZero?'bg-slate-200':'bg-primary-500'} h-full" style="width: ${perc}%"></div>
+                                </div>
+                            </div>`; 
+                        });
+                        
+                        html += `
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200 pb-2 mb-4 flex items-center gap-1.5"><i data-lucide="users" class="w-3.5 h-3.5"></i> Per Membro Team</h3>
+                        <div class="space-y-3">`;
+                        
+                        Object.keys(teamStats).forEach(m => { 
+                            html += `
+                            <div class="flex justify-between items-center bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                                <span class="font-bold text-slate-700 text-xs uppercase tracking-wide">${m}</span>
+                                <div class="text-right">
+                                    <p class="text-[11px] font-mono font-bold text-primary-600">${teamStats[m].h.toFixed(1)}h</p>
+                                    <p class="text-[10px] font-mono font-black text-slate-400 admin-only">€ ${teamStats[m].c.toFixed(2)}</p>
+                                </div>
+                            </div>`; 
+                        });
+                        
+                        html += `
+                        </div>
+                    </div>
+                </div>
+                <div class="admin-only bg-slate-50 rounded-2xl p-5 border border-slate-200">
+                    <h3 class="text-[11px] font-bold text-slate-600 uppercase tracking-wider border-b border-slate-200 pb-3 mb-4 flex items-center gap-2"><i data-lucide="receipt" class="w-4 h-4 text-amber-500"></i> Spese Vive</h3>
+                    <div class="flex gap-2 mb-6">
+                        <input type="text" id="exp-desc" placeholder="Es. Oneri o Materiali" class="flex-1 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 transition-all bg-white">
+                        <div class="w-24 relative flex items-center">
+                            <span class="absolute left-3 text-slate-400 font-bold text-xs">€</span>
+                            <input type="number" step="0.01" id="exp-amount" placeholder="0.00" class="w-full border border-slate-200 rounded-xl p-3 pl-6 text-xs outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 transition-all font-bold bg-white">
+                        </div>
+                        <button onclick="addExpense('${p.id}')" class="bg-amber-500 text-white px-3.5 rounded-xl hover:bg-amber-600 transition-all shadow-sm active:scale-95"><i data-lucide="plus" class="w-4 h-4"></i></button>
+                    </div>
+                    <div class="space-y-2 max-h-[300px] overflow-y-auto pr-1">
+                        ${pExpenses.length === 0 ? '<div class="text-center py-6 text-slate-400 text-xs font-bold uppercase tracking-wider">Nessuna spesa registrata.</div>' : pExpenses.map(ex => `
+                        <div class="bg-white p-3 rounded-xl border border-slate-200 flex justify-between items-center shadow-sm group">
+                            <div>
+                                <p class="text-xs font-bold text-slate-700">${ex.description}</p>
+                                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mt-1">${new Date(ex.created_at).toLocaleDateString()} • ${ex.user_name}</p>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="font-black text-amber-600 text-sm tracking-tight">€${Number(ex.amount).toFixed(2)}</span>
+                                <button onclick="deleteExpense('${ex.id}', '${p.id}')" class="text-slate-300 hover:text-red-500 p-1.5 hover:bg-red-50 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                            </div>
+                        </div>`).join('')}
+                    </div>
+                </div>
+            </div>`;
             
             document.getElementById('detail-content').innerHTML = html;
             document.getElementById('modal-detail').classList.remove('force-hide');
             lucide.createIcons();
         }
+
         function closeDetail() { document.getElementById('modal-detail').classList.add('force-hide'); }
 
         function openEditProjectModal(id) {
             const p = projects.find(x => x.id === id); if(!p) return;
-            document.getElementById('edit-modal-proj-id').value = id; document.getElementById('edit-modal-name').value = p.name; document.getElementById('edit-modal-client').value = p.client || ''; document.getElementById('edit-modal-budget').value = p.budget;
+            document.getElementById('edit-modal-proj-id').value = id; 
+            document.getElementById('edit-modal-name').value = p.name; 
+            document.getElementById('edit-modal-client').value = p.client || ''; 
+            document.getElementById('edit-modal-budget').value = p.budget;
             editProjectTasks = p.tasks && p.tasks.length > 0 ? [...p.tasks] : [];
             renderEditProjectTasks();
-            document.getElementById('modal-detail').classList.add('force-hide'); document.getElementById('modal-edit-project').classList.remove('force-hide'); lucide.createIcons();
+            document.getElementById('modal-detail').classList.add('force-hide'); 
+            document.getElementById('modal-edit-project').classList.remove('force-hide'); 
+            lucide.createIcons();
         }
 
         function renderEditProjectTasks() {
@@ -1121,6 +1732,7 @@
         }
 
         function closeEditProjectModal() { document.getElementById('modal-edit-project').classList.add('force-hide'); }
+        
         async function saveModalProjectEdit() {
             const id = document.getElementById('edit-modal-proj-id').value; 
             const name = document.getElementById('edit-modal-name').value.trim(); 
@@ -1138,10 +1750,25 @@
             if(userProfile.role !== 'admin') return;
             const activeProjects = projects.filter(p => !p.is_archived);
             let totalBudget = 0, totalSpent = 0, projectSpend = {}; let totalTaskHours = 0;
-            activeProjects.forEach(p => { totalBudget += (p.budget || 0); const costHrs = entries.filter(e => e.project_id === p.id).reduce((s, e) => s + Number(e.rate || 0), 0); const costExp = expenses.filter(ex => ex.project_id === p.id).reduce((s, ex) => s + Number(ex.amount || 0), 0); const pSpent = costHrs + costExp; totalSpent += pSpent; projectSpend[p.name] = pSpent; });
-            const archivedBudget = projects.filter(p => p.is_archived).reduce((s,p) => s + p.budget, 0); const archivedHrs = entries.filter(e => projects.find(p => p.id === e.project_id && p.is_archived)).reduce((s,e) => s + Number(e.rate), 0); const archivedExp = expenses.filter(ex => projects.find(p => p.id === ex.project_id && p.is_archived)).reduce((s,ex) => s + Number(ex.amount), 0);
-            const profit = archivedBudget - (archivedHrs + archivedExp); const margin = totalBudget - totalSpent;
-            const profitCard = document.getElementById('card-profit'); const profitLabel = document.getElementById('label-profit');
+            
+            activeProjects.forEach(p => { 
+                totalBudget += (p.budget || 0); 
+                const costHrs = entries.filter(e => e.project_id === p.id).reduce((s, e) => s + Number(e.rate || 0), 0); 
+                const costExp = expenses.filter(ex => ex.project_id === p.id).reduce((s, ex) => s + Number(ex.amount || 0), 0); 
+                const pSpent = costHrs + costExp; 
+                totalSpent += pSpent; 
+                projectSpend[p.name] = pSpent; 
+            });
+            
+            const archivedBudget = projects.filter(p => p.is_archived).reduce((s,p) => s + p.budget, 0); 
+            const archivedHrs = entries.filter(e => projects.find(p => p.id === e.project_id && p.is_archived)).reduce((s,e) => s + Number(e.rate), 0); 
+            const archivedExp = expenses.filter(ex => projects.find(p => p.id === ex.project_id && p.is_archived)).reduce((s,ex) => s + Number(ex.amount), 0);
+            
+            const profit = archivedBudget - (archivedHrs + archivedExp); 
+            const margin = totalBudget - totalSpent;
+            const profitCard = document.getElementById('card-profit'); 
+            const profitLabel = document.getElementById('label-profit');
+            
             document.getElementById('kpi-profit').innerText = `€ ${profit.toFixed(2)}`;
             
             if (profit < 0) { 
@@ -1158,22 +1785,58 @@
                 document.getElementById('kpi-profit').classList.replace('text-red-600', 'text-slate-800'); 
             }
             
-            const marginEl = document.getElementById('kpi-margin'); marginEl.innerText = `€ ${margin.toFixed(2)}`;
-            if (margin < 0) marginEl.classList.replace('text-primary-600', 'text-red-500'); else marginEl.classList.replace('text-red-500', 'text-primary-600');
+            const marginEl = document.getElementById('kpi-margin'); 
+            marginEl.innerText = `€ ${margin.toFixed(2)}`;
+            if (margin < 0) marginEl.classList.replace('text-primary-600', 'text-red-500'); 
+            else marginEl.classList.replace('text-red-500', 'text-primary-600');
             
-            let topBurner = "-", maxSpent = 0; for(let name in projectSpend) if(projectSpend[name] > maxSpent) { maxSpent = projectSpend[name]; topBurner = name; } 
+            let topBurner = "-", maxSpent = 0; 
+            for(let name in projectSpend) {
+                if(projectSpend[name] > maxSpent) { maxSpent = projectSpend[name]; topBurner = name; } 
+            }
             document.getElementById('kpi-burner').innerText = topBurner;
             
             const theme = THEMES[currentBusinessType];
             Chart.defaults.font.family = "'Inter', sans-serif";
+            
             if(charts.global) charts.global.destroy();
-            charts.global = new Chart(document.getElementById('chart-global'), { type: 'bar', data: { labels: ['Portafoglio Attivo'], datasets: [ { label: 'Costi (Ore+Spese)', data: [totalSpent], backgroundColor: theme.chartMainColor, borderRadius: 6 }, { label: 'Budget', data: [totalBudget], backgroundColor: '#f1f5f9', hoverBackgroundColor: '#e2e8f0', borderRadius: 6 } ]}, options: { responsive: true, maintainAspectRatio: false } });
-            const taskStats = {}; entries.filter(e => activeProjects.find(p => p.id === e.project_id)).forEach(e => { const hrs = Number(e.duration); taskStats[e.task||'Altro'] = (taskStats[e.task||'Altro']||0) + hrs; totalTaskHours += hrs; });
+            charts.global = new Chart(document.getElementById('chart-global'), { 
+                type: 'bar', 
+                data: { 
+                    labels: ['Portafoglio Attivo'], 
+                    datasets: [ 
+                        { label: 'Costi (Ore+Spese)', data: [totalSpent], backgroundColor: theme.chartMainColor, borderRadius: 6 }, 
+                        { label: 'Budget', data: [totalBudget], backgroundColor: '#f1f5f9', hoverBackgroundColor: '#e2e8f0', borderRadius: 6 } 
+                    ]
+                }, 
+                options: { responsive: true, maintainAspectRatio: false } 
+            });
+            
+            const taskStats = {}; 
+            entries.filter(e => activeProjects.find(p => p.id === e.project_id)).forEach(e => { 
+                const hrs = Number(e.duration); 
+                taskStats[e.task||'Altro'] = (taskStats[e.task||'Altro']||0) + hrs; 
+                totalTaskHours += hrs; 
+            });
+            
             const topTasks = Object.entries(taskStats).sort((a,b) => b[1] - a[1]).slice(0, 5);
             const taskLabelsWithPerc = topTasks.map(t => `${t[0]} - ${totalTaskHours > 0 ? Math.round((t[1] / totalTaskHours) * 100) : 0}%`);
+            
             if(charts.tasks) charts.tasks.destroy();
-            charts.tasks = new Chart(document.getElementById('chart-tasks-dist'), { type: 'doughnut', data: { labels: taskLabelsWithPerc, datasets: [{ data: topTasks.map(t=>t[1]), backgroundColor: theme.chartPalette, borderWidth: 0 }]}, options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { position: 'right', labels: { boxWidth: 10, font: { size: 10, weight: 'bold' } } } } } });
+            charts.tasks = new Chart(document.getElementById('chart-tasks-dist'), { 
+                type: 'doughnut', 
+                data: { 
+                    labels: taskLabelsWithPerc, 
+                    datasets: [{ data: topTasks.map(t=>t[1]), backgroundColor: theme.chartPalette, borderWidth: 0 }]
+                }, 
+                options: { 
+                    responsive: true, maintainAspectRatio: false, cutout: '75%', 
+                    plugins: { legend: { position: 'right', labels: { boxWidth: 10, font: { size: 10, weight: 'bold' } } } } 
+                } 
+            });
         }
+
+        // ================= REGISTRO ATTIVITÀ E ORE =================
 
         function prevWeek() { currentWeekStart.setDate(currentWeekStart.getDate() - 7); renderEntries(); }
         function nextWeek() { currentWeekStart.setDate(currentWeekStart.getDate() + 7); renderEntries(); }
@@ -1187,8 +1850,12 @@
         function renderEntries() {
             const table = document.getElementById('entries-table-desktop'); 
             const mobile = document.getElementById('entries-list-mobile');
-            const start = new Date(currentWeekStart); start.setHours(0,0,0,0); 
-            const end = new Date(start); end.setDate(end.getDate() + 6); end.setHours(23,59,59,999);
+            
+            const start = new Date(currentWeekStart); 
+            start.setHours(0,0,0,0); 
+            const end = new Date(start); 
+            end.setDate(end.getDate() + 6); 
+            end.setHours(23,59,59,999);
             
             document.getElementById('week-display').innerText = `${start.toLocaleDateString('it-IT', {day:'2-digit',month:'short'})} - ${end.toLocaleDateString('it-IT', {day:'2-digit',month:'short',year:'numeric'})}`;
             
@@ -1198,6 +1865,7 @@
                 const d = new Date(e.created_at).getTime();
                 const inDate = d >= start.getTime() && d <= end.getTime();
                 
+                // Filtro sicurezza: il collaboratore vede solo se stesso
                 if (isStaff) {
                     return inDate && e.user_email === userProfile.email;
                 }
@@ -1207,18 +1875,253 @@
             document.getElementById('entries-empty-state').classList.toggle('force-hide', weekly.length > 0); 
             table.parentElement.classList.toggle('force-hide', weekly.length === 0);
             
-            table.innerHTML = weekly.map(e => `<tr class="hover:bg-slate-50 border-b border-slate-100 transition-colors"><td class="p-5 font-bold text-slate-500 text-xs">${new Date(e.created_at).toLocaleDateString('it-IT', {weekday:'short', day:'2-digit'})}</td><td class="p-5 text-center"><span class="bg-slate-100 text-slate-600 text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider">${e.user_name}</span></td><td class="p-5 font-black text-slate-800 tracking-tight">${e.project_name}</td><td class="p-5"><div class="text-xs font-bold text-slate-600">${e.task}</div><div class="text-[11px] text-slate-400 mt-0.5">${e.notes||''}</div></td><td class="p-5 font-mono font-black text-primary-600">${Number(e.duration).toFixed(2)}h</td><td class="p-5 text-right admin-only"><div class="flex justify-end gap-3 items-center"><span class="font-mono text-slate-400 text-sm font-bold">€${Number(e.rate).toFixed(2)}</span><button onclick="openEditEntryModal('${e.id}')" class="text-slate-300 hover:text-primary-600 p-1.5 hover:bg-primary-50 rounded-lg transition-colors"><i data-lucide="pencil" class="w-4 h-4"></i></button><button onclick="deleteEntry('${e.id}')" class="text-slate-300 hover:text-red-600 p-1.5 hover:bg-red-50 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div></td></tr>`).join('');
+            table.innerHTML = weekly.map(e => `
+                <tr class="hover:bg-slate-50 border-b border-slate-100 transition-colors">
+                    <td class="p-5 font-bold text-slate-500 text-xs">${new Date(e.created_at).toLocaleDateString('it-IT', {weekday:'short', day:'2-digit'})}</td>
+                    <td class="p-5 text-center"><span class="bg-slate-100 text-slate-600 text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider">${e.user_name}</span></td>
+                    <td class="p-5 font-black text-slate-800 tracking-tight">${e.project_name}</td>
+                    <td class="p-5"><div class="text-xs font-bold text-slate-600">${e.task}</div><div class="text-[11px] text-slate-400 mt-0.5">${e.notes||''}</div></td>
+                    <td class="p-5 font-mono font-black text-primary-600">${Number(e.duration).toFixed(2)}h</td>
+                    <td class="p-5 text-right admin-only">
+                        <div class="flex justify-end gap-3 items-center">
+                            <span class="font-mono text-slate-400 text-sm font-bold">€${Number(e.rate).toFixed(2)}</span>
+                            <button onclick="openEditEntryModal('${e.id}')" class="text-slate-300 hover:text-primary-600 p-1.5 hover:bg-primary-50 rounded-lg transition-colors"><i data-lucide="pencil" class="w-4 h-4"></i></button>
+                            <button onclick="deleteEntry('${e.id}')" class="text-slate-300 hover:text-red-600 p-1.5 hover:bg-red-50 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        </div>
+                    </td>
+                </tr>`).join('');
             
-            mobile.innerHTML = weekly.map(e => `<div class="p-5 border-b border-slate-100 bg-white"><div class="flex justify-between mb-3"><div><div class="flex gap-2 mb-1.5"><span class="text-[9px] font-bold text-slate-600 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded-md uppercase tracking-wider">${e.user_name}</span><span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">${new Date(e.created_at).toLocaleDateString('it-IT', {weekday:'short', day:'2-digit'})}</span></div><h4 class="font-black text-sm text-slate-800 tracking-tight">${e.project_name}</h4></div><span class="font-mono font-black text-primary-600 bg-primary-50 border border-primary-100 px-2 py-1 rounded-lg h-fit">${Number(e.duration).toFixed(2)}h</span></div><div class="flex flex-col gap-3"><div class="max-w-[90%]"><span class="text-xs text-slate-600 font-bold">${e.task}</span><div class="text-[11px] text-slate-400 mt-0.5">${e.notes||''}</div></div><div class="admin-only flex justify-between border-t border-slate-100 pt-3"><span class="font-mono text-slate-500 font-bold text-xs">Costo: €${Number(e.rate).toFixed(2)}</span><div class="flex gap-2"><button onclick="openEditEntryModal('${e.id}')" class="text-slate-400 p-1.5 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button><button onclick="deleteEntry('${e.id}')" class="text-slate-400 p-1.5 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></div></div></div></div>`).join('');
+            mobile.innerHTML = weekly.map(e => `
+                <div class="p-5 border-b border-slate-100 bg-white">
+                    <div class="flex justify-between mb-3">
+                        <div>
+                            <div class="flex gap-2 mb-1.5">
+                                <span class="text-[9px] font-bold text-slate-600 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded-md uppercase tracking-wider">${e.user_name}</span>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">${new Date(e.created_at).toLocaleDateString('it-IT', {weekday:'short', day:'2-digit'})}</span>
+                            </div>
+                            <h4 class="font-black text-sm text-slate-800 tracking-tight">${e.project_name}</h4>
+                        </div>
+                        <span class="font-mono font-black text-primary-600 bg-primary-50 border border-primary-100 px-2 py-1 rounded-lg h-fit">${Number(e.duration).toFixed(2)}h</span>
+                    </div>
+                    <div class="flex flex-col gap-3">
+                        <div class="max-w-[90%]"><span class="text-xs text-slate-600 font-bold">${e.task}</span><div class="text-[11px] text-slate-400 mt-0.5">${e.notes||''}</div></div>
+                        <div class="admin-only flex justify-between border-t border-slate-100 pt-3">
+                            <span class="font-mono text-slate-500 font-bold text-xs">Costo: €${Number(e.rate).toFixed(2)}</span>
+                            <div class="flex gap-2">
+                                <button onclick="openEditEntryModal('${e.id}')" class="text-slate-400 p-1.5 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button>
+                                <button onclick="deleteEntry('${e.id}')" class="text-slate-400 p-1.5 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`).join('');
             lucide.createIcons();
         }
 
-        async function getBase64FromUrl(url) { return new Promise((resolve, reject) => { const img = new Image(); img.crossOrigin = 'Anonymous'; img.onload = () => { const canvas = document.createElement('canvas'); canvas.width = img.naturalWidth; canvas.height = img.naturalHeight; const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0); resolve({ url: canvas.toDataURL('image/png'), width: img.naturalWidth, height: img.naturalHeight }); }; img.onerror = reject; img.src = url; }); }
+        function updateTaskDropdown() { 
+            const idx = document.getElementById('project-select').value; 
+            const taskSel = document.getElementById('task-select'); 
+            if(idx === "") return taskSel.innerHTML = '<option disabled selected>Seleziona...</option>'; 
+            const p = projects[idx]; 
+            taskSel.innerHTML = (p.tasks || []).length > 0 ? p.tasks.map(t => `<option value="${t}">${t}</option>`).join('') : '<option value="Generico">Generico</option>'; 
+        }
+
+        async function restoreCloudTimer() {
+            const { data: prof } = await supabaseClient.from('profiles').select('*').eq('id', userProfile.id).single();
+            if (prof && prof.active_timer_start) {
+                timerRunning = true; 
+                startTime = parseInt(prof.active_timer_start);
+                const pIdx = prof.active_timer_project; 
+                const tVal = prof.active_timer_task; 
+                const notes = prof.active_timer_notes || "";
+                
+                if (pIdx !== null && pIdx !== "") { document.getElementById('project-select').value = pIdx; updateTaskDropdown(); }
+                if (tVal) document.getElementById('task-select').value = tVal; 
+                if (notes) document.getElementById('timer-notes').value = notes;
+                
+                document.getElementById('btn-text').innerText = "FERMA E SALVA"; 
+                document.getElementById('btn-icon').setAttribute("data-lucide", "square"); 
+                document.getElementById('btn-toggle-timer').classList.replace('bg-slate-900', 'bg-red-500'); 
+                document.getElementById('btn-toggle-timer').classList.replace('hover:bg-slate-800', 'hover:bg-red-600');
+                
+                timerInterval = setInterval(() => { 
+                    const d = new Date(Date.now() - startTime); 
+                    document.getElementById('timer-display').innerText = `${String(d.getUTCHours()).padStart(2,'0')}:${String(d.getUTCMinutes()).padStart(2,'0')}:${String(d.getUTCSeconds()).padStart(2,'0')}`; 
+                }, 1000); 
+                lucide.createIcons();
+            }
+        }
+
+        async function toggleTimer() {
+            const pIdx = document.getElementById('project-select').value; 
+            const tVal = document.getElementById('task-select').value; 
+            const notes = document.getElementById('timer-notes').value.trim();
+            if(pIdx === "") return await appAlert("Attenzione", "Scegli un lavoro prima di avviare il timer!", "danger");
+            
+            if (!timerRunning) {
+                timerRunning = true; 
+                startTime = Date.now();
+                await supabaseClient.from('profiles').update({ active_timer_start: startTime.toString(), active_timer_project: pIdx, active_timer_task: tVal, active_timer_notes: notes }).eq('id', userProfile.id);
+                document.getElementById('btn-text').innerText = "FERMA E SALVA"; 
+                document.getElementById('btn-icon').setAttribute("data-lucide", "square"); 
+                document.getElementById('btn-toggle-timer').classList.replace('bg-slate-900', 'bg-red-500'); 
+                document.getElementById('btn-toggle-timer').classList.replace('hover:bg-slate-800', 'hover:bg-red-600');
+                
+                timerInterval = setInterval(() => { 
+                    const d = new Date(Date.now() - startTime); 
+                    document.getElementById('timer-display').innerText = `${String(d.getUTCHours()).padStart(2,'0')}:${String(d.getUTCMinutes()).padStart(2,'0')}:${String(d.getUTCSeconds()).padStart(2,'0')}`; 
+                }, 1000);
+            } else {
+                timerRunning = false; 
+                clearInterval(timerInterval);
+                await supabaseClient.from('profiles').update({ active_timer_start: null, active_timer_project: null, active_timer_task: null, active_timer_notes: null }).eq('id', userProfile.id);
+                
+                saveEntry(projects[pIdx], tVal, (Date.now() - startTime) / 3600000, null, document.getElementById('timer-notes').value.trim());
+                
+                document.getElementById('timer-display').innerText = "00:00:00"; 
+                document.getElementById('timer-notes').value = ""; 
+                document.getElementById('btn-text').innerText = "AVVIA ORA"; 
+                document.getElementById('btn-icon').setAttribute("data-lucide", "play-circle"); 
+                document.getElementById('btn-toggle-timer').classList.replace('bg-red-500', 'bg-slate-900'); 
+                document.getElementById('btn-toggle-timer').classList.replace('hover:bg-red-600', 'hover:bg-slate-800');
+            }
+            lucide.createIcons();
+        }
+
+        async function saveEntry(proj, task, hours, customDate = null, notes = "") {
+            const { data: prof } = await supabaseClient.from('profiles').select('*').eq('id', userProfile.id).single();
+            const payload = { project_id: proj.id, project_name: proj.name, task, duration: hours, user_email: userProfile.email, user_name: prof.full_name, rate: (prof ? prof.hourly_cost : 0) * hours, studio_id: userProfile.studio_id, notes: notes };
+            if(customDate) payload.created_at = new Date(customDate).toISOString();
+            await supabaseClient.from('entries').insert([payload]); 
+            fetchEntries();
+        }
+
+        function openManualEntry() { 
+            document.getElementById('modal-manual').classList.remove('force-hide'); 
+            document.getElementById('manual-date').valueAsDate = new Date(); 
+            document.getElementById('manual-project').innerHTML = '<option value="" disabled selected>Scegli...</option>' + projects.filter(p => !p.is_archived).map((p, i) => `<option value="${projects.indexOf(p)}">${p.name}</option>`).join(''); 
+        }
+        
+        function closeManualEntry() { document.getElementById('modal-manual').classList.add('force-hide'); }
+        
+        function updateManualTaskDropdown() { 
+            const p = projects[document.getElementById('manual-project').value]; 
+            document.getElementById('manual-task').innerHTML = (p.tasks || []).map(t => `<option value="${t}">${t}</option>`).join('') || '<option value="Generico">Generico</option>'; 
+        }
+        
+        async function saveManualEntry() { 
+            const pIdx = document.getElementById('manual-project').value; 
+            const h = parseFloat(document.getElementById('manual-hours').value); 
+            const d = document.getElementById('manual-date').value; 
+            const t = document.getElementById('manual-task').value; 
+            const n = document.getElementById('manual-notes').value.trim(); 
+            
+            if(!pIdx || !h || !d) return await appAlert("Attenzione", "Completa tutti i dati obbligatori!", "danger"); 
+            
+            await saveEntry(projects[pIdx], t, h, d, n); 
+            document.getElementById('manual-notes').value = ""; 
+            closeManualEntry(); 
+        }
+
+        function updateEditTaskDropdown(forceTask = null) {
+            const isEvent = forceTask && typeof forceTask !== 'string'; 
+            const explicitTask = isEvent ? null : forceTask;
+            const p = projects.find(proj => proj.id === document.getElementById('edit-entry-project').value);
+            const taskSelect = document.getElementById('edit-entry-task');
+            
+            let projectTasks = p && p.tasks && p.tasks.length > 0 ? [...p.tasks] : []; 
+            if (!projectTasks.includes('Generico')) projectTasks.push('Generico'); 
+            if (explicitTask && !projectTasks.includes(explicitTask)) projectTasks.push(explicitTask);
+            
+            const oldVal = explicitTask || taskSelect.value;
+            taskSelect.innerHTML = projectTasks.map(t => `<option value="${t}" ${t === oldVal ? 'selected' : ''}>${t}</option>`).join('');
+            if (!taskSelect.value && projectTasks.length > 0) taskSelect.value = projectTasks[0];
+        }
+
+        function updateEditCost() { 
+            const userVal = document.getElementById('edit-entry-user').value; 
+            const hoursVal = parseFloat(document.getElementById('edit-entry-hours').value) || 0; 
+            const selectedProfile = profiles.find(pr => pr.full_name === userVal); 
+            document.getElementById('edit-entry-cost').value = ((selectedProfile ? (selectedProfile.hourly_cost || 0) : 0) * hoursVal).toFixed(2); 
+        }
+
+        function openEditEntryModal(id) {
+            const e = entries.find(x => x.id === id); if(!e) return;
+            
+            document.getElementById('edit-entry-id').value = id;
+            const d = new Date(e.created_at); 
+            document.getElementById('edit-entry-date').value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+            
+            const userSelect = document.getElementById('edit-entry-user'); 
+            userSelect.innerHTML = profiles.filter(p => p.role !== 'inactive' || p.full_name === e.user_name).map(pr => `<option value="${pr.full_name}" ${pr.full_name === e.user_name ? 'selected' : ''}>${pr.full_name}</option>`).join(''); 
+            if (!profiles.find(pr => pr.full_name === e.user_name)) userSelect.innerHTML += `<option value="${e.user_name}" selected>${e.user_name} (Rimosso)</option>`;
+            
+            const projectSelect = document.getElementById('edit-entry-project'); 
+            projectSelect.innerHTML = projects.map(p => `<option value="${p.id}" ${p.id === e.project_id ? 'selected' : ''}>${p.name}</option>`).join(''); 
+            if (!projects.find(p => p.id === e.project_id)) projectSelect.innerHTML += `<option value="${e.project_id}" selected>${e.project_name} (Eliminato)</option>`;
+            
+            updateEditTaskDropdown(e.task);
+            
+            document.getElementById('edit-entry-notes').value = e.notes || ''; 
+            document.getElementById('edit-entry-hours').value = Number(e.duration).toFixed(2);
+            updateEditCost(); 
+            
+            document.getElementById('modal-edit-entry').classList.remove('force-hide'); 
+            lucide.createIcons();
+        }
+        
+        function closeEditEntryModal() { document.getElementById('modal-edit-entry').classList.add('force-hide'); }
+
+        async function saveEntryEdit() {
+            const id = document.getElementById('edit-entry-id').value; 
+            const dateVal = document.getElementById('edit-entry-date').value; 
+            const userVal = document.getElementById('edit-entry-user').value; 
+            const projId = document.getElementById('edit-entry-project').value; 
+            const taskVal = document.getElementById('edit-entry-task').value; 
+            const notesVal = document.getElementById('edit-entry-notes').value.trim(); 
+            const hoursVal = parseFloat(document.getElementById('edit-entry-hours').value); 
+            const costVal = parseFloat(document.getElementById('edit-entry-cost').value);
+            
+            if (!dateVal || isNaN(hoursVal) || isNaN(costVal) || !projId) return await appAlert("Attenzione", "Compila tutti i campi!", "danger");
+            
+            const selectedProj = projects.find(p => p.id === projId); 
+            const projName = selectedProj ? selectedProj.name : document.getElementById('edit-entry-project').options[document.getElementById('edit-entry-project').selectedIndex].text;
+            
+            await supabaseClient.from('entries').update({ created_at: new Date(`${dateVal}T12:00:00Z`).toISOString(), user_name: userVal, project_id: projId, project_name: projName, task: taskVal, notes: notesVal, duration: hoursVal, rate: costVal }).eq('id', id); 
+            closeEditEntryModal(); 
+            fetchEntries();
+        }
+
+        async function deleteEntry(id) { 
+            if(await appConfirm("Elimina", "Rimuovere definitivamente questa voce?", "danger")) { 
+                await supabaseClient.from('entries').delete().eq('id', id); 
+                fetchEntries(); 
+            } 
+        }
+
+        // ================= REPORT PDF E UTILS =================
+
+        async function getBase64FromUrl(url) { 
+            return new Promise((resolve, reject) => { 
+                const img = new Image(); 
+                img.crossOrigin = 'Anonymous'; 
+                img.onload = () => { 
+                    const canvas = document.createElement('canvas'); 
+                    canvas.width = img.naturalWidth; 
+                    canvas.height = img.naturalHeight; 
+                    const ctx = canvas.getContext('2d'); 
+                    ctx.drawImage(img, 0, 0); 
+                    resolve({ url: canvas.toDataURL('image/png'), width: img.naturalWidth, height: img.naturalHeight }); 
+                }; 
+                img.onerror = reject; 
+                img.src = url; 
+            }); 
+        }
 
         async function exportProjectPDF(id) {
             if (activePlan === 'starter') return openUpgradeModal('Esportazione Report PDF');
             const p = projects.find(x => x.id === id); if(!p) return;
-            const pEntries = entries.filter(e => e.project_id === id).sort((a,b) => new Date(b.created_at) - new Date(a.created_at)); const pExpenses = expenses.filter(ex => ex.project_id === id).sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+            const pEntries = entries.filter(e => e.project_id === id).sort((a,b) => new Date(b.created_at) - new Date(a.created_at)); 
+            const pExpenses = expenses.filter(ex => ex.project_id === id).sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
             const { jsPDF } = window.jspdf; const doc = new jsPDF();
             
             let logoData = null, startY = 20;
@@ -1299,9 +2202,11 @@
             const today = new Date(); const fmt = (d) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
             const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
             document.getElementById('team-report-start').value = fmt(firstDay); document.getElementById('team-report-end').value = fmt(today);
+            
             const userSelect = document.getElementById('team-report-user');
             const activeProfiles = profiles.filter(p => p.role !== 'inactive');
             userSelect.innerHTML = '<option value="all">Tutto il Team</option>' + activeProfiles.map(pr => `<option value="${pr.full_name}">${pr.full_name}</option>`).join('');
+            
             document.getElementById('modal-team-report').classList.remove('force-hide'); lucide.createIcons();
         }
 
