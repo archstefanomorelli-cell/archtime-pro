@@ -167,11 +167,30 @@
         </div>
     </div>
 
+    <div id="workspace-selector" class="force-hide fixed inset-0 z-[250] bg-slate-900/90 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl">
+            <h2 class="text-2xl font-black text-slate-900 mb-2 text-center tracking-tight">I tuoi Spazi</h2>
+            <p class="text-sm text-slate-500 text-center mb-6">Seleziona lo Studio o l'Impresa in cui vuoi entrare.</p>
+            
+            <div id="workspace-list" class="space-y-3 mb-6 max-h-[40vh] overflow-y-auto pr-2"></div>
+            
+            <div class="pt-6 border-t border-slate-100">
+                <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-3">Partecipa a un altro spazio</p>
+                <div class="flex gap-2">
+                    <input type="text" id="join-code-input" placeholder="Incolla codice invito" class="flex-1 border border-slate-200 rounded-xl p-3 text-sm outline-none focus:border-primary-500 transition-all">
+                    <button onclick="joinNewWorkspace()" class="bg-slate-900 text-white px-5 rounded-xl font-bold shadow-sm hover:bg-slate-800 transition-all active:scale-95">Unisciti</button>
+                </div>
+            </div>
+            
+            <button onclick="handleLogout()" class="mt-6 text-xs font-bold text-slate-400 hover:text-slate-600 transition-colors w-full text-center uppercase tracking-wider">Esci dall'account</button>
+        </div>
+    </div>
+
     <div id="paywall-container" class="force-hide fixed inset-0 z-[200] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
         <div class="bg-white border border-slate-200 rounded-2xl p-8 max-w-md w-full text-center shadow-xl">
             <div class="w-16 h-16 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-red-100"><i data-lucide="lock" class="w-8 h-8"></i></div>
             <h2 class="text-2xl font-black text-slate-900 mb-2 tracking-tight">Abbonamento Scaduto</h2>
-            <p class="text-slate-500 text-sm mb-8 leading-relaxed">La tua prova gratuita è terminata. Scegli il piano più adatto al tuo Studio per continuare.</p>
+            <p class="text-slate-500 text-sm mb-8 leading-relaxed">La prova gratuita di questo Spazio è terminata. Scegli il piano più adatto per continuare.</p>
             
             <div class="flex flex-col gap-3 mb-6">
                 <button onclick="redirectToStripe('premium')" class="w-full bg-primary-600 text-white py-3.5 rounded-xl font-bold hover:bg-primary-700 transition-all shadow-sm active:scale-[0.98] flex justify-center items-center gap-2">
@@ -181,7 +200,6 @@
                     Attiva STARTER (29,99€/mese)
                 </button>
             </div>
-            
             <button onclick="handleLogout()" class="text-xs font-bold text-slate-400 hover:text-slate-600 transition-colors">Esci dall'account</button>
         </div>
     </div>
@@ -206,6 +224,8 @@
                     <span id="plan-badge" class="admin-only force-hide text-[9px] px-2 py-0.5 rounded-md border border-slate-200 bg-slate-50 text-slate-500 font-bold uppercase tracking-wider ml-1 sm:ml-2 hidden sm:inline-block"></span>
                 </div>
                 <div class="flex items-center gap-2 lg:gap-4 shrink-0">
+                    <button onclick="document.getElementById('workspace-selector').classList.remove('force-hide');" class="text-[10px] font-bold text-slate-500 border border-slate-200 bg-white px-2 py-1.5 rounded-lg hover:bg-slate-50 shadow-sm flex items-center gap-1"><i data-lucide="arrow-left-right" class="w-3.5 h-3.5"></i> Cambia</button>
+                    
                     <button id="btn-header-pdf" onclick="openReportModal()" class="admin-only text-[10px] lg:text-xs font-bold text-slate-600 hover:text-primary-600 flex items-center gap-1.5 bg-white border border-slate-200 hover:border-primary-200 hover:bg-primary-50 lg:border-transparent lg:bg-transparent lg:hover:bg-transparent px-2.5 py-1.5 lg:p-0 rounded-lg transition-all shadow-sm lg:shadow-none"><i data-lucide="file-text" class="w-4 h-4"></i> <span class="hidden lg:inline">PDF REPORT</span></button>
                     <div class="hidden lg:block h-6 w-[1px] bg-slate-200 admin-only mx-2"></div>
                     
@@ -270,6 +290,7 @@
                         </div>
                     </div>
                     <div id="team-list" class="space-y-3"></div>
+                    <button onclick="toggleInactiveTeam()" id="btn-toggle-inactive" class="mt-4 w-full py-3 bg-white border border-slate-200 text-slate-500 rounded-xl font-bold text-[10px] uppercase tracking-wider hover:bg-slate-50 transition-colors shadow-sm">Mostra Sospesi</button>
                 </section>
             </div>
 
@@ -349,16 +370,17 @@
     <div id="modal-edit-team" class="force-hide fixed inset-0 z-[100] modal flex items-center justify-center p-4">
         <div class="w-full max-w-md p-6 lg:p-8 shadow-xl border border-slate-200 rounded-2xl relative bg-white">
             <button onclick="closeEditTeamMemberModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>
-            <h2 class="text-lg font-black text-slate-800 tracking-tight mb-6 flex items-center gap-2"><i data-lucide="user-cog" class="text-primary-500 w-5 h-5"></i> Modifica Collaboratore</h2>
+            <h2 class="text-lg font-black text-slate-800 tracking-tight mb-6 flex items-center gap-2"><i data-lucide="user-cog" class="text-primary-500 w-5 h-5"></i> Contratto Collaboratore</h2>
             <input type="hidden" id="edit-team-id">
             <div class="space-y-4">
                 <div>
-                    <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Nome e Cognome</label>
-                    <input type="text" id="edit-team-name" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all">
+                    <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Nome</label>
+                    <input type="text" id="edit-team-name" readonly class="w-full border border-slate-200 bg-slate-50 text-slate-500 rounded-xl p-3 text-sm outline-none">
+                    <p class="text-[9px] text-slate-400 mt-1 ml-1">Il nome può essere cambiato solo dal proprietario dell'account.</p>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Ruolo</label>
+                        <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Ruolo in questo Spazio</label>
                         <select id="edit-team-role" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none text-slate-700">
                             <option value="staff">Staff</option>
                             <option value="admin">Admin</option>
@@ -366,8 +388,11 @@
                         </select>
                     </div>
                     <div>
-                        <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Costo Orario (€)</label>
-                        <input type="number" step="0.01" id="edit-team-cost" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all font-bold">
+                        <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Costo Orario Aziendale</label>
+                        <div class="flex gap-2 bg-white p-3 rounded-xl border border-slate-200 focus-within:border-primary-500 focus-within:ring-4 focus-within:ring-primary-500/10 transition-all">
+                            <span class="text-slate-400 font-bold text-sm">€</span>
+                            <input type="number" step="0.01" id="edit-team-cost" class="bg-transparent w-full outline-none text-sm font-bold text-slate-800">
+                        </div>
                     </div>
                 </div>
                 <div class="flex gap-2 pt-4 mt-2 border-t border-slate-100">
@@ -387,7 +412,7 @@
                 <div class="mt-2 inline-block px-2.5 py-1 bg-slate-100 text-slate-600 text-[10px] font-bold uppercase rounded-md border border-slate-200 tracking-wider" id="account-role">RUOLO</div>
             </div>
             <div class="border-t border-slate-100 pt-4 admin-only">
-                <h3 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2.5 flex items-center gap-1.5"><i data-lucide="credit-card" class="w-3.5 h-3.5"></i> Abbonamento</h3>
+                <h3 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2.5 flex items-center gap-1.5"><i data-lucide="credit-card" class="w-3.5 h-3.5"></i> Abbonamento Spazio</h3>
                 <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl flex justify-between items-center mb-3">
                     <div>
                         <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Piano Attuale</p>
@@ -400,7 +425,7 @@
                 <p class="text-[10px] text-center text-slate-400 leading-tight mb-4">Gestione sicura fatture via Stripe.</p>
             </div>
             <div class="border-t border-slate-100 pt-4 admin-only">
-                <h3 id="lbl-identity-title" class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2.5 flex items-center gap-1.5"><i data-lucide="image" class="w-3.5 h-3.5"></i> Identità Studio</h3>
+                <h3 id="lbl-identity-title" class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2.5 flex items-center gap-1.5"><i data-lucide="image" class="w-3.5 h-3.5"></i> Identità Spazio</h3>
                 <div class="flex items-center gap-3 mb-3">
                     <div class="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center border border-dashed border-slate-300 overflow-hidden relative shrink-0">
                         <img id="account-logo-preview" class="force-hide w-full h-full object-contain z-10 bg-white">
@@ -411,7 +436,7 @@
                     </div>
                 </div>
                 <div class="flex gap-2">
-                    <input type="text" id="account-studio-name" placeholder="Nome Studio" class="flex-1 border border-slate-200 rounded-xl p-2.5 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all">
+                    <input type="text" id="account-studio-name" placeholder="Nome Spazio" class="flex-1 border border-slate-200 rounded-xl p-2.5 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all">
                     <button onclick="saveStudioName()" class="bg-primary-600 text-white px-3.5 rounded-xl hover:bg-primary-700 transition-all shadow-sm flex items-center justify-center"><i data-lucide="save" class="w-4 h-4"></i></button>
                 </div>
                 <div class="mt-4 pt-4 border-t border-slate-100 flex justify-between items-center">
@@ -568,9 +593,9 @@
         const STRIPE_LINK_PREMIUM = "https://buy.stripe.com/test_5kQ4gA4hF1XHfKb39V67S03";
         const STRIPE_CUSTOMER_PORTAL = "https://billing.stripe.com/p/login/test_eVq6oIg0nbyhfKb9yj67S00"; 
 
-        let userProfile = null, studioData = null, isSignupMode = false;
+        let userProfile = null, currentMembership = null, studioData = null, isSignupMode = false;
         let projects = [], entries = [], profiles = [], expenses = [];
-        let showArchived = false, timerRunning = false, startTime, timerInterval;
+        let showArchived = false, showInactiveTeam = false, timerRunning = false, startTime, timerInterval;
         let charts = { global: null, tasks: null };
         let activePlan = 'premium'; 
 
@@ -641,7 +666,7 @@
                 'modal-catalog-title': `<i data-lucide="book-open" class="text-primary-500 w-5 h-5"></i> ${theme.catalogTitle}`,
                 'modal-catalog-desc': theme.catalogDesc,
                 'modal-template-title': `<i data-lucide="layers" class="text-primary-500 w-5 h-5"></i> ${theme.templateModalTitle}`,
-                'account-role': userProfile?.role === 'admin' ? theme.managerLabel : 'Collaboratore'
+                'account-role': currentMembership?.role === 'admin' ? theme.managerLabel : 'Collaboratore'
             };
 
             for (let id in els) {
@@ -781,9 +806,9 @@
         async function handleAuthAction() {
             const email = document.getElementById('email').value.trim(); 
             const password = document.getElementById('password').value; 
-            const fullName = document.getElementById('full-name').value.trim();
             
             if(isSignupMode) {
+                const fullName = document.getElementById('full-name').value.trim();
                 const acceptTerms = document.getElementById('accept-terms').checked;
                 if(!acceptTerms) return await appAlert("Attenzione", "Devi accettare i Termini di Servizio e la Privacy Policy per registrarti.", "danger");
                 
@@ -803,7 +828,7 @@
                     options: { data: { full_name: fullName, role: role, business_type: businessType, studio_id: isStaff ? code : null } } 
                 });
                 
-                if(error) await appAlert("Errore", error.message, "danger"); else { await appAlert("Ottimo!", "Registrazione OK!", "success"); switchAuthTab('login'); }
+                if(error) await appAlert("Errore", error.message, "danger"); else { await appAlert("Ottimo!", "Registrazione OK! Ora effettua l'accesso.", "success"); switchAuthTab('login'); }
             } else { 
                 const { error } = await supabaseClient.auth.signInWithPassword({ email, password }); 
                 if(error) await appAlert("Errore", "Credenziali errate", "danger"); else checkUser(); 
@@ -821,7 +846,7 @@
         async function exportUserData() {
             if(!userProfile) return await appAlert("Errore", "Utente non trovato.", "danger");
             try {
-                const exportData = { profile: userProfile, studio: userProfile.role === 'admin' ? studioData : "Dati Studio non accessibili.", projects: projects, entries: entries, expenses: expenses, exportDate: new Date().toISOString() };
+                const exportData = { profile: userProfile, studio: currentMembership?.role === 'admin' ? studioData : "Dati Studio non accessibili.", projects: projects, entries: entries, expenses: expenses, exportDate: new Date().toISOString() };
                 const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
                 const downloadAnchorNode = document.createElement('a'); downloadAnchorNode.setAttribute("href", dataStr); downloadAnchorNode.setAttribute("download", "Export_" + userProfile.full_name.replace(/\s+/g, '_') + ".json");
                 document.body.appendChild(downloadAnchorNode); downloadAnchorNode.click(); downloadAnchorNode.remove();
@@ -829,11 +854,11 @@
         }
 
         function redirectToStripe(plan) { 
-            if(!userProfile || !userProfile.studio_id) return; 
+            if(!currentMembership || !currentMembership.studio_id) return; 
             const link = plan === 'starter' ? STRIPE_LINK_STARTER : STRIPE_LINK_PREMIUM;
-            window.location.href = `${link}?client_reference_id=${userProfile.studio_id}`; 
+            window.location.href = `${link}?client_reference_id=${currentMembership.studio_id}`; 
         }
-        function showPaywall() { document.getElementById('auth-container').classList.add('force-hide'); document.getElementById('app-container').classList.add('force-hide'); document.getElementById('paywall-container').classList.remove('force-hide'); lucide.createIcons(); }
+        function showPaywall() { document.getElementById('auth-container').classList.add('force-hide'); document.getElementById('workspace-selector').classList.add('force-hide'); document.getElementById('app-container').classList.add('force-hide'); document.getElementById('paywall-container').classList.remove('force-hide'); lucide.createIcons(); }
         
         function openUpgradeModal(featureName) { document.getElementById('upgrade-message').innerText = `La funzione ${featureName} è riservata agli abbonamenti Premium.`; document.getElementById('modal-upgrade').classList.remove('force-hide'); if (document.getElementById('modal-detail')) document.getElementById('modal-detail').classList.add('force-hide'); if (document.getElementById('modal-report')) document.getElementById('modal-report').classList.add('force-hide'); if (document.getElementById('modal-team-report')) document.getElementById('modal-team-report').classList.add('force-hide'); }
         function closeUpgradeModal() { document.getElementById('modal-upgrade').classList.add('force-hide'); }
@@ -842,7 +867,7 @@
             document.getElementById('account-name').innerText = userProfile.full_name;
             document.getElementById('account-email').innerText = userProfile.email;
             
-            if(userProfile.role === 'admin') {
+            if(currentMembership?.role === 'admin') {
                 document.getElementById('account-plan-name').innerText = activePlan.toUpperCase();
                 document.getElementById('account-upgrade-btn-container').classList.toggle('force-hide', activePlan !== 'starter');
                 document.getElementById('account-downgrade-btn-container').classList.toggle('force-hide', activePlan !== 'premium');
@@ -853,12 +878,11 @@
         function closeAccountModal() { document.getElementById('modal-account').classList.add('force-hide'); }
 
         async function deleteAccount() {
-            const warning = currentBusinessType === 'impresa' ? "Se sei il Titolare, eliminerai anche l'intera Impresa, tutti i cantieri e i dati." : "Se sei il Manager, eliminerai anche l'intero Studio, tutti i progetti e i dati.";
-            if(await appConfirm("Eliminazione Account", `ATTENZIONE: Stai per eliminare il tuo account. ${warning}\nQuesta operazione è IRREVERSIBILE. Vuoi procedere?`, "danger")) {
+            if(await appConfirm("Eliminazione Account", `ATTENZIONE: Stai per eliminare il tuo account personale e uscire da tutti gli spazi di lavoro.\nQuesta operazione è IRREVERSIBILE. Vuoi procedere?`, "danger")) {
                 const check = await appPrompt("Conferma di sicurezza", "Scrivi ELIMINA per confermare la cancellazione:", "ELIMINA");
                 if(check === "ELIMINA") {
                     const { error } = await supabaseClient.rpc('delete_user_account');
-                    if(error) await appAlert("Errore", error.message, "danger"); else { await supabaseClient.auth.signOut(); await appAlert("Account Eliminato", "Tutti i dati sono stati eliminati.", "success"); location.reload(); }
+                    if(error) await appAlert("Errore", error.message, "danger"); else { await supabaseClient.auth.signOut(); await appAlert("Account Eliminato", "I tuoi dati sono stati eliminati.", "success"); location.reload(); }
                 } else if(check !== null) { await appAlert("Annullato", "Operazione annullata.", "info"); }
             }
         }
@@ -871,8 +895,8 @@
             if(STRIPE_CUSTOMER_PORTAL && STRIPE_CUSTOMER_PORTAL.includes('http')) window.location.href = STRIPE_CUSTOMER_PORTAL; else redirectToStripe(targetPlan);
         }
 
-        async function saveStudioName() { const name = document.getElementById('account-studio-name').value.trim(); if(!name) return; await supabaseClient.from('studios').update({ name }).eq('id', userProfile.studio_id); if(studioData) studioData.name = name; await appAlert("Fatto", "Nome aggiornato!", "success"); }
-        async function uploadLogo(event) { const file = event.target.files[0]; if(!file) return; const fileExt = file.name.split('.').pop(); const filePath = `${userProfile.studio_id}_logo.${fileExt}`; const { error: uploadError } = await supabaseClient.storage.from('studio-logos').upload(filePath, file, { upsert: true }); if(uploadError) return await appAlert("Errore", uploadError.message, "danger"); const { data: { publicUrl } } = supabaseClient.storage.from('studio-logos').getPublicUrl(filePath); await supabaseClient.from('studios').update({ logo_url: publicUrl }).eq('id', userProfile.studio_id); if(studioData) studioData.logo_url = publicUrl; document.getElementById('account-logo-preview').src = publicUrl; document.getElementById('account-logo-preview').classList.remove('force-hide'); document.getElementById('header-logo').src = publicUrl; document.getElementById('header-logo').classList.remove('force-hide'); }
+        async function saveStudioName() { const name = document.getElementById('account-studio-name').value.trim(); if(!name) return; await supabaseClient.from('studios').update({ name }).eq('id', currentMembership.studio_id); if(studioData) studioData.name = name; await appAlert("Fatto", "Nome aggiornato!", "success"); }
+        async function uploadLogo(event) { const file = event.target.files[0]; if(!file) return; const fileExt = file.name.split('.').pop(); const filePath = `${currentMembership.studio_id}_logo.${fileExt}`; const { error: uploadError } = await supabaseClient.storage.from('studio-logos').upload(filePath, file, { upsert: true }); if(uploadError) return await appAlert("Errore", uploadError.message, "danger"); const { data: { publicUrl } } = supabaseClient.storage.from('studio-logos').getPublicUrl(filePath); await supabaseClient.from('studios').update({ logo_url: publicUrl }).eq('id', currentMembership.studio_id); if(studioData) studioData.logo_url = publicUrl; document.getElementById('account-logo-preview').src = publicUrl; document.getElementById('account-logo-preview').classList.remove('force-hide'); document.getElementById('header-logo').src = publicUrl; document.getElementById('header-logo').classList.remove('force-hide'); }
 
         function openTaskBuilder(mode) { taskBuilderMode = mode; tempBuilderTasks = mode === 'new' ? [...newProjectTasks] : [...editProjectTasks]; renderTaskBuilder(); document.getElementById('modal-task-builder').classList.remove('force-hide'); }
         function closeTaskBuilder() { document.getElementById('modal-task-builder').classList.add('force-hide'); }
@@ -913,69 +937,136 @@
             input.value = ''; renderTaskBuilder();
         }
 
+        // ---------- NUOVO MOTORE LOGIN MULTI-TENANT ----------
         async function checkUser() {
             const { data: { user } } = await supabaseClient.auth.getUser();
             if(user) {
-                const { data: profile, error } = await supabaseClient.from('profiles').select('*').eq('id', user.id).single();
-                if(profile) {
-                    userProfile = profile;
-                    const { data: studio } = await supabaseClient.from('studios').select('*').eq('id', userProfile.studio_id).single();
-                    if(studio) studioData = studio;
+                const { data: profile } = await supabaseClient.from('profiles').select('*').eq('id', user.id).single();
+                if(profile) userProfile = profile;
 
-                    const status = studioData?.subscription_status || 'trialing';
-                    activePlan = studioData?.plan_type || 'premium'; 
+                const { data: memberships } = await supabaseClient.from('studio_members').select('*, studios(*)').eq('user_id', user.id);
+                
+                document.getElementById('auth-container').classList.add('force-hide');
 
-                    let bType = 'studio';
-                    if (userProfile.role === 'admin') {
-                        bType = user?.user_metadata?.business_type || 'studio';
-                        if (studioData && !studioData.business_type) {
-                            await supabaseClient.from('studios').update({ business_type: bType }).eq('id', studioData.id);
-                            studioData.business_type = bType;
-                        }
+                if(memberships && memberships.length > 0) {
+                    if (memberships.length === 1) {
+                        selectWorkspace(memberships[0]);
                     } else {
-                        bType = studioData?.business_type || 'studio';
+                        renderWorkspaceSelector(memberships);
                     }
-                    applyTheme(bType);
-                    
-                    if (status === 'canceled' || status === 'past_due' || status === 'inactive') { showPaywall(); return; }
-
-                    const trialBadge = document.getElementById('trial-badge');
-                    const planBadge = document.getElementById('plan-badge');
-
-                    if (status === 'active') {
-                        trialBadge.classList.add('force-hide'); planBadge.innerText = activePlan === 'starter' ? 'STARTER' : 'PREMIUM'; planBadge.classList.remove('force-hide');
-                    } else {
-                        const createdAt = new Date(studioData?.created_at || new Date()); const expireDate = new Date(createdAt.getTime() + 15 * 24 * 60 * 60 * 1000); const daysLeft = Math.ceil((expireDate.getTime() - Date.now()) / (1000 * 3600 * 24));
-                        if (daysLeft > 0) {
-                            trialBadge.innerText = `PROVA: ${daysLeft} GG`; trialBadge.className = daysLeft <= 3 ? "admin-only text-[9px] bg-red-50 text-red-600 border-red-200 px-1.5 py-0.5 rounded-md font-bold border whitespace-nowrap" : "admin-only text-[9px] bg-primary-50 text-primary-600 border-primary-200 px-1.5 py-0.5 rounded-md font-bold border whitespace-nowrap"; trialBadge.classList.remove('force-hide'); planBadge.innerText = 'TUTTO SBLOCCATO'; planBadge.classList.remove('force-hide');
-                        } else { showPaywall(); return; }
-                    }
-
-                    if(profile.role === 'admin') {
-                        document.body.classList.add('is-admin');
-                        activityCatalog = studioData?.activity_catalog ? studioData.activity_catalog : [...THEMES[currentBusinessType].defaultCatalog];
-                        projectTemplates = studioData?.project_templates ? studioData.project_templates : [...THEMES[currentBusinessType].defaultTemplates];
-                        if(studioData) {
-                            document.getElementById('account-studio-name').value = studioData.name || '';
-                            if(studioData.logo_url) { document.getElementById('account-logo-preview').src = studioData.logo_url; document.getElementById('account-logo-preview').classList.remove('force-hide'); document.getElementById('header-logo').src = studioData.logo_url; document.getElementById('header-logo').classList.remove('force-hide'); }
-                        }
-                    }
-
-                    document.getElementById('user-display').innerText = profile.full_name;
-                    document.getElementById('auth-container').classList.add('force-hide'); document.getElementById('app-container').classList.remove('force-hide');
-                    initApp();
-                } else if (error) await appAlert("Errore", "Errore accesso database.", "danger");
+                } else {
+                    renderWorkspaceSelector([]);
+                }
             }
         }
 
+        function renderWorkspaceSelector(memberships) {
+            const list = document.getElementById('workspace-list');
+            if (memberships.length === 0) {
+                list.innerHTML = `<div class="text-center py-6 text-slate-500 text-sm">Non appartieni ancora a nessuno Spazio di Lavoro. Fatti invitare o creane uno.</div>`;
+            } else {
+                list.innerHTML = memberships.map((m, idx) => {
+                    const s = m.studios;
+                    const roleBadge = m.role === 'admin' 
+                        ? `<span class="bg-indigo-100 text-indigo-700 text-[9px] px-2 py-0.5 rounded uppercase font-bold tracking-wider">Admin</span>` 
+                        : (m.role === 'inactive' ? `<span class="bg-red-50 text-red-500 text-[9px] px-2 py-0.5 rounded uppercase font-bold tracking-wider">Sospeso</span>` : `<span class="bg-slate-100 text-slate-500 text-[9px] px-2 py-0.5 rounded uppercase font-bold tracking-wider">Staff</span>`);
+                    
+                    const isInactive = m.role === 'inactive';
+                    return `
+                        <button ${isInactive ? 'disabled' : `onclick="selectWorkspaceFromIndex(${idx})"`} class="w-full text-left bg-white border border-slate-200 p-4 rounded-xl flex items-center justify-between shadow-sm hover:border-primary-300 hover:shadow transition-all group ${isInactive ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}">
+                            <div>
+                                <h4 class="font-black text-slate-800 group-hover:text-primary-600 transition-colors">${s?.name || 'Spazio Senza Nome'}</h4>
+                                <p class="text-[10px] text-slate-400 mt-1 uppercase tracking-widest">${s?.business_type === 'impresa' ? 'Impresa Edile' : 'Studio Tecnico'}</p>
+                            </div>
+                            <div>${roleBadge}</div>
+                        </button>
+                    `;
+                }).join('');
+            }
+            // Salviamo temporaneamente in window per il click index
+            window._tempMemberships = memberships;
+            document.getElementById('workspace-selector').classList.remove('force-hide');
+        }
+
+        function selectWorkspaceFromIndex(idx) {
+            if(window._tempMemberships && window._tempMemberships[idx]) {
+                selectWorkspace(window._tempMemberships[idx]);
+            }
+        }
+
+        async function selectWorkspace(membership) {
+            if (membership.role === 'inactive') return await appAlert("Accesso Negato", "Il tuo account è stato sospeso in questo spazio di lavoro.", "danger");
+            
+            document.getElementById('workspace-selector').classList.add('force-hide');
+            currentMembership = membership;
+            studioData = membership.studios;
+
+            const status = studioData?.subscription_status || 'trialing';
+            activePlan = studioData?.plan_type || 'premium'; 
+
+            applyTheme(studioData?.business_type || 'studio');
+            
+            if (status === 'canceled' || status === 'past_due' || status === 'inactive') { showPaywall(); return; }
+
+            const trialBadge = document.getElementById('trial-badge');
+            const planBadge = document.getElementById('plan-badge');
+
+            if (status === 'active') {
+                trialBadge.classList.add('force-hide'); planBadge.innerText = activePlan === 'starter' ? 'STARTER' : 'PREMIUM'; planBadge.classList.remove('force-hide');
+            } else {
+                const createdAt = new Date(studioData?.created_at || new Date()); const expireDate = new Date(createdAt.getTime() + 15 * 24 * 60 * 60 * 1000); const daysLeft = Math.ceil((expireDate.getTime() - Date.now()) / (1000 * 3600 * 24));
+                if (daysLeft > 0) {
+                    trialBadge.innerText = `PROVA: ${daysLeft} GG`; trialBadge.className = daysLeft <= 3 ? "admin-only text-[9px] bg-red-50 text-red-600 border-red-200 px-1.5 py-0.5 rounded-md font-bold border whitespace-nowrap" : "admin-only text-[9px] bg-primary-50 text-primary-600 border-primary-200 px-1.5 py-0.5 rounded-md font-bold border whitespace-nowrap"; trialBadge.classList.remove('force-hide'); planBadge.innerText = 'TUTTO SBLOCCATO'; planBadge.classList.remove('force-hide');
+                } else { showPaywall(); return; }
+            }
+
+            if(currentMembership.role === 'admin') {
+                document.body.classList.add('is-admin');
+                activityCatalog = studioData?.activity_catalog ? studioData.activity_catalog : [...THEMES[currentBusinessType].defaultCatalog];
+                projectTemplates = studioData?.project_templates ? studioData.project_templates : [...THEMES[currentBusinessType].defaultTemplates];
+                if(studioData) {
+                    document.getElementById('account-studio-name').value = studioData.name || '';
+                    if(studioData.logo_url) { document.getElementById('account-logo-preview').src = studioData.logo_url; document.getElementById('account-logo-preview').classList.remove('force-hide'); document.getElementById('header-logo').src = studioData.logo_url; document.getElementById('header-logo').classList.remove('force-hide'); }
+                }
+            } else {
+                document.body.classList.remove('is-admin');
+            }
+
+            document.getElementById('user-display').innerText = userProfile.full_name;
+            document.getElementById('app-container').classList.remove('force-hide');
+            
+            initApp();
+        }
+
+        async function joinNewWorkspace() {
+            const code = document.getElementById('join-code-input').value.trim();
+            if(!code) return await appAlert("Attenzione", "Inserisci un codice valido.", "danger");
+            
+            const { error } = await supabaseClient.from('studio_members').insert([{
+                user_id: userProfile.id,
+                studio_id: code,
+                role: 'staff',
+                hourly_cost: 0
+            }]);
+            
+            if(error) {
+                if(error.code === '23505') return await appAlert("Errore", "Fai già parte di questo spazio.", "danger");
+                return await appAlert("Errore", "Codice non valido o errore server.", "danger");
+            }
+            
+            document.getElementById('join-code-input').value = '';
+            await appAlert("Successo!", "Ti sei unito al nuovo Spazio di Lavoro.", "success");
+            checkUser(); // Ricarica
+        }
+
         async function handleLogout() { await supabaseClient.auth.signOut(); location.reload(); }
-        function switchAppTab(tabName) { document.querySelectorAll('.mobile-tab').forEach(el => el.classList.toggle('active', el.dataset.tab === tabName)); document.querySelectorAll('.nav-btn').forEach(btn => { btn.classList.toggle('text-primary-600', btn.dataset.tab === tabName); btn.classList.toggle('text-slate-400', btn.dataset.tab !== tabName); }); if(tabName === 'analyze' && userProfile.role === 'admin') setTimeout(renderStrategicCharts, 50); window.scrollTo(0, 0); }
-        async function generateInviteLink() { await navigator.clipboard.writeText(userProfile.studio_id); await appAlert("Fatto", "Codice copiato negli appunti! Condividilo col tuo team.", "success"); }
+        function switchAppTab(tabName) { document.querySelectorAll('.mobile-tab').forEach(el => el.classList.toggle('active', el.dataset.tab === tabName)); document.querySelectorAll('.nav-btn').forEach(btn => { btn.classList.toggle('text-primary-600', btn.dataset.tab === tabName); btn.classList.toggle('text-slate-400', btn.dataset.tab !== tabName); }); if(tabName === 'analyze' && currentMembership?.role === 'admin') setTimeout(renderStrategicCharts, 50); window.scrollTo(0, 0); }
+        async function generateInviteLink() { await navigator.clipboard.writeText(currentMembership.studio_id); await appAlert("Fatto", "Codice copiato negli appunti! Condividilo col tuo team.", "success"); }
 
         async function initApp() {
             lucide.createIcons();
             await fetchProjects(); await fetchEntries(); await fetchExpenses();
-            if(userProfile.role === 'admin') { await fetchProfiles(); renderCatalogAndTemplatesUI(); await checkAndGenerateDemoData(); applyPlanLimitsUI(); }
+            if(currentMembership?.role === 'admin') { await fetchProfiles(); renderCatalogAndTemplatesUI(); await checkAndGenerateDemoData(); applyPlanLimitsUI(); }
             await restoreCloudTimer();
         }
 
@@ -991,32 +1082,57 @@
 
         async function checkAndGenerateDemoData() {
             if (projects.length === 0 && (!studioData || studioData.demo_generated !== true)) {
-                await supabaseClient.from('studios').update({ demo_generated: true }).eq('id', userProfile.studio_id);
+                await supabaseClient.from('studios').update({ demo_generated: true }).eq('id', currentMembership.studio_id);
                 const t = THEMES[currentBusinessType];
                 const { data: pData } = await supabaseClient.from('projects').insert([ 
-                    { studio_id: userProfile.studio_id, name: t.demoProject, client: t.demoClient, budget: 15000, tasks: [t.demoTask, 'Riunioni'] } 
+                    { studio_id: currentMembership.studio_id, name: t.demoProject, client: t.demoClient, budget: 15000, tasks: [t.demoTask, 'Riunioni'] } 
                 ]).select();
                 if(pData && pData.length > 0) {
-                    const rate = profiles.find(p=>p.id===userProfile.id)?.hourly_cost || 50;
-                    await supabaseClient.from('entries').insert([ { studio_id: userProfile.studio_id, project_id: pData[0].id, project_name: pData[0].name, task: t.demoTask, duration: 4, rate: rate*4, user_name: userProfile.full_name, user_email: userProfile.email, created_at: new Date().toISOString() } ]);
-                    await supabaseClient.from('expenses').insert([ { studio_id: userProfile.studio_id, project_id: pData[0].id, description: t.demoExpense, amount: 150.00, user_name: userProfile.full_name, created_at: new Date().toISOString() } ]);
+                    const rate = currentMembership.hourly_cost || 50;
+                    await supabaseClient.from('entries').insert([ { studio_id: currentMembership.studio_id, project_id: pData[0].id, project_name: pData[0].name, task: t.demoTask, duration: 4, rate: rate*4, user_name: userProfile.full_name, user_email: userProfile.email, created_at: new Date().toISOString() } ]);
+                    await supabaseClient.from('expenses').insert([ { studio_id: currentMembership.studio_id, project_id: pData[0].id, description: t.demoExpense, amount: 150.00, user_name: userProfile.full_name, created_at: new Date().toISOString() } ]);
                 }
                 await fetchProjects(); await fetchEntries(); await fetchExpenses();
             }
         }
 
-        async function fetchProjects() { const { data } = await supabaseClient.from('projects').select('*').order('name'); projects = data || []; renderProjects(); if(userProfile.role === 'admin') renderStrategicCharts(); }
-        async function fetchEntries() { const { data } = await supabaseClient.from('entries').select('*').order('created_at', { ascending: false }).limit(2000); entries = data || []; renderEntries(); renderProjects(); if(userProfile.role === 'admin') renderStrategicCharts(); }
-        async function fetchExpenses() { const { data } = await supabaseClient.from('expenses').select('*').order('created_at', { ascending: false }); expenses = data || []; renderProjects(); if(userProfile && userProfile.role === 'admin') renderStrategicCharts(); }
-        async function fetchProfiles() { const { data } = await supabaseClient.from('profiles').select('*').order('full_name'); profiles = data || []; renderProfiles(); }
+        async function fetchProjects() { const { data } = await supabaseClient.from('projects').select('*').eq('studio_id', currentMembership.studio_id).order('name'); projects = data || []; renderProjects(); if(currentMembership?.role === 'admin') renderStrategicCharts(); }
+        async function fetchEntries() { const { data } = await supabaseClient.from('entries').select('*').eq('studio_id', currentMembership.studio_id).order('created_at', { ascending: false }).limit(2000); entries = data || []; renderEntries(); renderProjects(); if(currentMembership?.role === 'admin') renderStrategicCharts(); }
+        async function fetchExpenses() { const { data } = await supabaseClient.from('expenses').select('*').eq('studio_id', currentMembership.studio_id).order('created_at', { ascending: false }); expenses = data || []; renderProjects(); if(currentMembership?.role === 'admin') renderStrategicCharts(); }
+        
+        async function fetchProfiles() { 
+            const { data } = await supabaseClient.from('studio_members')
+                .select('id, role, hourly_cost, user_id, profiles(full_name, email)')
+                .eq('studio_id', currentMembership.studio_id);
+            
+            profiles = data ? data.map(sm => ({
+                id: sm.id,
+                user_id: sm.user_id,
+                full_name: sm.profiles?.full_name || 'Utente Rimosso',
+                email: sm.profiles?.email || '',
+                role: sm.role,
+                hourly_cost: sm.hourly_cost
+            })).sort((a,b) => a.full_name.localeCompare(b.full_name)) : [];
+            
+            renderProfiles(); 
+        }
+
+        function toggleInactiveTeam() {
+            showInactiveTeam = !showInactiveTeam;
+            const btn = document.getElementById('btn-toggle-inactive');
+            if(btn) btn.innerText = showInactiveTeam ? "Nascondi Sospesi" : "Mostra Sospesi";
+            renderProfiles();
+        }
 
         function renderProfiles() {
-            document.getElementById('team-list').innerHTML = profiles.map(pr => {
+            const filteredProfiles = profiles.filter(p => showInactiveTeam ? true : p.role !== 'inactive');
+            
+            document.getElementById('team-list').innerHTML = filteredProfiles.map(pr => {
                 const roleBadge = pr.role === 'admin' 
                     ? '<span class="bg-indigo-50 text-indigo-600 border border-indigo-100 text-[9px] px-2 py-0.5 rounded-md uppercase font-bold tracking-wider">Admin</span>' 
-                    : (pr.role === 'inactive' ? '<span class="bg-red-50 text-red-500 border border-red-200 text-[9px] px-2 py-0.5 rounded-md uppercase font-bold tracking-wider">Inattivo</span>' : '<span class="bg-slate-100 text-slate-500 border border-slate-200 text-[9px] px-2 py-0.5 rounded-md uppercase font-bold tracking-wider">Staff</span>');
+                    : (pr.role === 'inactive' ? '<span class="bg-red-50 text-red-500 border border-red-200 text-[9px] px-2 py-0.5 rounded-md uppercase font-bold tracking-wider">Sospeso</span>' : '<span class="bg-slate-100 text-slate-500 border border-slate-200 text-[9px] px-2 py-0.5 rounded-md uppercase font-bold tracking-wider">Staff</span>');
                 
-                const opacityClass = pr.role === 'inactive' ? 'opacity-60 grayscale' : '';
+                const opacityClass = pr.role === 'inactive' ? 'opacity-50 grayscale' : '';
                 
                 return `
                     <div class="bg-white p-4 rounded-xl border border-slate-200 flex justify-between items-center shadow-sm hover:shadow-md transition-shadow group ${opacityClass}">
@@ -1044,7 +1160,7 @@
             document.getElementById('edit-team-cost').value = pr.hourly_cost || 0;
             
             const btnDelete = document.getElementById('btn-delete-team');
-            if(pr.id === userProfile.id) {
+            if(pr.user_id === userProfile.id) {
                 btnDelete.classList.add('force-hide');
             } else {
                 btnDelete.classList.remove('force-hide');
@@ -1060,18 +1176,22 @@
 
         async function saveTeamMemberEdit() {
             const id = document.getElementById('edit-team-id').value;
-            const newName = document.getElementById('edit-team-name').value.trim();
             const newRole = document.getElementById('edit-team-role').value;
             const newCost = parseFloat(document.getElementById('edit-team-cost').value) || 0;
             
-            if(!newName) return await appAlert("Attenzione", "Inserisci il nome", "danger");
-            
             const oldProf = profiles.find(p => p.id === id);
-            await supabaseClient.from('profiles').update({ full_name: newName, hourly_cost: newCost, role: newRole }).eq('id', id);
+            if(!oldProf) return;
+
+            // Aggiorna studio_members
+            await supabaseClient.from('studio_members').update({ hourly_cost: newCost, role: newRole }).eq('id', id);
             
-            if (oldProf && oldProf.hourly_cost !== newCost) {
-                if(await appConfirm("Ricalcolo Storico", `Hai modificato la tariffa oraria di ${newName}.\nVuoi ricalcolare automaticamente il costo di TUTTE le ore che ha già registrato in passato con questa nuova tariffa?`, "info")) {
-                    const { data: userEntries } = await supabaseClient.from('entries').select('id, duration').eq('user_name', oldProf.full_name);
+            if (oldProf.hourly_cost !== newCost) {
+                if(await appConfirm("Ricalcolo Storico", `Hai modificato la tariffa oraria di ${oldProf.full_name}.\nVuoi ricalcolare automaticamente il costo di TUTTE le ore passate in questo Spazio con la nuova tariffa?`, "info")) {
+                    const { data: userEntries } = await supabaseClient.from('entries')
+                        .select('id, duration')
+                        .eq('user_name', oldProf.full_name)
+                        .eq('studio_id', currentMembership.studio_id);
+                        
                     if(userEntries && userEntries.length > 0) {
                         for(let e of userEntries) {
                             await supabaseClient.from('entries').update({ rate: (e.duration * newCost) }).eq('id', e.id);
@@ -1083,7 +1203,7 @@
             closeEditTeamMemberModal();
             await fetchProfiles(); 
             await fetchEntries(); 
-            if (userProfile.role === 'admin') { 
+            if (currentMembership?.role === 'admin') { 
                 await fetchProjects(); 
                 renderStrategicCharts(); 
             }
@@ -1092,8 +1212,8 @@
         
         async function deleteTeamMemberFromModal() {
             const id = document.getElementById('edit-team-id').value;
-            if(await appConfirm("Rimuovi Collaboratore", "ATTENZIONE: Eliminando il collaboratore si perderà il collegamento con le sue ore.\n\nConsiglio: se ha smesso di collaborare, usa Annulla e cambia il suo ruolo in 'Inattivo' così manterrai lo storico.\n\nVuoi davvero eliminarlo definitivamente?", "danger")) { 
-                await supabaseClient.from('profiles').delete().eq('id', id); 
+            if(await appConfirm("Rimuovi Collaboratore", "ATTENZIONE: Eliminando il collaboratore perderai il collegamento con il suo storico.\n\nSe vuoi nasconderlo dal team mantenendo le sue ore passate, chiudi questo avviso e imposta il suo Ruolo su 'Inattivo (Sospeso)'.\n\nVuoi davvero eliminarlo?", "danger")) { 
+                await supabaseClient.from('studio_members').delete().eq('id', id); 
                 closeEditTeamMemberModal();
                 fetchProfiles(); 
             }
@@ -1104,7 +1224,7 @@
         function openTemplatesModal() { if(activePlan === 'starter') return openUpgradeModal('Gestione Template'); document.getElementById('modal-templates').classList.remove('force-hide'); }
         function closeTemplatesModal() { document.getElementById('modal-templates').classList.add('force-hide'); cancelEditTemplate(); }
 
-        async function syncCatalogAndTemplatesToDB() { if(!studioData) return; await supabaseClient.from('studios').update({ activity_catalog: activityCatalog, project_templates: projectTemplates }).eq('id', userProfile.studio_id); }
+        async function syncCatalogAndTemplatesToDB() { if(!studioData) return; await supabaseClient.from('studios').update({ activity_catalog: activityCatalog, project_templates: projectTemplates }).eq('id', currentMembership.studio_id); }
 
         function renderCatalogAndTemplatesUI() {
             document.getElementById('catalog-manage-list').innerHTML = activityCatalog.map(task => `
@@ -1208,7 +1328,7 @@
             const name = document.getElementById('new-proj-name').value.trim(); const client = document.getElementById('new-proj-client').value.trim(); const budget = parseFloat(document.getElementById('new-proj-budget').value) || 0;
             if(!name) return await appAlert("Attenzione", "Inserisci il nome del lavoro", "danger"); 
             if(newProjectTasks.length === 0) return await appAlert("Attenzione", "Configura almeno un'attività", "danger");
-            await supabaseClient.from('projects').insert([{ name: name, client: client, budget: budget, tasks: [...newProjectTasks], studio_id: userProfile.studio_id }]);
+            await supabaseClient.from('projects').insert([{ name: name, client: client, budget: budget, tasks: [...newProjectTasks], studio_id: currentMembership.studio_id }]);
             document.getElementById('new-proj-name').value = ""; document.getElementById('new-proj-client').value = ""; document.getElementById('new-proj-budget').value = ""; document.getElementById('new-proj-template').value = ""; newProjectTasks = [];
             renderNewProjectUI(); fetchProjects(); await appAlert("Fatto", "Lavoro Creato!", "success"); switchAppTab('operate');
         }
@@ -1247,8 +1367,7 @@
         }
 
         async function saveEntry(proj, task, hours, customDate = null, notes = "") {
-            const { data: prof } = await supabaseClient.from('profiles').select('*').eq('id', userProfile.id).single();
-            const payload = { project_id: proj.id, project_name: proj.name, task, duration: hours, user_email: userProfile.email, user_name: prof.full_name, rate: (prof ? prof.hourly_cost : 0) * hours, studio_id: userProfile.studio_id, notes: notes };
+            const payload = { project_id: proj.id, project_name: proj.name, task, duration: hours, user_email: userProfile.email, user_name: userProfile.full_name, rate: (currentMembership.hourly_cost || 0) * hours, studio_id: currentMembership.studio_id, notes: notes };
             if(customDate) payload.created_at = new Date(customDate).toISOString();
             await supabaseClient.from('entries').insert([payload]); fetchEntries();
         }
@@ -1314,7 +1433,7 @@
             lucide.createIcons();
         }
 
-        async function addExpense(projId) { const desc = document.getElementById('exp-desc').value.trim(); const amt = parseFloat(document.getElementById('exp-amount').value); if(!desc || isNaN(amt)) return await appAlert("Attenzione", "Inserisci dati spesa.", "danger"); const { error } = await supabaseClient.from('expenses').insert([{ project_id: projId, studio_id: userProfile.studio_id, description: desc, amount: amt, user_name: userProfile.full_name }]); if(error) await appAlert("Errore", error.message, "danger"); else { await fetchExpenses(); showProjectDetail(projId); } }
+        async function addExpense(projId) { const desc = document.getElementById('exp-desc').value.trim(); const amt = parseFloat(document.getElementById('exp-amount').value); if(!desc || isNaN(amt)) return await appAlert("Attenzione", "Inserisci dati spesa.", "danger"); const { error } = await supabaseClient.from('expenses').insert([{ project_id: projId, studio_id: currentMembership.studio_id, description: desc, amount: amt, user_name: userProfile.full_name }]); if(error) await appAlert("Errore", error.message, "danger"); else { await fetchExpenses(); showProjectDetail(projId); } }
         async function deleteExpense(id, projId) { if(await appConfirm("Elimina Spesa", "Vuoi eliminare questa spesa?", "danger")) { await supabaseClient.from('expenses').delete().eq('id', id); await fetchExpenses(); showProjectDetail(projId); } }
         async function toggleArchive(id, status) { await supabaseClient.from('projects').update({ is_archived: !status }).eq('id', id); fetchProjects(); }
         
@@ -1384,7 +1503,7 @@
         }
 
         function renderStrategicCharts() {
-            if(userProfile.role !== 'admin') return;
+            if(currentMembership?.role !== 'admin') return;
             const activeProjects = projects.filter(p => !p.is_archived);
             let totalBudget = 0, totalSpent = 0, projectSpend = {}; let totalTaskHours = 0;
             activeProjects.forEach(p => { totalBudget += (p.budget || 0); const costHrs = entries.filter(e => e.project_id === p.id).reduce((s, e) => s + Number(e.rate || 0), 0); const costExp = expenses.filter(ex => ex.project_id === p.id).reduce((s, ex) => s + Number(ex.amount || 0), 0); const pSpent = costHrs + costExp; totalSpent += pSpent; projectSpend[p.name] = pSpent; });
@@ -1441,12 +1560,13 @@
             
             document.getElementById('week-display').innerText = `${start.toLocaleDateString('it-IT', {day:'2-digit',month:'short'})} - ${end.toLocaleDateString('it-IT', {day:'2-digit',month:'short',year:'numeric'})}`;
             
-            const isStaff = userProfile.role !== 'admin';
+            const isStaff = currentMembership?.role !== 'admin';
 
             let weekly = entries.filter(e => {
                 const d = new Date(e.created_at).getTime();
                 const inDate = d >= start.getTime() && d <= end.getTime();
                 
+                // IL COLLABORATORE VEDE SOLO SE STESSO
                 if (isStaff) {
                     return inDate && e.user_email === userProfile.email;
                 }
