@@ -72,7 +72,6 @@
         .force-hide { display: none !important; }
         .modal { background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(4px); }
         
-        /* admin-only ora nasconde gli elementi se l'utente non ha la classe is-admin sul body */
         body:not(.is-admin) .admin-only { display: none !important; }
         
         .is-archived { opacity: 0.6; filter: grayscale(0.8); }
@@ -183,7 +182,7 @@
         <div class="bg-white border border-slate-200 rounded-2xl p-8 max-w-md w-full text-center shadow-xl">
             <div class="w-16 h-16 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-red-100"><i data-lucide="lock" class="w-8 h-8"></i></div>
             <h2 class="text-2xl font-black text-slate-900 mb-2 tracking-tight">Abbonamento Scaduto</h2>
-            <p class="text-slate-500 text-sm mb-8 leading-relaxed">La tua prova gratuita è terminata. Scegli il piano più adatto al tuo Studio per continuare.</p>
+            <p class="text-slate-500 text-sm mb-8 leading-relaxed">L'abbonamento per questo Spazio di Lavoro è scaduto. Attiva un piano per continuare a lavorare.</p>
             
             <div class="flex flex-col gap-3 mb-6">
                 <button onclick="redirectToStripe('premium')" class="w-full bg-primary-600 text-white py-3.5 rounded-xl font-bold hover:bg-primary-700 transition-all shadow-sm active:scale-[0.98] flex justify-center items-center gap-2">
@@ -658,7 +657,7 @@
 
     <div id="cookie-banner" class="force-hide fixed bottom-0 left-0 w-full bg-slate-900 text-white p-5 z-[9999] flex flex-col md:flex-row justify-between items-center gap-4 border-t border-slate-800 shadow-[0_-10px_20px_rgba(0,0,0,0.2)]">
         <div class="text-xs text-slate-300 leading-relaxed max-w-4xl">
-            <strong>Informativa sui Cookie:</strong> Utilizziamo esclusivamente cookie tecnici strettamente necessari (Supabase e Stripe) per mantenere attiva la tua sessione, garantire la sicurezza e gestire i pagamenti. Non utilizziamo cookie di profilazione per scopi di marketing. <a href="privacy.html" target="_blank" class="text-white font-bold hover:underline transition-all">Privacy Policy</a>.
+            <strong>Informativa sui Cookie:</strong> Utilizziamo esclusivamente cookie tecnici strettamente necessari per mantenere attiva la tua sessione, garantire la sicurezza e gestire i pagamenti. Non utilizziamo cookie di profilazione per scopi di marketing. <a href="privacy.html" target="_blank" class="text-white font-bold hover:underline transition-all">Privacy Policy</a>.
         </div>
         <button onclick="acceptCookies()" class="bg-primary-600 text-white text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-xl hover:bg-primary-500 transition-colors shadow-sm shrink-0 whitespace-nowrap active:scale-95">Ho capito</button>
     </div>
@@ -741,7 +740,7 @@
                 'modal-catalog-title': `<i data-lucide="book-open" class="text-primary-500 w-5 h-5"></i> ${theme.catalogTitle}`,
                 'modal-catalog-desc': theme.catalogDesc,
                 'modal-template-title': `<i data-lucide="layers" class="text-primary-500 w-5 h-5"></i> ${theme.templateModalTitle}`,
-                'account-role': userProfile?.role === 'owner' ? 'Owner (' + theme.managerLabel + ')' : (userProfile?.role === 'admin' ? 'Admin' : 'Collaboratore')
+                'account-role': userProfile?.is_owner ? 'Owner (' + theme.managerLabel + ')' : (userProfile?.role === 'admin' ? 'Admin' : 'Collaboratore')
             };
 
             for (let id in els) {
@@ -897,8 +896,9 @@
                 const checkedRole = document.querySelector('input[name="main-role"]:checked');
                 if(!checkedRole) return await appAlert("Attenzione", "Seleziona prima il tipo di account.", "danger");
                 
-                let role = checkedRole.value; 
-                const isStaff = role === 'staff';
+                const isOwnerChoice = checkedRole.value === 'owner';
+                const finalRole = isOwnerChoice ? 'admin' : checkedRole.value;
+                const isStaff = finalRole === 'staff';
                 const businessType = isStaff ? 'studio' : document.querySelector('input[name="business-type"]:checked').value;
                 const code = document.getElementById('invite-code-input').value.trim();
                 
@@ -907,7 +907,7 @@
                 
                 const { error } = await supabaseClient.auth.signUp({ 
                     email, password, 
-                    options: { data: { full_name: fullName, role: role, business_type: businessType, studio_id: isStaff ? code : null } } 
+                    options: { data: { full_name: fullName, role: finalRole, is_owner: isOwnerChoice, business_type: businessType, studio_id: isStaff ? code : null } } 
                 });
                 
                 if(error) await appAlert("Errore", error.message, "danger"); else { await appAlert("Ottimo!", "Registrazione OK!", "success"); switchAuthTab('login'); }
@@ -928,7 +928,7 @@
         async function exportUserData() {
             if(!userProfile) return await appAlert("Errore", "Utente non trovato.", "danger");
             try {
-                const exportData = { profile: userProfile, studio: ['admin', 'owner'].includes(userProfile.role) ? studioData : "Dati Studio non accessibili.", projects: projects, entries: entries, expenses: expenses, exportDate: new Date().toISOString() };
+                const exportData = { profile: userProfile, studio: userProfile.role === 'admin' ? studioData : "Dati Studio non accessibili.", projects: projects, entries: entries, expenses: expenses, exportDate: new Date().toISOString() };
                 const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
                 const downloadAnchorNode = document.createElement('a'); downloadAnchorNode.setAttribute("href", dataStr); downloadAnchorNode.setAttribute("download", "Export_" + userProfile.full_name.replace(/\s+/g, '_') + ".json");
                 document.body.appendChild(downloadAnchorNode); downloadAnchorNode.click(); downloadAnchorNode.remove();
@@ -963,7 +963,7 @@
             document.getElementById('account-email').innerText = userProfile.email;
             
             // Logica visualizzazione Billing (Solo Owner)
-            if(userProfile.role === 'owner') {
+            if(userProfile.is_owner) {
                 document.getElementById('billing-section').classList.remove('force-hide');
                 document.getElementById('account-plan-name').innerText = activePlan.toUpperCase();
                 document.getElementById('account-upgrade-btn-container').classList.toggle('force-hide', activePlan !== 'starter');
@@ -978,7 +978,7 @@
         function closeAccountModal() { document.getElementById('modal-account').classList.add('force-hide'); }
 
         async function deleteAccount() {
-            if (userProfile.role === 'owner') {
+            if (userProfile.is_owner) {
                 if (activePlan === 'premium' && studioData?.subscription_status === 'active') {
                     return await appAlert("Abbonamento Attivo", "Prima di poter eliminare definitivamente l'account e distruggere lo Spazio di Lavoro, devi annullare il tuo abbonamento Premium attivo dal portale pagamenti (pulsante Gestione Fatture via Stripe).", "danger");
                 }
@@ -1058,7 +1058,7 @@
                     activePlan = studioData?.plan_type || 'premium'; 
 
                     let bType = 'studio';
-                    if (['admin', 'owner'].includes(userProfile.role)) {
+                    if (userProfile.role === 'admin') {
                         bType = user?.user_metadata?.business_type || 'studio';
                         if (studioData && !studioData.business_type) {
                             await supabaseClient.from('studios').update({ business_type: bType }).eq('id', studioData.id);
@@ -1094,7 +1094,7 @@
                         }
                     }
 
-                    if(['admin', 'owner'].includes(profile.role)) {
+                    if(profile.role === 'admin') {
                         document.body.classList.add('is-admin');
                         activityCatalog = studioData?.activity_catalog ? studioData.activity_catalog : [...THEMES[currentBusinessType].defaultCatalog];
                         projectTemplates = studioData?.project_templates ? studioData.project_templates : [...THEMES[currentBusinessType].defaultTemplates];
@@ -1130,7 +1130,7 @@
                 btn.classList.toggle('text-primary-600', btn.dataset.tab === tabName); 
                 btn.classList.toggle('text-slate-400', btn.dataset.tab !== tabName); 
             }); 
-            if(tabName === 'analyze' && ['admin', 'owner'].includes(userProfile.role)) {
+            if(tabName === 'analyze' && userProfile.role === 'admin') {
                 setTimeout(renderStrategicCharts, 50); 
             }
             window.scrollTo(0, 0); 
@@ -1146,7 +1146,7 @@
             await fetchProjects(); 
             await fetchEntries(); 
             await fetchExpenses();
-            if(['admin', 'owner'].includes(userProfile.role)) { 
+            if(userProfile.role === 'admin') { 
                 await fetchProfiles(); 
                 renderCatalogAndTemplatesUI(); 
                 await checkAndGenerateDemoData(); 
@@ -1208,7 +1208,7 @@
             const visibleProfiles = profiles.filter(p => showInactiveMembers ? true : p.role !== 'inactive');
             
             list.innerHTML = visibleProfiles.map(pr => {
-                const roleBadge = pr.role === 'owner' 
+                const roleBadge = pr.is_owner 
                     ? '<span class="bg-indigo-900 text-indigo-100 border border-indigo-800 text-[9px] px-2 py-0.5 rounded-md uppercase font-bold tracking-wider">Owner</span>'
                     : (pr.role === 'admin' 
                         ? '<span class="bg-indigo-50 text-indigo-600 border border-indigo-100 text-[9px] px-2 py-0.5 rounded-md uppercase font-bold tracking-wider">Admin</span>' 
@@ -1257,30 +1257,30 @@
                 <option value="inactive">Inattivo (Sospeso)</option>
             `;
             
-            if (userProfile.role === 'owner') {
-                optionsHtml += `<option value="admin">Admin</option>`;
+            if (userProfile.is_owner) {
                 if (pr.id !== userProfile.id) {
-                    optionsHtml += `<option value="owner">Owner (Cedi Proprietà)</option>`;
+                    optionsHtml += `<option value="admin">Admin</option>`;
+                    optionsHtml += `<option value="transfer_owner">Owner (Cedi Proprietà)</option>`;
                 } else {
-                    optionsHtml += `<option value="owner">Owner</option>`;
+                    optionsHtml += `<option value="owner">Owner</option>`; // solo per display
                 }
             } else if (userProfile.role === 'admin') {
                 optionsHtml += `<option value="admin">Admin</option>`;
             }
             
             roleSelect.innerHTML = optionsHtml;
-            roleSelect.value = pr.role;
+            roleSelect.value = pr.is_owner ? 'owner' : pr.role;
             
             const btnDelete = document.getElementById('btn-delete-team');
             
             // LOGICA DI SICUREZZA ANTI-GOLPE
-            if (pr.role === 'owner' && pr.id !== userProfile.id) {
-                // Nessuno può modificare l'Owner
+            if (pr.is_owner && pr.id !== userProfile.id) {
+                // Nessuno può toccare l'Owner
                 btnDelete.classList.add('force-hide');
                 roleSelect.disabled = true;
                 roleSelect.classList.add('opacity-50', 'cursor-not-allowed');
-            } else if (pr.role === 'admin' && pr.id !== userProfile.id && userProfile.role !== 'owner') {
-                // Un Admin NON può modificare/eliminare un altro Admin
+            } else if (pr.role === 'admin' && pr.id !== userProfile.id && !userProfile.is_owner) {
+                // Admin non tocca un altro Admin
                 btnDelete.classList.add('force-hide');
                 roleSelect.disabled = true;
                 roleSelect.classList.add('opacity-50', 'cursor-not-allowed');
@@ -1290,7 +1290,7 @@
                 roleSelect.classList.remove('opacity-50', 'cursor-not-allowed');
                 
                 if (pr.id === userProfile.id) {
-                    btnDelete.classList.add('force-hide'); // Nessuno si elimina da solo da qui
+                    btnDelete.classList.add('force-hide'); // Non si elimina da solo
                 } else {
                     btnDelete.classList.remove('force-hide');
                 }
@@ -1308,33 +1308,44 @@
             const id = document.getElementById('edit-team-id').value;
             const newName = document.getElementById('edit-team-name').value.trim();
             const newCost = parseFloat(document.getElementById('edit-team-cost').value) || 0;
-            const newRole = document.getElementById('edit-team-role').value;
+            const roleSelection = document.getElementById('edit-team-role').value;
             
             if(!newName) return await appAlert("Attenzione", "Inserisci il nome e cognome", "danger");
             
             const oldProf = profiles.find(p => p.id === id);
+            let finalRole = oldProf.role;
+            let finalIsOwner = oldProf.is_owner;
 
-            // Logica Passaggio di Proprietà (Solo Owner)
-            if (newRole === 'owner' && id !== userProfile.id) {
+            // Logica Cessione Proprietà
+            if (roleSelection === 'transfer_owner' && id !== userProfile.id) {
                 if(!await appConfirm("Trasferimento Proprietà", "ATTENZIONE: Stai cedendo la proprietà dello Spazio di Lavoro a questo utente.\nDiventerai un normale Admin, e perderai l'accesso alla gestione dell'abbonamento Stripe.\nVuoi davvero procedere?", "danger")) {
                     return;
                 }
-                // Si declassa a admin (Supabase aggiornerà il nuovo Owner con la riga successiva)
-                await supabaseClient.from('profiles').update({ role: 'admin' }).eq('id', userProfile.id);
-                userProfile.role = 'admin';
+                // Si declassa l'utente attuale
+                await supabaseClient.from('profiles').update({ is_owner: false }).eq('id', userProfile.id);
+                userProfile.is_owner = false;
+                
+                finalRole = 'admin';
+                finalIsOwner = true;
+            } else if (roleSelection === 'owner') {
+                finalRole = 'admin';
+                finalIsOwner = true;
+            } else {
+                finalRole = roleSelection;
+                finalIsOwner = false;
             }
             
-            // Logica di Auto-sospensione
-            if (id === userProfile.id && newRole === 'inactive') {
-                if (userProfile.role === 'owner') {
+            // Logica di Auto-sospensione (può farla un admin o l'owner se non è bloccato prima)
+            if (id === userProfile.id && finalRole === 'inactive') {
+                if (userProfile.is_owner) {
                     return await appAlert("Azione Bloccata", "L'Owner non può auto-sospendersi.\nPrima devi cedere la Proprietà a un altro membro del team.", "danger");
                 }
-                if(!await appConfirm("Auto-Sospensione", "ATTENZIONE: Stai impostando il tuo stesso account come Inattivo.\nSe confermi, perderai l'accesso come Manager e verrai disconnesso.\n\nVuoi procedere?", "danger")) {
+                if(!await appConfirm("Auto-Sospensione", "ATTENZIONE: Stai impostando il tuo account come Inattivo.\nSe confermi, verrai disconnesso all'istante.\n\nVuoi procedere?", "danger")) {
                     return; 
                 }
             }
 
-            await supabaseClient.from('profiles').update({ full_name: newName, hourly_cost: newCost, role: newRole }).eq('id', id);
+            await supabaseClient.from('profiles').update({ full_name: newName, hourly_cost: newCost, role: finalRole, is_owner: finalIsOwner }).eq('id', id);
             
             // Ricalcolo Storico
             if (oldProf && oldProf.hourly_cost !== newCost) {
@@ -1349,7 +1360,7 @@
             }
             
             // Esecuzione Auto-sospensione
-            if (id === userProfile.id && newRole === 'inactive') {
+            if (id === userProfile.id && finalRole === 'inactive') {
                 await supabaseClient.auth.signOut();
                 location.reload();
                 return;
@@ -1358,7 +1369,7 @@
             closeEditTeamMemberModal();
             await fetchProfiles(); 
             await fetchEntries(); 
-            if (['admin', 'owner'].includes(userProfile.role)) { 
+            if (userProfile.role === 'admin') { 
                 await fetchProjects(); 
                 renderStrategicCharts(); 
             }
@@ -1380,7 +1391,7 @@
             const { data } = await supabaseClient.from('projects').select('*').order('name'); 
             projects = data || []; 
             renderProjects(); 
-            if(['admin', 'owner'].includes(userProfile.role)) renderStrategicCharts(); 
+            if(userProfile.role === 'admin') renderStrategicCharts(); 
         }
         
         async function fetchEntries() { 
@@ -1388,14 +1399,14 @@
             entries = data || []; 
             renderEntries(); 
             renderProjects(); 
-            if(['admin', 'owner'].includes(userProfile.role)) renderStrategicCharts(); 
+            if(userProfile.role === 'admin') renderStrategicCharts(); 
         }
         
         async function fetchExpenses() { 
             const { data } = await supabaseClient.from('expenses').select('*').order('created_at', { ascending: false }); 
             expenses = data || []; 
             renderProjects(); 
-            if(userProfile && ['admin', 'owner'].includes(userProfile.role)) renderStrategicCharts(); 
+            if(userProfile && userProfile.role === 'admin') renderStrategicCharts(); 
         }
 
         function renderProjects() {
