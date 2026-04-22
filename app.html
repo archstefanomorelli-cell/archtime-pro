@@ -71,7 +71,10 @@
         
         .force-hide { display: none !important; }
         .modal { background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(4px); }
+        
+        /* admin-only ora nasconde gli elementi se l'utente non ha la classe is-admin sul body */
         body:not(.is-admin) .admin-only { display: none !important; }
+        
         .is-archived { opacity: 0.6; filter: grayscale(0.8); }
         .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
         @media (max-width: 1023px) { .mobile-tab { display: none; } .mobile-tab.active { display: block; } }
@@ -112,14 +115,17 @@
                 </div>
                 <div class="space-y-4">
                     <div id="signup-fields" class="force-hide space-y-4">
+                        
                         <div class="p-5 bg-slate-50 rounded-xl border border-slate-200">
                             <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-3">Tipo di Account</label>
+                            
                             <div class="space-y-3">
                                 <div>
                                     <label class="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200 cursor-pointer hover:border-primary-300 transition-all shadow-sm">
-                                        <input type="radio" name="main-role" value="admin" onchange="toggleSignupOptions()" class="w-4 h-4 text-primary-600 focus:ring-primary-500">
+                                        <input type="radio" name="main-role" value="owner" onchange="toggleSignupOptions()" class="w-4 h-4 text-primary-600 focus:ring-primary-500">
                                         <span class="text-sm font-bold text-slate-700">Manager (Crea Spazio di Lavoro)</span>
                                     </label>
+                                    
                                     <div id="sector-selection" class="force-hide pl-4 border-l-2 border-primary-200 ml-3 mt-3 transition-all duration-300">
                                         <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-2">Seleziona il tuo settore:</label>
                                         <div class="flex gap-2">
@@ -134,20 +140,24 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <label class="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200 cursor-pointer hover:border-primary-300 transition-all shadow-sm">
                                     <input type="radio" name="main-role" value="staff" onchange="toggleSignupOptions()" class="w-4 h-4 text-primary-600 focus:ring-primary-500">
                                     <span class="text-sm font-bold text-slate-700">Collaboratore (Unisciti)</span>
                                 </label>
                             </div>
+
                             <div id="trial-info-container" class="force-hide mt-4 p-3.5 bg-primary-50 border border-primary-100 rounded-xl flex gap-3 items-start">
                                 <i data-lucide="gift" class="w-5 h-5 text-primary-600 shrink-0"></i>
                                 <p class="text-xs text-primary-900 leading-relaxed"><strong class="font-black">15 giorni di prova gratuita!</strong><br>Nessuna carta richiesta.</p>
                             </div>
                         </div>
+                        
                         <div id="invite-code-container" class="force-hide">
                             <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Codice Invito Manager</label>
                             <input type="text" id="invite-code-input" placeholder="Incolla codice" class="w-full border border-primary-200 bg-primary-50/30 rounded-xl p-3.5 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all">
                         </div>
+                        
                         <input type="text" id="full-name" placeholder="Nome e Cognome" class="w-full border border-slate-200 rounded-xl p-3.5 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all bg-white">
                     </div>
                     
@@ -174,6 +184,7 @@
             <div class="w-16 h-16 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-red-100"><i data-lucide="lock" class="w-8 h-8"></i></div>
             <h2 class="text-2xl font-black text-slate-900 mb-2 tracking-tight">Abbonamento Scaduto</h2>
             <p class="text-slate-500 text-sm mb-8 leading-relaxed">La tua prova gratuita è terminata. Scegli il piano più adatto al tuo Studio per continuare.</p>
+            
             <div class="flex flex-col gap-3 mb-6">
                 <button onclick="redirectToStripe('premium')" class="w-full bg-primary-600 text-white py-3.5 rounded-xl font-bold hover:bg-primary-700 transition-all shadow-sm active:scale-[0.98] flex justify-center items-center gap-2">
                     <i data-lucide="zap" class="w-4 h-4"></i> Attiva PREMIUM (59,99€/mese)
@@ -182,6 +193,7 @@
                     Attiva STARTER (29,99€/mese)
                 </button>
             </div>
+            
             <button onclick="handleLogout()" class="text-xs font-bold text-slate-400 hover:text-slate-600 transition-colors">Esci dall'account</button>
         </div>
     </div>
@@ -393,10 +405,7 @@
                     <div>
                         <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Ruolo</label>
                         <select id="edit-team-role" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none text-slate-700">
-                            <option value="staff">Staff</option>
-                            <option value="admin">Admin</option>
-                            <option value="inactive">Inattivo (Sospeso)</option>
-                        </select>
+                            </select>
                     </div>
                     <div>
                         <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Costo Orario (€)</label>
@@ -420,7 +429,7 @@
                 <div class="mt-2 inline-block px-2.5 py-1 bg-slate-100 text-slate-600 text-[10px] font-bold uppercase rounded-md border border-slate-200 tracking-wider" id="account-role">RUOLO</div>
             </div>
             
-            <div class="border-t border-slate-100 pt-4 admin-only">
+            <div id="billing-section" class="border-t border-slate-100 pt-4 force-hide">
                 <h3 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2.5 flex items-center gap-1.5"><i data-lucide="credit-card" class="w-3.5 h-3.5"></i> Abbonamento</h3>
                 <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl flex justify-between items-center mb-3">
                     <div>
@@ -431,7 +440,7 @@
                 </div>
                 <div id="account-upgrade-btn-container" class="force-hide"><button onclick="handlePlanChange('premium')" class="w-full bg-slate-900 text-white py-3 rounded-xl font-bold hover:bg-slate-800 transition-all shadow-sm text-sm mb-2 flex items-center justify-center gap-2"><i data-lucide="zap" class="w-4 h-4 text-amber-400"></i> Passa a Premium (59,99€)</button></div>
                 <div id="account-downgrade-btn-container" class="force-hide"><button onclick="handlePlanChange('starter')" class="w-full bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 py-3 rounded-xl font-bold transition-all shadow-sm text-sm mb-2 flex items-center justify-center gap-2">Passa a Starter (29,99€)</button></div>
-                <p class="text-[10px] text-center text-slate-400 leading-tight mb-4">Gestione sicura fatture via Stripe.</p>
+                <button onclick="handlePlanChange('portal')" class="w-full bg-slate-50 border border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-slate-800 py-3 rounded-xl font-bold transition-all shadow-sm text-sm mb-2 flex items-center justify-center gap-2"><i data-lucide="external-link" class="w-4 h-4"></i> Gestisci su Stripe</button>
             </div>
 
             <div class="border-t border-slate-100 pt-4 admin-only">
@@ -649,7 +658,7 @@
 
     <div id="cookie-banner" class="force-hide fixed bottom-0 left-0 w-full bg-slate-900 text-white p-5 z-[9999] flex flex-col md:flex-row justify-between items-center gap-4 border-t border-slate-800 shadow-[0_-10px_20px_rgba(0,0,0,0.2)]">
         <div class="text-xs text-slate-300 leading-relaxed max-w-4xl">
-            <strong>Informativa sui Cookie:</strong> Utilizziamo esclusivamente cookie tecnici strettamente necessari per mantenere attiva la tua sessione, garantire la sicurezza e gestire i pagamenti. Non utilizziamo cookie di profilazione per scopi di marketing. <a href="privacy.html" target="_blank" class="text-white font-bold hover:underline transition-all">Privacy Policy</a>.
+            <strong>Informativa sui Cookie:</strong> Utilizziamo esclusivamente cookie tecnici strettamente necessari (Supabase e Stripe) per mantenere attiva la tua sessione, garantire la sicurezza e gestire i pagamenti. Non utilizziamo cookie di profilazione per scopi di marketing. <a href="privacy.html" target="_blank" class="text-white font-bold hover:underline transition-all">Privacy Policy</a>.
         </div>
         <button onclick="acceptCookies()" class="bg-primary-600 text-white text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-xl hover:bg-primary-500 transition-colors shadow-sm shrink-0 whitespace-nowrap active:scale-95">Ho capito</button>
     </div>
@@ -732,7 +741,7 @@
                 'modal-catalog-title': `<i data-lucide="book-open" class="text-primary-500 w-5 h-5"></i> ${theme.catalogTitle}`,
                 'modal-catalog-desc': theme.catalogDesc,
                 'modal-template-title': `<i data-lucide="layers" class="text-primary-500 w-5 h-5"></i> ${theme.templateModalTitle}`,
-                'account-role': userProfile?.role === 'admin' ? theme.managerLabel : 'Collaboratore'
+                'account-role': userProfile?.role === 'owner' ? 'Owner (' + theme.managerLabel + ')' : (userProfile?.role === 'admin' ? 'Admin' : 'Collaboratore')
             };
 
             for (let id in els) {
@@ -886,9 +895,9 @@
                 if(!acceptTerms) return await appAlert("Attenzione", "Devi accettare i Termini di Servizio e la Privacy Policy per registrarti.", "danger");
                 
                 const checkedRole = document.querySelector('input[name="main-role"]:checked');
-                if(!checkedRole) return await appAlert("Attenzione", "Seleziona prima il tipo di account (Manager o Collaboratore).", "danger");
+                if(!checkedRole) return await appAlert("Attenzione", "Seleziona prima il tipo di account.", "danger");
                 
-                const role = checkedRole.value; 
+                let role = checkedRole.value; 
                 const isStaff = role === 'staff';
                 const businessType = isStaff ? 'studio' : document.querySelector('input[name="business-type"]:checked').value;
                 const code = document.getElementById('invite-code-input').value.trim();
@@ -919,7 +928,7 @@
         async function exportUserData() {
             if(!userProfile) return await appAlert("Errore", "Utente non trovato.", "danger");
             try {
-                const exportData = { profile: userProfile, studio: userProfile.role === 'admin' ? studioData : "Dati Studio non accessibili.", projects: projects, entries: entries, expenses: expenses, exportDate: new Date().toISOString() };
+                const exportData = { profile: userProfile, studio: ['admin', 'owner'].includes(userProfile.role) ? studioData : "Dati Studio non accessibili.", projects: projects, entries: entries, expenses: expenses, exportDate: new Date().toISOString() };
                 const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
                 const downloadAnchorNode = document.createElement('a'); downloadAnchorNode.setAttribute("href", dataStr); downloadAnchorNode.setAttribute("download", "Export_" + userProfile.full_name.replace(/\s+/g, '_') + ".json");
                 document.body.appendChild(downloadAnchorNode); downloadAnchorNode.click(); downloadAnchorNode.remove();
@@ -953,45 +962,63 @@
             document.getElementById('account-name').innerText = userProfile.full_name;
             document.getElementById('account-email').innerText = userProfile.email;
             
-            if(userProfile.role === 'admin') {
+            // Logica visualizzazione Billing (Solo Owner)
+            if(userProfile.role === 'owner') {
+                document.getElementById('billing-section').classList.remove('force-hide');
                 document.getElementById('account-plan-name').innerText = activePlan.toUpperCase();
                 document.getElementById('account-upgrade-btn-container').classList.toggle('force-hide', activePlan !== 'starter');
                 document.getElementById('account-downgrade-btn-container').classList.toggle('force-hide', activePlan !== 'premium');
+            } else {
+                document.getElementById('billing-section').classList.add('force-hide');
             }
+            
             document.getElementById('modal-account').classList.remove('force-hide');
         }
         
         function closeAccountModal() { document.getElementById('modal-account').classList.add('force-hide'); }
 
         async function deleteAccount() {
-            if (userProfile.role === 'admin' && activePlan === 'premium' && studioData?.subscription_status === 'active') {
-                return await appAlert("Abbonamento Attivo", "Prima di poter eliminare definitivamente l'account e distruggere tutti i dati, devi annullare il tuo abbonamento Premium attivo dal portale pagamenti (pulsante Gestione Fatture via Stripe).", "danger");
-            }
-
-            const warning = currentBusinessType === 'impresa' ? "Se sei il Titolare, eliminerai anche l'intera Impresa, tutti i cantieri e i dati." : "Se sei il Manager, eliminerai anche l'intero Studio, tutti i progetti e i dati.";
-            
-            if(await appConfirm("Eliminazione Account", `ATTENZIONE: Stai per eliminare il tuo account. ${warning}\nQuesta operazione è IRREVERSIBILE e tutti i collaboratori verranno espulsi. Vuoi procedere?`, "danger")) {
-                const check = await appPrompt("Conferma di sicurezza", "Scrivi ELIMINA per confermare la cancellazione:", "ELIMINA");
-                if(check === "ELIMINA") {
-                    const { error } = await supabaseClient.rpc('delete_user_account');
-                    if(error) await appAlert("Errore", error.message, "danger"); 
-                    else { 
-                        await supabaseClient.auth.signOut(); 
-                        await appAlert("Account Eliminato", "Lo Spazio di Lavoro e tutti i dati sono stati distrutti.", "success"); 
-                        location.reload(); 
+            if (userProfile.role === 'owner') {
+                if (activePlan === 'premium' && studioData?.subscription_status === 'active') {
+                    return await appAlert("Abbonamento Attivo", "Prima di poter eliminare definitivamente l'account e distruggere lo Spazio di Lavoro, devi annullare il tuo abbonamento Premium attivo dal portale pagamenti (pulsante Gestione Fatture via Stripe).", "danger");
+                }
+                const warning = currentBusinessType === 'impresa' ? "Se sei il Titolare, eliminerai anche l'intera Impresa, tutti i cantieri e i dati storici." : "Se sei il Manager, eliminerai anche l'intero Studio, tutti i progetti e i dati storici.";
+                
+                if(await appConfirm("Distruzione Spazio di Lavoro", `ATTENZIONE: Stai per eliminare il tuo account da Owner. ${warning}\nQuesta operazione è IRREVERSIBILE e tutti i collaboratori verranno espulsi. Vuoi procedere?`, "danger")) {
+                    const check = await appPrompt("Conferma di sicurezza", "Scrivi ELIMINA per confermare la cancellazione:", "ELIMINA");
+                    if(check === "ELIMINA") {
+                        const { error } = await supabaseClient.rpc('delete_user_account');
+                        if(error) await appAlert("Errore", error.message, "danger"); 
+                        else { 
+                            await supabaseClient.auth.signOut(); 
+                            await appAlert("Spazio Eliminato", "Lo Spazio di Lavoro e tutti i dati sono stati distrutti.", "success"); 
+                            location.reload(); 
+                        }
+                    } else if(check !== null) { 
+                        await appAlert("Annullato", "Operazione annullata.", "info"); 
                     }
-                } else if(check !== null) { 
-                    await appAlert("Annullato", "Operazione annullata.", "info"); 
+                }
+            } else {
+                // Per Admin e Staff (possono solo uscire e cancellarsi)
+                if(await appConfirm("Abbandona Studio", "Vuoi davvero eliminare il tuo account e uscire dallo Studio? Perderai l'accesso per sempre.", "danger")) {
+                    await supabaseClient.from('profiles').delete().eq('id', userProfile.id);
+                    await supabaseClient.rpc('delete_user_account'); 
+                    await supabaseClient.auth.signOut();
+                    location.reload();
                 }
             }
         }
 
         async function handlePlanChange(targetPlan) {
+            if (targetPlan === 'portal') {
+                if(STRIPE_CUSTOMER_PORTAL && STRIPE_CUSTOMER_PORTAL.includes('http')) window.location.href = STRIPE_CUSTOMER_PORTAL;
+                return;
+            }
             if (targetPlan === 'starter') {
                 const activeCount = projects.filter(p => !p.is_archived).length;
-                if (activeCount > 5) { return await appAlert("Attenzione", `Il piano Starter ha un limite di 5 lavori attivi. Ne hai ${activeCount}.\nArchivia o elimina i lavori in eccesso prima di procedere.`, "danger"); }
+                if (activeCount > 5) { return await appAlert("Attenzione", `Il piano Starter ha un limite di 5 lavori attivi. Ne hai ${activeCount}.\nArchivia o elimina i lavori in eccesso prima di procedere al downgrade.`, "danger"); }
             }
-            if(STRIPE_CUSTOMER_PORTAL && STRIPE_CUSTOMER_PORTAL.includes('http')) window.location.href = STRIPE_CUSTOMER_PORTAL; else redirectToStripe(targetPlan);
+            redirectToStripe(targetPlan);
         }
 
         async function saveStudioName() { 
@@ -1031,7 +1058,7 @@
                     activePlan = studioData?.plan_type || 'premium'; 
 
                     let bType = 'studio';
-                    if (userProfile.role === 'admin') {
+                    if (['admin', 'owner'].includes(userProfile.role)) {
                         bType = user?.user_metadata?.business_type || 'studio';
                         if (studioData && !studioData.business_type) {
                             await supabaseClient.from('studios').update({ business_type: bType }).eq('id', studioData.id);
@@ -1042,7 +1069,7 @@
                     }
                     applyTheme(bType);
                     
-                    if (status === 'canceled' || status === 'past_due' || status === 'inactive') { showPaywall(); return; }
+                    if (['canceled', 'past_due', 'inactive'].includes(status)) { showPaywall(); return; }
 
                     const trialBadge = document.getElementById('trial-badge');
                     const planBadge = document.getElementById('plan-badge');
@@ -1067,7 +1094,7 @@
                         }
                     }
 
-                    if(profile.role === 'admin') {
+                    if(['admin', 'owner'].includes(profile.role)) {
                         document.body.classList.add('is-admin');
                         activityCatalog = studioData?.activity_catalog ? studioData.activity_catalog : [...THEMES[currentBusinessType].defaultCatalog];
                         projectTemplates = studioData?.project_templates ? studioData.project_templates : [...THEMES[currentBusinessType].defaultTemplates];
@@ -1103,7 +1130,7 @@
                 btn.classList.toggle('text-primary-600', btn.dataset.tab === tabName); 
                 btn.classList.toggle('text-slate-400', btn.dataset.tab !== tabName); 
             }); 
-            if(tabName === 'analyze' && userProfile.role === 'admin') {
+            if(tabName === 'analyze' && ['admin', 'owner'].includes(userProfile.role)) {
                 setTimeout(renderStrategicCharts, 50); 
             }
             window.scrollTo(0, 0); 
@@ -1119,7 +1146,7 @@
             await fetchProjects(); 
             await fetchEntries(); 
             await fetchExpenses();
-            if(userProfile.role === 'admin') { 
+            if(['admin', 'owner'].includes(userProfile.role)) { 
                 await fetchProfiles(); 
                 renderCatalogAndTemplatesUI(); 
                 await checkAndGenerateDemoData(); 
@@ -1181,9 +1208,12 @@
             const visibleProfiles = profiles.filter(p => showInactiveMembers ? true : p.role !== 'inactive');
             
             list.innerHTML = visibleProfiles.map(pr => {
-                const roleBadge = pr.role === 'admin' 
-                    ? '<span class="bg-indigo-50 text-indigo-600 border border-indigo-100 text-[9px] px-2 py-0.5 rounded-md uppercase font-bold tracking-wider">Admin</span>' 
-                    : (pr.role === 'inactive' ? '<span class="bg-red-50 text-red-500 border border-red-200 text-[9px] px-2 py-0.5 rounded-md uppercase font-bold tracking-wider">Inattivo</span>' : '<span class="bg-slate-100 text-slate-500 border border-slate-200 text-[9px] px-2 py-0.5 rounded-md uppercase font-bold tracking-wider">Staff</span>');
+                const roleBadge = pr.role === 'owner' 
+                    ? '<span class="bg-indigo-900 text-indigo-100 border border-indigo-800 text-[9px] px-2 py-0.5 rounded-md uppercase font-bold tracking-wider">Owner</span>'
+                    : (pr.role === 'admin' 
+                        ? '<span class="bg-indigo-50 text-indigo-600 border border-indigo-100 text-[9px] px-2 py-0.5 rounded-md uppercase font-bold tracking-wider">Admin</span>' 
+                        : (pr.role === 'inactive' ? '<span class="bg-red-50 text-red-500 border border-red-200 text-[9px] px-2 py-0.5 rounded-md uppercase font-bold tracking-wider">Inattivo</span>' : '<span class="bg-slate-100 text-slate-500 border border-slate-200 text-[9px] px-2 py-0.5 rounded-md uppercase font-bold tracking-wider">Staff</span>')
+                      );
                 
                 const opacityClass = pr.role === 'inactive' ? 'opacity-60 grayscale' : '';
                 
@@ -1219,23 +1249,48 @@
             document.getElementById('edit-team-name').value = pr.full_name || '';
             document.getElementById('edit-team-cost').value = pr.hourly_cost || 0;
             
-            const btnDelete = document.getElementById('btn-delete-team');
             const roleSelect = document.getElementById('edit-team-role');
-            roleSelect.value = pr.role || 'staff';
+            
+            // Popolamento dinamico delle opzioni in base a chi sta guardando
+            let optionsHtml = `
+                <option value="staff">Staff</option>
+                <option value="inactive">Inattivo (Sospeso)</option>
+            `;
+            
+            if (userProfile.role === 'owner') {
+                optionsHtml += `<option value="admin">Admin</option>`;
+                if (pr.id !== userProfile.id) {
+                    optionsHtml += `<option value="owner">Owner (Cedi Proprietà)</option>`;
+                } else {
+                    optionsHtml += `<option value="owner">Owner</option>`;
+                }
+            } else if (userProfile.role === 'admin') {
+                optionsHtml += `<option value="admin">Admin</option>`;
+            }
+            
+            roleSelect.innerHTML = optionsHtml;
+            roleSelect.value = pr.role;
+            
+            const btnDelete = document.getElementById('btn-delete-team');
             
             // LOGICA DI SICUREZZA ANTI-GOLPE
-            if (pr.role === 'admin' && pr.id !== userProfile.id) {
-                // Non puoi modificare o eliminare un altro Admin
+            if (pr.role === 'owner' && pr.id !== userProfile.id) {
+                // Nessuno può modificare l'Owner
+                btnDelete.classList.add('force-hide');
+                roleSelect.disabled = true;
+                roleSelect.classList.add('opacity-50', 'cursor-not-allowed');
+            } else if (pr.role === 'admin' && pr.id !== userProfile.id && userProfile.role !== 'owner') {
+                // Un Admin NON può modificare/eliminare un altro Admin
                 btnDelete.classList.add('force-hide');
                 roleSelect.disabled = true;
                 roleSelect.classList.add('opacity-50', 'cursor-not-allowed');
             } else {
-                // Puoi modificare te stesso o altri membri Staff/Inattivi
+                // Modificabile
                 roleSelect.disabled = false;
                 roleSelect.classList.remove('opacity-50', 'cursor-not-allowed');
                 
                 if (pr.id === userProfile.id) {
-                    btnDelete.classList.add('force-hide'); // Non puoi eliminare te stesso da qui
+                    btnDelete.classList.add('force-hide'); // Nessuno si elimina da solo da qui
                 } else {
                     btnDelete.classList.remove('force-hide');
                 }
@@ -1257,14 +1312,28 @@
             
             if(!newName) return await appAlert("Attenzione", "Inserisci il nome e cognome", "danger");
             
+            const oldProf = profiles.find(p => p.id === id);
+
+            // Logica Passaggio di Proprietà (Solo Owner)
+            if (newRole === 'owner' && id !== userProfile.id) {
+                if(!await appConfirm("Trasferimento Proprietà", "ATTENZIONE: Stai cedendo la proprietà dello Spazio di Lavoro a questo utente.\nDiventerai un normale Admin, e perderai l'accesso alla gestione dell'abbonamento Stripe.\nVuoi davvero procedere?", "danger")) {
+                    return;
+                }
+                // Si declassa a admin (Supabase aggiornerà il nuovo Owner con la riga successiva)
+                await supabaseClient.from('profiles').update({ role: 'admin' }).eq('id', userProfile.id);
+                userProfile.role = 'admin';
+            }
+            
             // Logica di Auto-sospensione
             if (id === userProfile.id && newRole === 'inactive') {
-                if(!await appConfirm("Auto-Sospensione", "ATTENZIONE: Stai impostando il tuo stesso account come Inattivo.\nSe confermi, perderai l'accesso come Manager e verrai disconnesso per sempre.\n\nVuoi procedere?", "danger")) {
+                if (userProfile.role === 'owner') {
+                    return await appAlert("Azione Bloccata", "L'Owner non può auto-sospendersi.\nPrima devi cedere la Proprietà a un altro membro del team.", "danger");
+                }
+                if(!await appConfirm("Auto-Sospensione", "ATTENZIONE: Stai impostando il tuo stesso account come Inattivo.\nSe confermi, perderai l'accesso come Manager e verrai disconnesso.\n\nVuoi procedere?", "danger")) {
                     return; 
                 }
             }
 
-            const oldProf = profiles.find(p => p.id === id);
             await supabaseClient.from('profiles').update({ full_name: newName, hourly_cost: newCost, role: newRole }).eq('id', id);
             
             // Ricalcolo Storico
@@ -1289,7 +1358,7 @@
             closeEditTeamMemberModal();
             await fetchProfiles(); 
             await fetchEntries(); 
-            if (userProfile.role === 'admin') { 
+            if (['admin', 'owner'].includes(userProfile.role)) { 
                 await fetchProjects(); 
                 renderStrategicCharts(); 
             }
@@ -1311,7 +1380,7 @@
             const { data } = await supabaseClient.from('projects').select('*').order('name'); 
             projects = data || []; 
             renderProjects(); 
-            if(userProfile.role === 'admin') renderStrategicCharts(); 
+            if(['admin', 'owner'].includes(userProfile.role)) renderStrategicCharts(); 
         }
         
         async function fetchEntries() { 
@@ -1319,14 +1388,14 @@
             entries = data || []; 
             renderEntries(); 
             renderProjects(); 
-            if(userProfile.role === 'admin') renderStrategicCharts(); 
+            if(['admin', 'owner'].includes(userProfile.role)) renderStrategicCharts(); 
         }
         
         async function fetchExpenses() { 
             const { data } = await supabaseClient.from('expenses').select('*').order('created_at', { ascending: false }); 
             expenses = data || []; 
             renderProjects(); 
-            if(userProfile && userProfile.role === 'admin') renderStrategicCharts(); 
+            if(userProfile && ['admin', 'owner'].includes(userProfile.role)) renderStrategicCharts(); 
         }
 
         function renderProjects() {
@@ -1747,7 +1816,7 @@
         }
 
         function renderStrategicCharts() {
-            if(userProfile.role !== 'admin') return;
+            if(!['admin', 'owner'].includes(userProfile.role)) return;
             const activeProjects = projects.filter(p => !p.is_archived);
             let totalBudget = 0, totalSpent = 0, projectSpend = {}; let totalTaskHours = 0;
             
@@ -1859,7 +1928,7 @@
             
             document.getElementById('week-display').innerText = `${start.toLocaleDateString('it-IT', {day:'2-digit',month:'short'})} - ${end.toLocaleDateString('it-IT', {day:'2-digit',month:'short',year:'numeric'})}`;
             
-            const isStaff = userProfile.role !== 'admin';
+            const isStaff = !['admin', 'owner'].includes(userProfile.role);
 
             let weekly = entries.filter(e => {
                 const d = new Date(e.created_at).getTime();
