@@ -985,4 +985,389 @@
                 timerRunning = true; startTime = Date.now();
                 await supabaseClient.from('profiles').update({ active_timer_start: startTime.toString(), active_timer_project: pIdx, active_timer_task: tVal, active_timer_notes: notes }).eq('id', userProfile.id);
                 document.getElementById('btn-text').innerText = "FERMA E SALVA"; document.getElementById('btn-icon').setAttribute("data-lucide", "square"); 
-                document.getElementById('btn-toggle-timer').classList.replace('bg-slate-900', 'bg-red-500'); document.getElementById('btn-toggle-timer').
+                document.getElementById('btn-toggle-timer').classList.replace('bg-slate-900', 'bg-red-500'); document.getElementById('btn-toggle-timer').classList.replace('hover:bg-slate-800', 'hover:bg-red-600');
+                timerInterval = setInterval(() => { const d = new Date(Date.now() - startTime); document.getElementById('timer-display').innerText = `${String(d.getUTCHours()).padStart(2,'0')}:${String(d.getUTCMinutes()).padStart(2,'0')}:${String(d.getUTCSeconds()).padStart(2,'0')}`; }, 1000);
+            } else {
+                timerRunning = false; clearInterval(timerInterval);
+                await supabaseClient.from('profiles').update({ active_timer_start: null, active_timer_project: null, active_timer_task: null, active_timer_notes: null }).eq('id', userProfile.id);
+                saveEntry(projects[pIdx], tVal, (Date.now() - startTime) / 3600000, null, document.getElementById('timer-notes').value.trim());
+                document.getElementById('timer-display').innerText = "00:00:00"; document.getElementById('timer-notes').value = ""; document.getElementById('btn-text').innerText = "AVVIA ORA"; document.getElementById('btn-icon').setAttribute("data-lucide", "play-circle"); 
+                document.getElementById('btn-toggle-timer').classList.replace('bg-red-500', 'bg-slate-900'); document.getElementById('btn-toggle-timer').classList.replace('hover:bg-red-600', 'hover:bg-slate-800');
+            }
+            lucide.createIcons();
+        }
+
+        async function saveEntry(proj, task, hours, customDate = null, notes = "") {
+            const { data: prof } = await supabaseClient.from('profiles').select('*').eq('id', userProfile.id).single();
+            const payload = { project_id: proj.id, project_name: proj.name, task, duration: hours, user_email: userProfile.email, user_name: prof.full_name, rate: (prof ? prof.hourly_cost : 0) * hours, studio_id: userProfile.studio_id, notes: notes };
+            if(customDate) payload.created_at = new Date(customDate).toISOString();
+            await supabaseClient.from('entries').insert([payload]); fetchEntries();
+        }
+
+        function openManualEntry() { document.getElementById('modal-manual').classList.remove('force-hide'); document.getElementById('manual-date').valueAsDate = new Date(); document.getElementById('manual-project').innerHTML = '<option value="" disabled selected>Scegli...</option>' + projects.filter(p => !p.is_archived).map((p, i) => `<option value="${projects.indexOf(p)}">${p.name}</option>`).join(''); }
+        function closeManualEntry() { document.getElementById('modal-manual').classList.add('force-hide'); }
+        function updateManualTaskDropdown() { const p = projects[document.getElementById('manual-project').value]; document.getElementById('manual-task').innerHTML = (p.tasks || []).map(t => `<option value="${t}">${t}</option>`).join('') || '<option value="Generico">Generico</option>'; }
+        async function saveManualEntry() { const pIdx = document.getElementById('manual-project').value; const h = parseFloat(document.getElementById('manual-hours').value); const d = document.getElementById('manual-date').value; const t = document.getElementById('manual-task').value; const n = document.getElementById('manual-notes').value.trim(); if(!pIdx || !h || !d) return await appAlert("Attenzione", "Completa tutti i dati obbligatori!", "danger"); await saveEntry(projects[pIdx], t, h, d, n); document.getElementById('manual-notes').value = ""; closeManualEntry(); }
+
+        function updateEditTaskDropdown(forceTask = null) {
+            const isEvent = forceTask && typeof forceTask !== 'string'; const explicitTask = isEvent ? null : forceTask;
+            const p = projects.find(proj => proj.id === document.getElementById('edit-entry-project').value);
+            const taskSelect = document.getElementById('edit-entry-task');
+            let projectTasks = p && p.tasks && p.tasks.length > 0 ? [...p.tasks] : []; if (!projectTasks.includes('Generico')) projectTasks.push('Generico'); if (explicitTask && !projectTasks.includes(explicitTask)) projectTasks.push(explicitTask);
+            const oldVal = explicitTask || taskSelect.value;
+            taskSelect.innerHTML = projectTasks.map(t => `<option value="${t}" ${t === oldVal ? 'selected' : ''}>${t}</option>`).join('');
+            if (!taskSelect.value && projectTasks.length > 0) taskSelect.value = projectTasks[0];
+        }
+
+        function updateEditCost() { const userVal = document.getElementById('edit-entry-user').value; const hoursVal = parseFloat(document.getElementById('edit-entry-hours').value) || 0; const selectedProfile = profiles.find(pr => pr.full_name === userVal); document.getElementById('edit-entry-cost').value = ((selectedProfile ? (selectedProfile.hourly_cost || 0) : 0) * hoursVal).toFixed(2); }
+
+        function openEditEntryModal(id) {
+            const e = entries.find(x => x.id === id); if(!e) return;
+            document.getElementById('edit-entry-id').value = id;
+            const d = new Date(e.created_at); document.getElementById('edit-entry-date').value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+            
+            const userSelect = document.getElementById('edit-entry-user'); 
+            userSelect.innerHTML = profiles.filter(p => p.role !== 'inactive' || p.full_name === e.user_name).map(pr => `<option value="${pr.full_name}" ${pr.full_name === e.user_name ? 'selected' : ''}>${pr.full_name}</option>`).join(''); 
+            if (!profiles.find(pr => pr.full_name === e.user_name)) userSelect.innerHTML += `<option value="${e.user_name}" selected>${e.user_name} (Rimosso)</option>`;
+            
+            const projectSelect = document.getElementById('edit-entry-project'); projectSelect.innerHTML = projects.map(p => `<option value="${p.id}" ${p.id === e.project_id ? 'selected' : ''}>${p.name}</option>`).join(''); if (!projects.find(p => p.id === e.project_id)) projectSelect.innerHTML += `<option value="${e.project_id}" selected>${e.project_name} (Eliminato)</option>`;
+            updateEditTaskDropdown(e.task);
+            document.getElementById('edit-entry-notes').value = e.notes || ''; document.getElementById('edit-entry-hours').value = Number(e.duration).toFixed(2);
+            updateEditCost(); document.getElementById('modal-edit-entry').classList.remove('force-hide'); lucide.createIcons();
+        }
+        function closeEditEntryModal() { document.getElementById('modal-edit-entry').classList.add('force-hide'); }
+
+        async function saveEntryEdit() {
+            const id = document.getElementById('edit-entry-id').value; const dateVal = document.getElementById('edit-entry-date').value; const userVal = document.getElementById('edit-entry-user').value; const projId = document.getElementById('edit-entry-project').value; const taskVal = document.getElementById('edit-entry-task').value; const notesVal = document.getElementById('edit-entry-notes').value.trim(); const hoursVal = parseFloat(document.getElementById('edit-entry-hours').value); const costVal = parseFloat(document.getElementById('edit-entry-cost').value);
+            if (!dateVal || isNaN(hoursVal) || isNaN(costVal) || !projId) return await appAlert("Attenzione", "Compila tutti i campi!", "danger");
+            const selectedProj = projects.find(p => p.id === projId); const projName = selectedProj ? selectedProj.name : document.getElementById('edit-entry-project').options[document.getElementById('edit-entry-project').selectedIndex].text;
+            await supabaseClient.from('entries').update({ created_at: new Date(`${dateVal}T12:00:00Z`).toISOString(), user_name: userVal, project_id: projId, project_name: projName, task: taskVal, notes: notesVal, duration: hoursVal, rate: costVal }).eq('id', id); 
+            closeEditEntryModal(); fetchEntries();
+        }
+
+        async function deleteEntry(id) { if(await appConfirm("Elimina", "Rimuovere definitivamente questa voce?", "danger")) { await supabaseClient.from('entries').delete().eq('id', id); fetchEntries(); } }
+
+        function renderProjects() {
+            const container = document.getElementById('projects-list');
+            let visibleProjects = projects.filter(p => showArchived ? true : p.is_archived !== true);
+            visibleProjects.sort((a, b) => { if (a.is_archived && !b.is_archived) return 1; if (!a.is_archived && b.is_archived) return -1; return 0; });
+            document.getElementById('project-select').innerHTML = '<option value="" disabled selected>-- Seleziona --</option>' + projects.filter(p => !p.is_archived).map((p, i) => `<option value="${projects.indexOf(p)}">${p.name}</option>`).join('');
+
+            container.innerHTML = visibleProjects.map((p, idx) => {
+                const costHrs = entries.filter(e => e.project_id === p.id).reduce((s,e) => s + Number(e.rate||0), 0);
+                const costExp = expenses.filter(ex => ex.project_id === p.id).reduce((s,ex) => s + Number(ex.amount||0), 0);
+                const totalCost = costHrs + costExp;
+                let perc = p.budget > 0 ? (totalCost/p.budget*100) : 0;
+                let color = perc > 90 ? 'bg-red-500' : (perc > 75 ? 'bg-amber-400' : 'bg-primary-500');
+                
+                return `<div class="bg-white border border-slate-200 p-5 lg:p-6 shadow-sm hover:shadow-md rounded-2xl cursor-pointer relative group transition-shadow ${p.is_archived ? 'is-archived' : ''}" onclick="showProjectDetail('${p.id}')"><div class="flex justify-between items-start mb-4"><div><h3 class="font-black text-slate-800 text-base lg:text-lg tracking-tight">${p.name}</h3><p class="text-[9px] lg:text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">${p.client || 'Interno'}</p></div><div class="admin-only opacity-100 lg:opacity-0 group-hover:opacity-100 flex gap-1 bg-white lg:bg-transparent rounded-lg shadow-sm lg:shadow-none p-1 lg:p-0"><button onclick="event.stopPropagation(); toggleArchive('${p.id}', ${p.is_archived})" class="p-1.5 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"><i data-lucide="archive" class="w-4 h-4"></i></button><button onclick="event.stopPropagation(); deleteProject('${p.id}')" class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div></div><div class="flex justify-between text-[10px] uppercase font-bold tracking-wider text-slate-500 mb-2"><span>Speso: €${totalCost.toFixed(0)}</span><span>Target: €${p.budget}</span></div><div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden"><div class="${color} h-full transition-all duration-1000" style="width: ${perc > 100 ? 100 : perc}%"></div></div></div>`;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        async function addExpense(projId) { const desc = document.getElementById('exp-desc').value.trim(); const amt = parseFloat(document.getElementById('exp-amount').value); if(!desc || isNaN(amt)) return await appAlert("Attenzione", "Inserisci dati spesa.", "danger"); const { error } = await supabaseClient.from('expenses').insert([{ project_id: projId, studio_id: userProfile.studio_id, description: desc, amount: amt, user_name: userProfile.full_name }]); if(error) await appAlert("Errore", error.message, "danger"); else { await fetchExpenses(); showProjectDetail(projId); } }
+        async function deleteExpense(id, projId) { if(await appConfirm("Elimina Spesa", "Vuoi eliminare questa spesa?", "danger")) { await supabaseClient.from('expenses').delete().eq('id', id); await fetchExpenses(); showProjectDetail(projId); } }
+        async function toggleArchive(id, status) { await supabaseClient.from('projects').update({ is_archived: !status }).eq('id', id); fetchProjects(); }
+        
+        async function deleteProject(id) { 
+            if(await appConfirm("Eliminazione Definitiva", "ATTENZIONE: Eliminando questo progetto verranno cancellate anche TUTTE le ore e le spese registrate al suo interno!\n\nSe vuoi conservare lo storico finanziario, chiudi questo avviso e usa il tasto 'Archivia' (icona a forma di scatola).\n\nSei sicuro di volerlo ELIMINARE PER SEMPRE?", "danger")) { 
+                await supabaseClient.from('projects').delete().eq('id', id); 
+                fetchProjects(); 
+            } 
+        }
+
+        function toggleViewArchived() { showArchived = !showArchived; document.getElementById('toggle-archived-btn').innerText = showArchived ? "Nascondi Archiviati" : "Archivio"; renderProjects(); }
+
+        function showProjectDetail(id) {
+            const p = projects.find(x => x.id === id); if(!p) return;
+            const pEntries = entries.filter(e => e.project_id === id); const pExpenses = expenses.filter(ex => ex.project_id === id);
+            const totalHours = pEntries.reduce((s, e) => s + Number(e.duration || 0), 0); const totalHoursCost = pEntries.reduce((s, e) => s + Number(e.rate || 0), 0); const totalExpenses = pExpenses.reduce((s, ex) => s + Number(ex.amount || 0), 0);
+            const totalSpent = totalHoursCost + totalExpenses; const effectiveRate = totalHours > 0 ? ((p.budget - totalExpenses) / totalHours).toFixed(2) : 0;
+            
+            const taskStats = {}, teamStats = {};
+            if (p.tasks && p.tasks.length > 0) p.tasks.forEach(t => { taskStats[t] = { h: 0, c: 0 }; });
+            pEntries.forEach(e => { const taskName = e.task || 'Altro'; if(!taskStats[taskName]) taskStats[taskName] = { h: 0, c: 0 }; taskStats[taskName].h += Number(e.duration || 0); taskStats[taskName].c += Number(e.rate || 0); const member = e.user_name || e.user_email.split('@')[0]; if(!teamStats[member]) teamStats[member] = { h: 0, c: 0 }; teamStats[member].h += Number(e.duration || 0); teamStats[member].c += Number(e.rate || 0); });
+
+            let btnPdfHtml = activePlan === 'starter' 
+                ? `<button onclick="openUpgradeModal('Report PDF Singolo')" class="text-xs font-bold bg-white text-slate-400 border border-slate-200 px-3.5 py-2.5 rounded-xl flex items-center justify-center gap-2 transition opacity-60 shadow-sm"><i data-lucide="lock" class="w-4 h-4"></i> Report PDF</button>`
+                : `<button onclick="exportProjectPDF('${p.id}')" class="text-xs font-bold bg-white text-primary-600 border border-slate-200 px-3.5 py-2.5 rounded-xl hover:border-primary-200 hover:bg-primary-50 flex items-center justify-center gap-2 shadow-sm transition-all"><i data-lucide="file-text" class="w-4 h-4"></i> Esporta in PDF</button>`;
+
+            let html = `<div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6 lg:mb-8 gap-4"><div><h2 class="text-2xl lg:text-3xl font-black text-slate-800 mb-1 leading-tight pr-8 tracking-tight">${p.name}</h2><p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">${p.client || 'Interno'}</p></div><div class="admin-only w-full lg:w-auto flex flex-col sm:flex-row gap-2"><button onclick="openEditProjectModal('${p.id}')" class="text-xs font-bold bg-white text-slate-600 border border-slate-200 px-3.5 py-2.5 rounded-xl hover:bg-slate-50 flex items-center justify-center gap-2 shadow-sm transition-all"><i data-lucide="edit" class="w-4 h-4"></i> Modifica</button>${btnPdfHtml}</div></div><div class="grid grid-cols-2 md:grid-cols-4 gap-3 lg:gap-4 mb-8"><div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-center"><p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Spesa Totale</p><p class="text-lg lg:text-xl font-black text-primary-600 mt-1 tracking-tight">€${totalSpent.toFixed(0)} <span class="text-[10px] text-slate-400">/ ${p.budget}</span></p></div><div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-center"><p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Costo Team</p><p class="text-lg lg:text-xl font-black text-slate-800 mt-1 tracking-tight">€${totalHoursCost.toFixed(0)} <span class="text-[10px] text-slate-400">(${totalHours.toFixed(1)}h)</span></p></div><div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-center"><p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Spese Extra</p><p class="text-lg lg:text-xl font-black text-amber-600 mt-1 tracking-tight">€${totalExpenses.toFixed(0)}</p></div><div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-center"><p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Resa Oraria</p><p class="text-lg lg:text-xl font-black ${effectiveRate > 0 ? 'text-emerald-500' : 'text-red-500'} mt-1 tracking-tight">€${effectiveRate} <span class="text-[10px] text-slate-400">/h</span></p></div></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 pb-8 lg:pb-0"><div class="space-y-8"><div><h3 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200 pb-2 mb-4 flex items-center gap-1.5"><i data-lucide="layers" class="w-3.5 h-3.5"></i> Per Attività (Ore)</h3><div class="space-y-4">`;
+            const sortedTaskNames = Object.keys(taskStats).sort((a, b) => taskStats[b].h - taskStats[a].h);
+            sortedTaskNames.forEach(t => { const perc = p.budget > 0 ? (taskStats[t].c / p.budget * 100).toFixed(1) : 0; const isZero = taskStats[t].h === 0; html += `<div><div class="flex justify-between items-end mb-1.5"><span class="font-bold ${isZero?'text-slate-400':'text-slate-700'} text-xs">${t}</span><span class="text-[10px] font-mono font-bold text-slate-500">€${taskStats[t].c.toFixed(0)} (${taskStats[t].h.toFixed(1)}h)</span></div><div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden"><div class="${isZero?'bg-slate-200':'bg-primary-500'} h-full" style="width: ${perc}%"></div></div></div>`; });
+            html += `</div></div><div><h3 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200 pb-2 mb-4 flex items-center gap-1.5"><i data-lucide="users" class="w-3.5 h-3.5"></i> Per Membro Team</h3><div class="space-y-3">`;
+            Object.keys(teamStats).forEach(m => { html += `<div class="flex justify-between items-center bg-white p-3 rounded-xl border border-slate-200 shadow-sm"><span class="font-bold text-slate-700 text-xs uppercase tracking-wide">${m}</span><div class="text-right"><p class="text-[11px] font-mono font-bold text-primary-600">${teamStats[m].h.toFixed(1)}h</p><p class="text-[10px] font-mono font-black text-slate-400 admin-only">€ ${teamStats[m].c.toFixed(2)}</p></div></div>`; });
+            html += `</div></div></div><div class="admin-only bg-slate-50 rounded-2xl p-5 border border-slate-200"><h3 class="text-[11px] font-bold text-slate-600 uppercase tracking-wider border-b border-slate-200 pb-3 mb-4 flex items-center gap-2"><i data-lucide="receipt" class="w-4 h-4 text-amber-500"></i> Spese Vive</h3><div class="flex gap-2 mb-6"><input type="text" id="exp-desc" placeholder="Es. Oneri o Materiali" class="flex-1 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 transition-all bg-white"><div class="w-24 relative flex items-center"><span class="absolute left-3 text-slate-400 font-bold text-xs">€</span><input type="number" step="0.01" id="exp-amount" placeholder="0.00" class="w-full border border-slate-200 rounded-xl p-3 pl-6 text-xs outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 transition-all font-bold bg-white"></div><button onclick="addExpense('${p.id}')" class="bg-amber-500 text-white px-3.5 rounded-xl hover:bg-amber-600 transition-all shadow-sm active:scale-95"><i data-lucide="plus" class="w-4 h-4"></i></button></div><div class="space-y-2 max-h-[300px] overflow-y-auto pr-1">${pExpenses.length === 0 ? '<div class="text-center py-6 text-slate-400 text-xs font-bold uppercase tracking-wider">Nessuna spesa registrata.</div>' : pExpenses.map(ex => `<div class="bg-white p-3 rounded-xl border border-slate-200 flex justify-between items-center shadow-sm group"><div><p class="text-xs font-bold text-slate-700">${ex.description}</p><p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mt-1">${new Date(ex.created_at).toLocaleDateString()} • ${ex.user_name}</p></div><div class="flex items-center gap-3"><span class="font-black text-amber-600 text-sm tracking-tight">€${Number(ex.amount).toFixed(2)}</span><button onclick="deleteExpense('${ex.id}', '${p.id}')" class="text-slate-300 hover:text-red-500 p-1.5 hover:bg-red-50 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></div></div>`).join('')}</div></div></div>`;
+            
+            document.getElementById('detail-content').innerHTML = html;
+            document.getElementById('modal-detail').classList.remove('force-hide');
+            lucide.createIcons();
+        }
+        function closeDetail() { document.getElementById('modal-detail').classList.add('force-hide'); }
+
+        function openEditProjectModal(id) {
+            const p = projects.find(x => x.id === id); if(!p) return;
+            document.getElementById('edit-modal-proj-id').value = id; document.getElementById('edit-modal-name').value = p.name; document.getElementById('edit-modal-client').value = p.client || ''; document.getElementById('edit-modal-budget').value = p.budget;
+            editProjectTasks = p.tasks && p.tasks.length > 0 ? [...p.tasks] : [];
+            renderEditProjectTasks();
+            document.getElementById('modal-detail').classList.add('force-hide'); document.getElementById('modal-edit-project').classList.remove('force-hide'); lucide.createIcons();
+        }
+
+        function renderEditProjectTasks() {
+            const selectedContainer = document.getElementById('edit-proj-selected-tasks');
+            if (editProjectTasks.length === 0) selectedContainer.innerHTML = '<span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider py-1 block">Nessuna attività configurata.</span>';
+            else selectedContainer.innerHTML = editProjectTasks.map((task, idx) => `<span class="inline-block bg-primary-50 text-primary-700 text-[10px] font-bold px-2 py-1 rounded-md border border-primary-100 uppercase tracking-wider">${idx+1}. ${task}</span>`).join('');
+            lucide.createIcons();
+        }
+
+        function closeEditProjectModal() { document.getElementById('modal-edit-project').classList.add('force-hide'); }
+        async function saveModalProjectEdit() {
+            const id = document.getElementById('edit-modal-proj-id').value; 
+            const name = document.getElementById('edit-modal-name').value.trim(); 
+            const client = document.getElementById('edit-modal-client').value.trim(); 
+            const budget = parseFloat(document.getElementById('edit-modal-budget').value) || 0;
+            if(!name) return await appAlert("Attenzione", "Inserisci il nome", "danger"); 
+            if(editProjectTasks.length === 0) return await appAlert("Attenzione", "Configura almeno un'attività", "danger");
+            await supabaseClient.from('projects').update({ name, client, budget, tasks: editProjectTasks }).eq('id', id); 
+            await supabaseClient.from('entries').update({ project_name: name }).eq('project_id', id);
+            await fetchProjects(); await fetchEntries();
+            closeEditProjectModal(); showProjectDetail(id); 
+        }
+
+        function renderStrategicCharts() {
+            if(userProfile.role !== 'admin') return;
+            const activeProjects = projects.filter(p => !p.is_archived);
+            let totalBudget = 0, totalSpent = 0, projectSpend = {}; let totalTaskHours = 0;
+            activeProjects.forEach(p => { totalBudget += (p.budget || 0); const costHrs = entries.filter(e => e.project_id === p.id).reduce((s, e) => s + Number(e.rate || 0), 0); const costExp = expenses.filter(ex => ex.project_id === p.id).reduce((s, ex) => s + Number(ex.amount || 0), 0); const pSpent = costHrs + costExp; totalSpent += pSpent; projectSpend[p.name] = pSpent; });
+            const archivedBudget = projects.filter(p => p.is_archived).reduce((s,p) => s + p.budget, 0); const archivedHrs = entries.filter(e => projects.find(p => p.id === e.project_id && p.is_archived)).reduce((s,e) => s + Number(e.rate), 0); const archivedExp = expenses.filter(ex => projects.find(p => p.id === ex.project_id && p.is_archived)).reduce((s,ex) => s + Number(ex.amount), 0);
+            const profit = archivedBudget - (archivedHrs + archivedExp); const margin = totalBudget - totalSpent;
+            const profitCard = document.getElementById('card-profit'); const profitLabel = document.getElementById('label-profit');
+            document.getElementById('kpi-profit').innerText = `€ ${profit.toFixed(2)}`;
+            
+            if (profit < 0) { 
+                profitLabel.innerText = "Perdita (Archiviati)"; 
+                profitCard.classList.replace('border-emerald-100', 'border-red-200'); 
+                profitCard.classList.remove('bg-emerald-50/60'); 
+                profitCard.classList.add('bg-red-50'); 
+                document.getElementById('kpi-profit').classList.replace('text-slate-800', 'text-red-600'); 
+            } else { 
+                profitLabel.innerText = "Utile (Archiviati)"; 
+                profitCard.classList.replace('border-red-200', 'border-emerald-100'); 
+                profitCard.classList.remove('bg-red-50'); 
+                profitCard.classList.add('bg-emerald-50/60'); 
+                document.getElementById('kpi-profit').classList.replace('text-red-600', 'text-slate-800'); 
+            }
+            
+            const marginEl = document.getElementById('kpi-margin'); marginEl.innerText = `€ ${margin.toFixed(2)}`;
+            if (margin < 0) marginEl.classList.replace('text-primary-600', 'text-red-500'); else marginEl.classList.replace('text-red-500', 'text-primary-600');
+            
+            let topBurner = "-", maxSpent = 0; for(let name in projectSpend) if(projectSpend[name] > maxSpent) { maxSpent = projectSpend[name]; topBurner = name; } 
+            document.getElementById('kpi-burner').innerText = topBurner;
+            
+            const theme = THEMES[currentBusinessType];
+            Chart.defaults.font.family = "'Inter', sans-serif";
+            if(charts.global) charts.global.destroy();
+            charts.global = new Chart(document.getElementById('chart-global'), { type: 'bar', data: { labels: ['Portafoglio Attivo'], datasets: [ { label: 'Costi (Ore+Spese)', data: [totalSpent], backgroundColor: theme.chartMainColor, borderRadius: 6 }, { label: 'Budget', data: [totalBudget], backgroundColor: '#f1f5f9', hoverBackgroundColor: '#e2e8f0', borderRadius: 6 } ]}, options: { responsive: true, maintainAspectRatio: false } });
+            const taskStats = {}; entries.filter(e => activeProjects.find(p => p.id === e.project_id)).forEach(e => { const hrs = Number(e.duration); taskStats[e.task||'Altro'] = (taskStats[e.task||'Altro']||0) + hrs; totalTaskHours += hrs; });
+            const topTasks = Object.entries(taskStats).sort((a,b) => b[1] - a[1]).slice(0, 5);
+            const taskLabelsWithPerc = topTasks.map(t => `${t[0]} - ${totalTaskHours > 0 ? Math.round((t[1] / totalTaskHours) * 100) : 0}%`);
+            if(charts.tasks) charts.tasks.destroy();
+            charts.tasks = new Chart(document.getElementById('chart-tasks-dist'), { type: 'doughnut', data: { labels: taskLabelsWithPerc, datasets: [{ data: topTasks.map(t=>t[1]), backgroundColor: theme.chartPalette, borderWidth: 0 }]}, options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { position: 'right', labels: { boxWidth: 10, font: { size: 10, weight: 'bold' } } } } } });
+        }
+
+        function prevWeek() { currentWeekStart.setDate(currentWeekStart.getDate() - 7); renderEntries(); }
+        function nextWeek() { currentWeekStart.setDate(currentWeekStart.getDate() + 7); renderEntries(); }
+        
+        function jumpToDate(dateString) {
+            if(!dateString) return;
+            currentWeekStart = getMonday(new Date(dateString));
+            renderEntries();
+        }
+
+        function renderEntries() {
+            const table = document.getElementById('entries-table-desktop'); 
+            const mobile = document.getElementById('entries-list-mobile');
+            const start = new Date(currentWeekStart); start.setHours(0,0,0,0); 
+            const end = new Date(start); end.setDate(end.getDate() + 6); end.setHours(23,59,59,999);
+            
+            document.getElementById('week-display').innerText = `${start.toLocaleDateString('it-IT', {day:'2-digit',month:'short'})} - ${end.toLocaleDateString('it-IT', {day:'2-digit',month:'short',year:'numeric'})}`;
+            
+            const isStaff = userProfile.role !== 'admin';
+
+            let weekly = entries.filter(e => {
+                const d = new Date(e.created_at).getTime();
+                const inDate = d >= start.getTime() && d <= end.getTime();
+                
+                if (isStaff) {
+                    return inDate && e.user_email === userProfile.email;
+                }
+                return inDate;
+            });
+
+            document.getElementById('entries-empty-state').classList.toggle('force-hide', weekly.length > 0); 
+            table.parentElement.classList.toggle('force-hide', weekly.length === 0);
+            
+            table.innerHTML = weekly.map(e => `<tr class="hover:bg-slate-50 border-b border-slate-100 transition-colors"><td class="p-5 font-bold text-slate-500 text-xs">${new Date(e.created_at).toLocaleDateString('it-IT', {weekday:'short', day:'2-digit'})}</td><td class="p-5 text-center"><span class="bg-slate-100 text-slate-600 text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider">${e.user_name}</span></td><td class="p-5 font-black text-slate-800 tracking-tight">${e.project_name}</td><td class="p-5"><div class="text-xs font-bold text-slate-600">${e.task}</div><div class="text-[11px] text-slate-400 mt-0.5">${e.notes||''}</div></td><td class="p-5 font-mono font-black text-primary-600">${Number(e.duration).toFixed(2)}h</td><td class="p-5 text-right admin-only"><div class="flex justify-end gap-3 items-center"><span class="font-mono text-slate-400 text-sm font-bold">€${Number(e.rate).toFixed(2)}</span><button onclick="openEditEntryModal('${e.id}')" class="text-slate-300 hover:text-primary-600 p-1.5 hover:bg-primary-50 rounded-lg transition-colors"><i data-lucide="pencil" class="w-4 h-4"></i></button><button onclick="deleteEntry('${e.id}')" class="text-slate-300 hover:text-red-600 p-1.5 hover:bg-red-50 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div></td></tr>`).join('');
+            
+            mobile.innerHTML = weekly.map(e => `<div class="p-5 border-b border-slate-100 bg-white"><div class="flex justify-between mb-3"><div><div class="flex gap-2 mb-1.5"><span class="text-[9px] font-bold text-slate-600 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded-md uppercase tracking-wider">${e.user_name}</span><span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">${new Date(e.created_at).toLocaleDateString('it-IT', {weekday:'short', day:'2-digit'})}</span></div><h4 class="font-black text-sm text-slate-800 tracking-tight">${e.project_name}</h4></div><span class="font-mono font-black text-primary-600 bg-primary-50 border border-primary-100 px-2 py-1 rounded-lg h-fit">${Number(e.duration).toFixed(2)}h</span></div><div class="flex flex-col gap-3"><div class="max-w-[90%]"><span class="text-xs text-slate-600 font-bold">${e.task}</span><div class="text-[11px] text-slate-400 mt-0.5">${e.notes||''}</div></div><div class="admin-only flex justify-between border-t border-slate-100 pt-3"><span class="font-mono text-slate-500 font-bold text-xs">Costo: €${Number(e.rate).toFixed(2)}</span><div class="flex gap-2"><button onclick="openEditEntryModal('${e.id}')" class="text-slate-400 p-1.5 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button><button onclick="deleteEntry('${e.id}')" class="text-slate-400 p-1.5 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></div></div></div></div>`).join('');
+            lucide.createIcons();
+        }
+
+        async function getBase64FromUrl(url) { return new Promise((resolve, reject) => { const img = new Image(); img.crossOrigin = 'Anonymous'; img.onload = () => { const canvas = document.createElement('canvas'); canvas.width = img.naturalWidth; canvas.height = img.naturalHeight; const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0); resolve({ url: canvas.toDataURL('image/png'), width: img.naturalWidth, height: img.naturalHeight }); }; img.onerror = reject; img.src = url; }); }
+
+        async function exportProjectPDF(id) {
+            if (activePlan === 'starter') return openUpgradeModal('Esportazione Report PDF');
+            const p = projects.find(x => x.id === id); if(!p) return;
+            const pEntries = entries.filter(e => e.project_id === id).sort((a,b) => new Date(b.created_at) - new Date(a.created_at)); const pExpenses = expenses.filter(ex => ex.project_id === id).sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+            const { jsPDF } = window.jspdf; const doc = new jsPDF();
+            
+            let logoData = null, startY = 20;
+            if(studioData?.logo_url) { try { logoData = await getBase64FromUrl(studioData.logo_url); } catch(err) {} }
+            if(logoData) { const imgH = 12; const imgW = (logoData.width/logoData.height)*imgH; doc.addImage(logoData.url, 'PNG', 14, 10, imgW, imgH); startY = 30; }
+            
+            doc.setFontSize(22); doc.setTextColor(15, 23, 42); doc.text(p.name, 14, startY); doc.setFontSize(12); doc.setTextColor(100, 116, 139); doc.text(`Cliente: ${p.client || 'Interno'}`, 14, startY + 8);
+            const totalHours = pEntries.reduce((s,e) => s + Number(e.duration), 0); const totalHrsCost = pEntries.reduce((s,e) => s + Number(e.rate), 0); const totalExp = pExpenses.reduce((s,ex) => s + Number(ex.amount), 0);
+            doc.setFontSize(10); doc.setTextColor(15, 23, 42); doc.text(`Totale: €${(totalHrsCost+totalExp).toFixed(2)} | Ore: €${totalHrsCost.toFixed(2)} (${totalHours.toFixed(1)}h) | Spese: €${totalExp.toFixed(2)}`, 14, startY + 18);
+            
+            const pdfColor = THEMES[currentBusinessType].pdfColor;
+            doc.setFontSize(12); doc.setTextColor(...pdfColor); doc.text("Registro Ore", 14, startY + 28);
+            doc.autoTable({ startY: startY + 32, head: [['Data', 'Team', 'Attività', 'Ore', 'Costo']], body: pEntries.map(e => [new Date(e.created_at).toLocaleDateString(), e.user_name, e.notes ? `${e.task}\n(${e.notes})` : e.task, `${Number(e.duration).toFixed(1)}h`, `€${Number(e.rate).toFixed(2)}`]), theme: 'striped', headStyles: { fillColor: pdfColor }, styles: { fontSize: 9 } });
+
+            if(pExpenses.length > 0) {
+                const finalY = doc.lastAutoTable.finalY || startY + 50; doc.setFontSize(12); doc.setTextColor(217, 119, 6); doc.text("Spese Extra", 14, finalY + 15);
+                doc.autoTable({ startY: finalY + 19, head: [['Data', 'Da', 'Descrizione', 'Importo']], body: pExpenses.map(ex => [new Date(ex.created_at).toLocaleDateString(), ex.user_name, ex.description, `€${Number(ex.amount).toFixed(2)}`]), theme: 'striped', headStyles: { fillColor: [245, 158, 11] }, styles: { fontSize: 9 } });
+            }
+            doc.save(`Lavoro_${p.name.replace(/\s+/g,'_')}.pdf`);
+        }
+
+        function openReportModal() { 
+            if(activePlan === 'starter') return openUpgradeModal('Generazione Report PDF Cumulativi');
+            const today = new Date(); const fmt = (d) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+            const content = document.getElementById('report-modal-content');
+            content.innerHTML = `
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Dal</label><input type="date" id="report-start" value="${fmt(firstDay)}" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div>
+                    <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Al</label><input type="date" id="report-end" value="${fmt(today)}" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div>
+                </div>
+                <button onclick="generatePDFReport()" class="w-full bg-slate-900 text-white py-3.5 mt-6 rounded-xl font-bold hover:bg-slate-800 transition-all active:scale-[0.98] shadow-sm flex items-center justify-center gap-2"><i data-lucide="file-text" class="w-4 h-4"></i> Genera PDF</button>
+            `;
+            document.getElementById('modal-report').classList.remove('force-hide'); lucide.createIcons();
+        }
+        
+        function closeReportModal() { document.getElementById('modal-report').classList.add('force-hide'); }
+
+        async function generatePDFReport() {
+            if (activePlan === 'starter') return;
+            const s = document.getElementById('report-start').value, e = document.getElementById('report-end').value;
+            if(!s || !e) return await appAlert("Attenzione", "Seleziona le date per il report.", "danger"); 
+            const start = new Date(s); start.setHours(0,0,0,0); const end = new Date(e); end.setHours(23,59,59,999);
+            if(start > end) return await appAlert("Attenzione", "La data di inizio deve essere precedente a quella di fine.", "danger");
+            
+            const filE = entries.filter(ent => { const d = new Date(ent.created_at); return d >= start && d <= end; });
+            if (filE.length === 0) return await appAlert("Informazione", "Nessuna attività registrata nel periodo selezionato.", "info");
+
+            const { jsPDF } = window.jspdf; const doc = new jsPDF();
+            const pdfColor = THEMES[currentBusinessType].pdfColor;
+            let logoData = null, startY = 30; if(studioData?.logo_url) { try { logoData = await getBase64FromUrl(studioData.logo_url); } catch(err) {} }
+            if(logoData) { const imgH = 12; const imgW = (logoData.width/logoData.height)*imgH; doc.addImage(logoData.url, 'PNG', 14, 15, imgW, imgH); startY = 40; }
+
+            doc.setFontSize(26); doc.setTextColor(15, 23, 42); doc.text(studioData?.name||"Azienda", 14, startY);
+            doc.setFontSize(16); doc.setTextColor(15, 23, 42); doc.text(`Rapporto Attività`, 14, startY + 15);
+            doc.setFontSize(12); doc.setTextColor(100, 116, 139); doc.text(`Dal ${start.toLocaleDateString()} al ${end.toLocaleDateString()}`, 14, startY + 23);
+            
+            const totalH = filE.reduce((sum, ent) => sum + Number(ent.duration), 0); const totalC = filE.reduce((sum, ent) => sum + Number(ent.rate), 0);
+            doc.setDrawColor(226, 232, 240); doc.line(14, startY+30, 196, startY+30);
+            doc.setFontSize(12); doc.setTextColor(15, 23, 42); doc.text(`Riepilogo Globale:`, 14, startY + 45);
+            doc.setFontSize(10); doc.text(`Ore Totali: ${totalH.toFixed(1)}h`, 14, startY + 53); doc.text(`Valore Economico: €${totalC.toFixed(2)}`, 14, startY + 60);
+
+            const projLabel = currentBusinessType === 'impresa' ? 'Cantiere' : 'Progetto';
+
+            [...new Set(filE.map(ent => ent.project_id))].forEach((pid) => {
+                const p = projects.find(x => x.id === pid); const pE = filE.filter(ent => ent.project_id === pid).sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+                doc.addPage(); let pY = 20; if(logoData) { doc.addImage(logoData.url, 'PNG', 14, 10, (logoData.width/logoData.height)*8, 8); pY = 28; }
+                doc.setFontSize(18); doc.setTextColor(...pdfColor); doc.text(p?p.name:"Eliminato", 14, pY);
+                doc.setFontSize(10); doc.setTextColor(100, 116, 139); doc.text(`Cliente: ${p?p.client:'-'} | Periodo: ${s} / ${e}`, 14, pY+7);
+                doc.text(`Ore Periodo: ${pE.reduce((sum,ent)=>sum+Number(ent.duration),0).toFixed(1)}h | Valore: €${pE.reduce((sum,ent)=>sum+Number(ent.rate),0).toFixed(2)}`, 14, pY+13);
+                doc.autoTable({ startY: pY+20, head: [['Data', 'Team', 'Attività', 'Ore', 'Costo']], body: pE.map(ent => [new Date(ent.created_at).toLocaleDateString(), ent.user_name, ent.notes ? `${ent.task}\n(${ent.notes})` : ent.task, `${Number(ent.duration).toFixed(1)}h`, `€${Number(ent.rate).toFixed(2)}`]), theme: 'striped', headStyles: { fillColor: pdfColor }, styles: { fontSize: 9 } });
+            });
+            doc.save(`Report_${start.toISOString().split('T')[0]}.pdf`); closeReportModal();
+        }
+
+        function openTeamReportModal() { 
+            if(activePlan === 'starter') return openUpgradeModal('Report Team PDF');
+            const today = new Date(); const fmt = (d) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+            document.getElementById('team-report-start').value = fmt(firstDay); document.getElementById('team-report-end').value = fmt(today);
+            const userSelect = document.getElementById('team-report-user');
+            const activeProfiles = profiles.filter(p => p.role !== 'inactive');
+            userSelect.innerHTML = '<option value="all">Tutto il Team</option>' + activeProfiles.map(pr => `<option value="${pr.full_name}">${pr.full_name}</option>`).join('');
+            document.getElementById('modal-team-report').classList.remove('force-hide'); lucide.createIcons();
+        }
+
+        function closeTeamReportModal() { document.getElementById('modal-team-report').classList.add('force-hide'); }
+
+        async function generateTeamPDFReport() {
+            if (activePlan === 'starter') return;
+            const s = document.getElementById('team-report-start').value, e = document.getElementById('team-report-end').value;
+            const selectedUser = document.getElementById('team-report-user').value;
+            
+            if(!s || !e) return await appAlert("Attenzione", "Seleziona le date per il report.", "danger"); 
+            const start = new Date(s); start.setHours(0,0,0,0); const end = new Date(e); end.setHours(23,59,59,999);
+            if(start > end) return await appAlert("Attenzione", "La data di inizio deve essere precedente a quella di fine.", "danger");
+            
+            let filE = entries.filter(ent => { const d = new Date(ent.created_at); return d >= start && d <= end; });
+            if (selectedUser !== 'all') { filE = filE.filter(ent => ent.user_name === selectedUser); }
+            if (filE.length === 0) return await appAlert("Informazione", "Nessuna attività registrata per il periodo e il collaboratore selezionati.", "info");
+
+            const { jsPDF } = window.jspdf; const doc = new jsPDF();
+            const pdfColor = THEMES[currentBusinessType].pdfColor;
+            let logoData = null; if(studioData?.logo_url) { try { logoData = await getBase64FromUrl(studioData.logo_url); } catch(err) {} }
+
+            const usersInReport = [...new Set(filE.map(ent => ent.user_name))].sort();
+
+            usersInReport.forEach((uname, index) => {
+                const uEntries = filE.filter(ent => ent.user_name === uname).sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+                const uTotalH = uEntries.reduce((sum, ent) => sum + Number(ent.duration), 0);
+                const uTotalC = uEntries.reduce((sum, ent) => sum + Number(ent.rate), 0);
+
+                if(index > 0) doc.addPage(); 
+                
+                let currentY = 20; 
+                if(logoData) { doc.addImage(logoData.url, 'PNG', 14, 10, (logoData.width/logoData.height)*8, 8); currentY = 28; } 
+
+                doc.setFontSize(18); doc.setTextColor(...pdfColor); doc.text(`Collaboratore: ${uname}`, 14, currentY);
+                doc.setFontSize(10); doc.setTextColor(100, 116, 139); doc.text(`Totale Periodo: ${uTotalH.toFixed(1)}h | Costo Totale: €${uTotalC.toFixed(2)}`, 14, currentY+7);
+
+                currentY += 15;
+                const projLabel = currentBusinessType === 'impresa' ? 'Cantiere' : 'Progetto';
+                const projectsForUser = [...new Set(uEntries.map(ent => ent.project_name))].sort();
+
+                projectsForUser.forEach(projName => {
+                    const pEntries = uEntries.filter(ent => ent.project_name === projName);
+                    const pTotalH = pEntries.reduce((sum, ent) => sum + Number(ent.duration), 0);
+                    const pTotalC = pEntries.reduce((sum, ent) => sum + Number(ent.rate), 0);
+
+                    if(currentY > doc.internal.pageSize.height - 30) { doc.addPage(); currentY = 20; }
+
+                    doc.setFontSize(12); doc.setTextColor(15, 23, 42); doc.text(`${projLabel}: ${projName}`, 14, currentY);
+                    doc.setFontSize(9); doc.setTextColor(100, 116, 139); doc.text(`Subtotale: ${pTotalH.toFixed(1)}h | €${pTotalC.toFixed(2)}`, 14, currentY + 5);
+
+                    doc.autoTable({
+                        startY: currentY + 8,
+                        head: [['Data', 'Attività', 'Ore', 'Costo']],
+                        body: pEntries.map(ent => [ new Date(ent.created_at).toLocaleDateString(), ent.notes ? `${ent.task}\n(${ent.notes})` : ent.task, `${Number(ent.duration).toFixed(1)}h`, `€${Number(ent.rate).toFixed(2)}` ]),
+                        theme: 'striped', headStyles: { fillColor: pdfColor }, styles: { fontSize: 9 }, margin: { bottom: 15 }
+                    });
+                    currentY = doc.lastAutoTable.finalY + 12; 
+                });
+            });
+
+            doc.save(`Report_Team_${start.toISOString().split('T')[0]}.pdf`); closeTeamReportModal();
+        }
+        
+        lucide.createIcons();
+        checkUser();
+    </script>
+</body>
+</html>
