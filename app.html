@@ -39,16 +39,28 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         
+        /* THEME: STUDIO TECNICO (INDIGO DEFAULT) */
         :root {
-            --color-primary-50: 238 242 255; --color-primary-100: 224 231 255; --color-primary-200: 199 210 254;
-            --color-primary-300: 165 180 252; --color-primary-400: 129 140 248; --color-primary-500: 99 102 241;
-            --color-primary-600: 79 70 229; --color-primary-700: 67 56 202;
+            --color-primary-50: 238 242 255;
+            --color-primary-100: 224 231 255;
+            --color-primary-200: 199 210 254;
+            --color-primary-300: 165 180 252;
+            --color-primary-400: 129 140 248;
+            --color-primary-500: 99 102 241;
+            --color-primary-600: 79 70 229;
+            --color-primary-700: 67 56 202;
         }
 
+        /* THEME: IMPRESA EDILE (AMBER/ORANGE) */
         body.theme-impresa {
-            --color-primary-50: 255 251 235; --color-primary-100: 254 243 199; --color-primary-200: 253 230 138;
-            --color-primary-300: 252 211 77; --color-primary-400: 251 191 36; --color-primary-500: 245 158 11;
-            --color-primary-600: 217 119 6; --color-primary-700: 180 83 9;
+            --color-primary-50: 255 251 235;
+            --color-primary-100: 254 243 199;
+            --color-primary-200: 253 230 138;
+            --color-primary-300: 252 211 77;
+            --color-primary-400: 251 191 36;
+            --color-primary-500: 245 158 11;
+            --color-primary-600: 217 119 6;
+            --color-primary-700: 180 83 9;
         }
 
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; -webkit-tap-highlight-color: transparent; }
@@ -59,7 +71,9 @@
         
         .force-hide { display: none !important; }
         .modal { background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(4px); }
+        
         body:not(.is-admin) .admin-only { display: none !important; }
+        
         .is-archived { opacity: 0.6; filter: grayscale(0.8); }
         .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
         @media (max-width: 1023px) { .mobile-tab { display: none; } .mobile-tab.active { display: block; } }
@@ -69,7 +83,10 @@
 
         select.appearance-none {
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-            background-position: right 1rem center; background-repeat: no-repeat; background-size: 1.2em 1.2em; padding-right: 2.5rem !important;
+            background-position: right 1rem center;
+            background-repeat: no-repeat;
+            background-size: 1.2em 1.2em;
+            padding-right: 2.5rem !important;
         }
     </style>
 </head>
@@ -97,14 +114,17 @@
                 </div>
                 <div class="space-y-4">
                     <div id="signup-fields" class="force-hide space-y-4">
+                        
                         <div class="p-5 bg-slate-50 rounded-xl border border-slate-200">
                             <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-3">Tipo di Account</label>
+                            
                             <div class="space-y-3">
                                 <div>
                                     <label class="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200 cursor-pointer hover:border-primary-300 transition-all shadow-sm">
                                         <input type="radio" name="main-role" value="owner" onchange="toggleSignupOptions()" class="w-4 h-4 text-primary-600 focus:ring-primary-500">
                                         <span class="text-sm font-bold text-slate-700">Manager (Crea Spazio di Lavoro)</span>
                                     </label>
+                                    
                                     <div id="sector-selection" class="force-hide pl-4 border-l-2 border-primary-200 ml-3 mt-3 transition-all duration-300">
                                         <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-2">Seleziona il tuo settore:</label>
                                         <div class="flex gap-2">
@@ -119,17 +139,24 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <label class="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200 cursor-pointer hover:border-primary-300 transition-all shadow-sm">
                                     <input type="radio" name="main-role" value="staff" onchange="toggleSignupOptions()" class="w-4 h-4 text-primary-600 focus:ring-primary-500">
                                     <span class="text-sm font-bold text-slate-700">Collaboratore (Unisciti)</span>
                                 </label>
                             </div>
-                            <div id="trial-info-container" class="force-hide mt-4 p-3.5 bg-primary-50 border border-primary-100 rounded-xl flex gap-3 items-start"><i data-lucide="gift" class="w-5 h-5 text-primary-600 shrink-0"></i><p class="text-xs text-primary-900 leading-relaxed"><strong class="font-black">15 giorni di prova gratuita!</strong><br>Nessuna carta richiesta.</p></div>
+
+                            <div id="trial-info-container" class="force-hide mt-4 p-3.5 bg-primary-50 border border-primary-100 rounded-xl flex gap-3 items-start">
+                                <i data-lucide="gift" class="w-5 h-5 text-primary-600 shrink-0"></i>
+                                <p class="text-xs text-primary-900 leading-relaxed"><strong class="font-black">15 giorni di prova gratuita!</strong><br>Nessuna carta richiesta.</p>
+                            </div>
                         </div>
+                        
                         <div id="invite-code-container" class="force-hide">
                             <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Codice Invito Manager</label>
                             <input type="text" id="invite-code-input" onkeydown="if(event.key === 'Enter'){ event.preventDefault(); handleAuthAction(); }" placeholder="Incolla codice" class="w-full border border-primary-200 bg-primary-50/30 rounded-xl p-3.5 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all">
                         </div>
+                        
                         <input type="text" id="full-name" onkeydown="if(event.key === 'Enter'){ event.preventDefault(); handleAuthAction(); }" placeholder="Nome e Cognome" class="w-full border border-slate-200 rounded-xl p-3.5 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all bg-white">
                     </div>
                     
@@ -139,9 +166,12 @@
                     <div id="signup-legal" class="force-hide mt-4 mb-2">
                         <label class="flex items-start gap-2.5 cursor-pointer group">
                             <input type="checkbox" id="accept-terms" class="mt-0.5 w-4 h-4 text-primary-600 border-slate-300 rounded focus:ring-primary-500 transition-all cursor-pointer">
-                            <span class="text-[10px] text-slate-500 leading-tight">Ho letto e accetto i <a href="termini.html" target="_blank" class="font-bold text-slate-700 group-hover:text-primary-600 hover:underline transition-colors">Termini</a> e la <a href="privacy.html" target="_blank" class="font-bold text-slate-700 group-hover:text-primary-600 hover:underline transition-colors">Privacy</a>.*</span>
+                            <span class="text-[10px] text-slate-500 leading-tight">
+                                Ho letto e accetto integralmente i <a href="termini.html" target="_blank" class="font-bold text-slate-700 group-hover:text-primary-600 hover:underline transition-colors">Termini di Servizio</a> e la <a href="privacy.html" target="_blank" class="font-bold text-slate-700 group-hover:text-primary-600 hover:underline transition-colors">Privacy Policy</a>.*
+                            </span>
                         </label>
                     </div>
+
                     <button id="btn-auth" onclick="handleAuthAction()" class="w-full bg-slate-900 text-white py-3.5 rounded-xl font-bold hover:bg-slate-800 transition-all active:scale-[0.98] shadow-sm mt-2">Accedi ora</button>
                 </div>
             </div>
@@ -154,6 +184,7 @@
             <div class="w-16 h-16 bg-slate-100 text-slate-500 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-slate-200"><i data-lucide="door-open" class="w-8 h-8"></i></div>
             <h2 class="text-2xl font-black text-slate-900 mb-2 tracking-tight text-center" id="limbo-user-name">Bentornato!</h2>
             <p class="text-slate-500 text-sm mb-8 leading-relaxed text-center font-medium">Al momento non fai più parte di alcun team aziendale. <br>Scegli come vuoi continuare:</p>
+            
             <div class="space-y-6">
                 <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200">
                     <h3 class="text-sm font-black text-slate-800 mb-3 flex items-center gap-2"><i data-lucide="link" class="w-4 h-4 text-primary-500"></i> Unisciti a uno Studio</h3>
@@ -162,18 +193,33 @@
                         <button onclick="limboJoinStudio()" class="bg-primary-600 text-white px-5 rounded-xl font-bold hover:bg-primary-700 transition-all shadow-sm active:scale-95 shrink-0 text-sm">Entra</button>
                     </div>
                 </div>
-                <div class="flex items-center gap-4"><div class="flex-1 h-[1px] bg-slate-200"></div><span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">OPPURE</span><div class="flex-1 h-[1px] bg-slate-200"></div></div>
+
+                <div class="flex items-center gap-4">
+                    <div class="flex-1 h-[1px] bg-slate-200"></div>
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">OPPURE</span>
+                    <div class="flex-1 h-[1px] bg-slate-200"></div>
+                </div>
+
                 <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                    <h3 class="text-sm font-black text-slate-800 mb-3 flex items-center gap-2"><i data-lucide="briefcase" class="w-4 h-4 text-amber-500"></i> Crea il tuo Studio</h3>
+                    <h3 class="text-sm font-black text-slate-800 mb-3 flex items-center gap-2"><i data-lucide="briefcase" class="w-4 h-4 text-amber-500"></i> Crea il tuo Spazio di Lavoro</h3>
                     <div class="flex gap-2 mb-3">
-                        <label class="flex-1 flex items-center justify-center gap-2 p-2.5 bg-slate-50 rounded-lg border border-slate-200 cursor-pointer has-[:checked]:border-primary-500 has-[:checked]:ring-1 has-[:checked]:ring-primary-500"><input type="radio" name="limbo-business-type" value="studio" checked class="sr-only"><span class="text-xs font-bold text-slate-700">Studio Tecnico</span></label>
-                        <label class="flex-1 flex items-center justify-center gap-2 p-2.5 bg-slate-50 rounded-lg border border-slate-200 cursor-pointer has-[:checked]:border-amber-500 has-[:checked]:ring-1 has-[:checked]:ring-amber-500"><input type="radio" name="limbo-business-type" value="impresa" class="sr-only"><span class="text-xs font-bold text-slate-700">Impresa Edile</span></label>
+                        <label class="flex-1 flex items-center justify-center gap-2 p-2.5 bg-slate-50 rounded-lg border border-slate-200 cursor-pointer hover:border-primary-300 transition-all relative has-[:checked]:bg-white has-[:checked]:border-primary-500 has-[:checked]:ring-1 has-[:checked]:ring-primary-500">
+                            <input type="radio" name="limbo-business-type" value="studio" checked class="sr-only">
+                            <span class="text-xs font-bold text-slate-700">Studio Tecnico</span>
+                        </label>
+                        <label class="flex-1 flex items-center justify-center gap-2 p-2.5 bg-slate-50 rounded-lg border border-slate-200 cursor-pointer hover:border-amber-300 transition-all relative has-[:checked]:bg-white has-[:checked]:border-amber-500 has-[:checked]:ring-1 has-[:checked]:ring-amber-500">
+                            <input type="radio" name="limbo-business-type" value="impresa" class="sr-only">
+                            <span class="text-xs font-bold text-slate-700">Impresa Edile</span>
+                        </label>
                     </div>
-                    <input type="text" id="limbo-studio-name" placeholder="Nome Azienda" class="w-full border border-slate-200 rounded-xl p-3 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all mb-3 bg-slate-50">
-                    <button onclick="limboCreateStudio()" class="w-full bg-slate-900 text-white py-3.5 rounded-xl font-bold hover:bg-slate-800 transition-all active:scale-[0.98] shadow-sm flex items-center justify-center w-full">Diventa Manager</button>
+                    <input type="text" id="limbo-studio-name" placeholder="Nome della tua Azienda" class="w-full border border-slate-200 rounded-xl p-3 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all mb-3 bg-slate-50">
+                    <button onclick="limboCreateStudio()" class="w-full bg-slate-900 text-white py-3.5 rounded-xl font-bold hover:bg-slate-800 transition-all active:scale-[0.98] shadow-sm flex justify-center items-center gap-2">Diventa Manager</button>
                 </div>
             </div>
-            <div class="text-center mt-6"><button onclick="handleLogout()" class="text-[11px] font-bold text-slate-400 hover:text-slate-600 uppercase tracking-wider">Esci dall'account</button></div>
+            
+            <div class="text-center mt-6">
+                <button onclick="handleLogout()" class="text-[11px] font-bold text-slate-400 hover:text-slate-600 transition-colors uppercase tracking-wider">Esci dall'account</button>
+            </div>
         </div>
     </div>
 
@@ -182,10 +228,16 @@
             <div class="w-16 h-16 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-red-100"><i data-lucide="lock" class="w-8 h-8"></i></div>
             <h2 class="text-2xl font-black text-slate-900 mb-2 tracking-tight">Abbonamento Scaduto</h2>
             <p class="text-slate-500 text-sm mb-8 leading-relaxed">L'abbonamento per questo Spazio di Lavoro è scaduto. Attiva un piano per continuare a lavorare.</p>
+            
             <div class="flex flex-col gap-3 mb-6">
-                <button onclick="redirectToStripe('premium')" class="w-full bg-primary-600 text-white py-3.5 rounded-xl font-bold hover:bg-primary-700 transition-all shadow-sm active:scale-[0.98] flex justify-center items-center gap-2"><i data-lucide="zap" class="w-4 h-4"></i> Attiva PREMIUM (59,99€/mese)</button>
-                <button onclick="redirectToStripe('starter')" class="w-full bg-white border border-slate-200 text-slate-700 py-3.5 rounded-xl font-bold hover:bg-slate-50 transition-all active:scale-[0.98] flex justify-center items-center gap-2 text-sm shadow-sm">Attiva STARTER (29,99€/mese)</button>
+                <button onclick="redirectToStripe('premium')" class="w-full bg-primary-600 text-white py-3.5 rounded-xl font-bold hover:bg-primary-700 transition-all shadow-sm active:scale-[0.98] flex justify-center items-center gap-2">
+                    <i data-lucide="zap" class="w-4 h-4"></i> Attiva PREMIUM (59,99€/mese)
+                </button>
+                <button onclick="redirectToStripe('starter')" class="w-full bg-white border border-slate-200 text-slate-700 py-3.5 rounded-xl font-bold hover:bg-slate-50 transition-all active:scale-[0.98] flex justify-center items-center gap-2 text-sm shadow-sm">
+                    Attiva STARTER (29,99€/mese)
+                </button>
             </div>
+            
             <button onclick="handleLogout()" class="text-xs font-bold text-slate-400 hover:text-slate-600 transition-colors">Esci dall'account</button>
         </div>
     </div>
@@ -212,6 +264,7 @@
                 <div class="flex items-center gap-2 lg:gap-4 shrink-0">
                     <button id="btn-header-pdf" onclick="openReportModal()" class="admin-only text-[10px] lg:text-xs font-bold text-slate-600 hover:text-primary-600 flex items-center gap-1.5 bg-white border border-slate-200 hover:border-primary-200 hover:bg-primary-50 lg:border-transparent lg:bg-transparent lg:hover:bg-transparent px-2.5 py-1.5 lg:p-0 rounded-lg transition-all shadow-sm lg:shadow-none"><i data-lucide="file-text" class="w-4 h-4"></i> <span class="hidden lg:inline">PDF REPORT</span></button>
                     <div class="hidden lg:block h-6 w-[1px] bg-slate-200 admin-only mx-2"></div>
+                    
                     <button onclick="openAccountModal()" class="flex items-center gap-2 border border-transparent hover:border-slate-200 hover:bg-slate-50 p-1.5 lg:px-3 lg:py-1.5 rounded-xl transition-all group">
                         <i data-lucide="user" class="w-5 h-5 text-slate-400 group-hover:text-primary-600 lg:hidden"></i>
                         <span id="user-display" class="hidden lg:inline text-xs font-bold text-slate-600 uppercase truncate max-w-[120px] group-hover:text-primary-600 tracking-wide"></span>
@@ -221,7 +274,9 @@
         </header>
 
         <main class="max-w-7xl mx-auto px-4 lg:px-6 py-6 lg:py-10 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 flex-grow w-full">
+            
             <div class="lg:col-span-4 flex flex-col gap-6 lg:gap-8">
+                
                 <section class="bg-slate-100 border border-slate-200/80 rounded-2xl p-6 shadow-md mobile-tab active" data-tab="operate">
                     <div>
                         <div class="flex justify-between items-center mb-6">
@@ -244,16 +299,20 @@
                         <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Nome</label><input type="text" id="new-proj-name" placeholder="Nome Lavoro" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white shadow-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all text-slate-700"></div>
                         <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Cliente</label><input type="text" id="new-proj-client" placeholder="Nome Cliente" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white shadow-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all text-slate-700"></div>
                         <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Budget Assegnato</label><div class="flex gap-2 bg-white shadow-sm p-3 rounded-xl border border-slate-200 focus-within:border-primary-500 focus-within:ring-4 focus-within:ring-primary-500/10 transition-all"><span class="text-slate-400 font-bold text-sm">€</span><input type="number" id="new-proj-budget" placeholder="0.00" class="bg-transparent w-full outline-none text-sm font-bold text-slate-800"></div></div>
+                        
                         <div class="pt-5 mt-2 border-t border-slate-200">
                             <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-2 ml-1">Flusso di lavoro</label>
                             <div class="flex gap-2 mb-3">
                                 <select id="new-proj-template" onchange="applyTemplateToNewProject()" class="flex-1 border border-slate-200 rounded-xl p-3 text-sm bg-white shadow-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none cursor-pointer text-slate-700"><option value="" selected disabled>Scegli un Template</option></select>
                                 <button id="btn-manage-templates" onclick="openTemplatesModal()" class="bg-white shadow-sm border border-slate-200 text-slate-500 hover:text-primary-600 hover:border-primary-200 hover:bg-primary-50 px-3.5 rounded-xl transition-all flex items-center justify-center" title="Gestisci Template"><i data-lucide="layers" class="w-4 h-4"></i></button>
                             </div>
+                            
                             <div class="bg-white border border-slate-200 rounded-xl p-3.5 shadow-sm">
                                 <div class="flex justify-between items-center mb-2.5">
                                     <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Attività Incluse</span>
-                                    <button onclick="openTaskBuilder('new')" class="bg-white text-slate-500 hover:text-primary-600 border border-slate-200 hover:border-primary-200 hover:bg-primary-50 p-1.5 rounded-md transition-all shadow-sm" title="Aggiungi Attività"><i data-lucide="plus" class="w-3.5 h-3.5"></i></button>
+                                    <button onclick="openTaskBuilder('new')" class="bg-white text-slate-500 hover:text-primary-600 border border-slate-200 hover:border-primary-200 hover:bg-primary-50 p-1.5 rounded-md transition-all shadow-sm" title="Aggiungi Attività">
+                                        <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                                    </button>
                                 </div>
                                 <div id="new-proj-selected-tasks" class="flex flex-wrap gap-1.5 min-h-[28px]"></div>
                             </div>
@@ -281,20 +340,36 @@
             </div>
 
             <div class="lg:col-span-8 flex flex-col gap-6 lg:gap-8">
+                
                 <section class="admin-only mobile-tab" data-tab="analyze">
                     <h2 class="text-lg lg:text-xl font-black text-slate-800 tracking-tight pl-1 mb-4">Salute Finanziaria</h2>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                         <div class="bg-primary-50/60 border border-primary-100 rounded-2xl p-5 shadow-sm relative overflow-hidden">
-                            <div class="absolute inset-0 z-0 pointer-events-none"><i data-lucide="trending-up" class="absolute -right-4 -bottom-4 w-24 h-24 text-primary-200 opacity-60"></i></div>
-                            <div class="relative z-10"><h3 class="text-[11px] font-bold uppercase text-slate-500 tracking-wider mb-1">Margine (Attivi)</h3><div id="kpi-margin" class="text-2xl lg:text-3xl font-black text-primary-600 truncate tracking-tight transition-colors duration-500">€ 0.00</div></div>
+                            <div class="absolute inset-0 z-0 pointer-events-none">
+                                <i data-lucide="trending-up" class="absolute -right-4 -bottom-4 w-24 h-24 text-primary-200 opacity-60"></i>
+                            </div>
+                            <div class="relative z-10">
+                                <h3 class="text-[11px] font-bold uppercase text-slate-500 tracking-wider mb-1">Margine (Attivi)</h3>
+                                <div id="kpi-margin" class="text-2xl lg:text-3xl font-black text-primary-600 truncate tracking-tight transition-colors duration-500">€ 0.00</div>
+                            </div>
                         </div>
                         <div id="card-profit" class="bg-emerald-50/60 border border-emerald-100 rounded-2xl p-5 shadow-sm relative overflow-hidden transition-all duration-500">
-                            <div class="absolute inset-0 z-0 pointer-events-none"><i data-lucide="pie-chart" class="absolute -right-4 -bottom-4 w-24 h-24 text-emerald-200 opacity-60"></i></div>
-                            <div class="relative z-10"><h3 id="label-profit" class="text-[11px] font-bold uppercase text-slate-500 tracking-wider mb-1 transition-colors duration-500">Utile (Archiviati)</h3><div id="kpi-profit" class="text-2xl lg:text-3xl font-black text-slate-800 truncate tracking-tight">€ 0.00</div></div>
+                            <div class="absolute inset-0 z-0 pointer-events-none">
+                                <i data-lucide="pie-chart" class="absolute -right-4 -bottom-4 w-24 h-24 text-emerald-200 opacity-60"></i>
+                            </div>
+                            <div class="relative z-10">
+                                <h3 id="label-profit" class="text-[11px] font-bold uppercase text-slate-500 tracking-wider mb-1 transition-colors duration-500">Utile (Archiviati)</h3>
+                                <div id="kpi-profit" class="text-2xl lg:text-3xl font-black text-slate-800 truncate tracking-tight">€ 0.00</div>
+                            </div>
                         </div>
                         <div class="bg-orange-50/60 border border-orange-100 rounded-2xl p-5 shadow-sm relative overflow-hidden">
-                            <div class="absolute inset-0 z-0 pointer-events-none"><i data-lucide="flame" class="absolute -right-4 -bottom-4 w-24 h-24 text-orange-200 opacity-60"></i></div>
-                            <div class="relative z-10"><h3 class="text-[11px] font-bold uppercase text-slate-500 tracking-wider mb-1">Top Burner (Attivi)</h3><div id="kpi-burner" class="text-lg font-bold text-slate-800 mt-2 truncate">-</div></div>
+                            <div class="absolute inset-0 z-0 pointer-events-none">
+                                <i data-lucide="flame" class="absolute -right-4 -bottom-4 w-24 h-24 text-orange-200 opacity-60"></i>
+                            </div>
+                            <div class="relative z-10">
+                                <h3 class="text-[11px] font-bold uppercase text-slate-500 tracking-wider mb-1">Top Burner (Attivi)</h3>
+                                <div id="kpi-burner" class="text-lg font-bold text-slate-800 mt-2 truncate">-</div>
+                            </div>
                         </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -314,6 +389,7 @@
                 <section class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden mobile-tab active" data-tab="operate">
                     <div class="p-5 border-b border-slate-100 flex flex-col md:flex-row md:justify-between items-start md:items-center gap-4 bg-white sticky top-0 z-10">
                         <h2 class="text-base font-black text-slate-800 tracking-tight flex items-center gap-2"><i data-lucide="align-left" class="text-primary-500 w-4 h-4"></i> Registro Attività</h2>
+                        
                         <div class="flex items-center gap-1.5 bg-slate-50 rounded-lg p-1 border border-slate-200">
                             <button onclick="prevWeek()" class="p-1.5 text-slate-400 hover:text-primary-600 hover:bg-white rounded-md shadow-sm transition-colors border border-transparent hover:border-slate-200"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
                             <div class="relative cursor-pointer group px-2 flex items-center justify-center" onclick="document.getElementById('week-picker').showPicker()">
@@ -326,7 +402,14 @@
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm text-left hidden lg:table">
                             <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold tracking-wider border-b border-slate-200">
-                                <tr><th class="px-5 py-4 font-bold">Data</th><th class="px-5 py-4 text-center font-bold">Team</th><th class="px-5 py-4 font-bold">Progetto</th><th class="px-5 py-4 font-bold">Attività / Note</th><th class="px-5 py-4 font-bold">Tempo</th><th class="px-5 py-4 admin-only text-right font-bold">Costo / Azioni</th></tr>
+                                <tr>
+                                    <th class="px-5 py-4 font-bold">Data</th>
+                                    <th class="px-5 py-4 text-center font-bold">Team</th>
+                                    <th class="px-5 py-4 font-bold">Progetto</th>
+                                    <th class="px-5 py-4 font-bold">Attività / Note</th>
+                                    <th class="px-5 py-4 font-bold">Tempo</th>
+                                    <th class="px-5 py-4 admin-only text-right font-bold">Costo / Azioni</th>
+                                </tr>
                             </thead>
                             <tbody id="entries-table-desktop" class="divide-y divide-slate-100"></tbody>
                         </table>
@@ -496,11 +579,19 @@
             <div class="space-y-4">
                 <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Progetto</label><select id="manual-project" onchange="updateManualTaskDropdown()" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none"></select></div>
                 <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Attività</label><select id="manual-task" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none"></select></div>
-                <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Note</label><input type="text" id="manual-notes" placeholder="Opzionale" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Da (Opzionale)</label><input type="time" id="manual-start" onchange="calculateManualHours()" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div>
+                    <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">A (Opzionale)</label><input type="time" id="manual-end" onchange="calculateManualHours()" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div>
+                </div>
+
                 <div class="grid grid-cols-2 gap-4">
                     <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Data</label><input type="date" id="manual-date" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div>
-                    <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Ore</label><input type="number" step="0.1" id="manual-hours" placeholder="0.0" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div>
+                    <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Ore Totali</label><input type="number" step="0.1" id="manual-hours" placeholder="0.0" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all font-bold"></div>
                 </div>
+
+                <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Note (Opzionali)</label><input type="text" id="manual-notes" placeholder="Aggiungi una nota" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all"></div>
+                
                 <button onclick="saveManualEntry()" class="w-full bg-slate-900 text-white py-3.5 mt-4 rounded-xl font-bold shadow-sm hover:bg-slate-800 transition-all active:scale-[0.98]">Salva Ore</button>
             </div>
         </div>
@@ -2065,6 +2156,10 @@
         function openManualEntry() { 
             document.getElementById('modal-manual').classList.remove('force-hide'); 
             document.getElementById('manual-date').valueAsDate = new Date(); 
+            document.getElementById('manual-start').value = '';
+            document.getElementById('manual-end').value = '';
+            document.getElementById('manual-hours').value = '';
+            document.getElementById('manual-notes').value = '';
             document.getElementById('manual-project').innerHTML = '<option value="" disabled selected>Scegli...</option>' + projects.filter(p => !p.is_archived).map((p, i) => `<option value="${projects.indexOf(p)}">${p.name}</option>`).join(''); 
         }
         
@@ -2074,16 +2169,38 @@
             const p = projects[document.getElementById('manual-project').value]; 
             document.getElementById('manual-task').innerHTML = (p.tasks || []).map(t => `<option value="${t}">${t}</option>`).join('') || '<option value="Generico">Generico</option>'; 
         }
+
+        function calculateManualHours() {
+            const start = document.getElementById('manual-start').value;
+            const end = document.getElementById('manual-end').value;
+            if(start && end) {
+                const [sH, sM] = start.split(':').map(Number);
+                const [eH, eM] = end.split(':').map(Number);
+                let diffMins = (eH * 60 + eM) - (sH * 60 + sM);
+                if(diffMins > 0) {
+                    document.getElementById('manual-hours').value = (diffMins / 60).toFixed(2);
+                }
+            }
+        }
         
         async function saveManualEntry() { 
             const pIdx = document.getElementById('manual-project').value; 
             const h = parseFloat(document.getElementById('manual-hours').value); 
             const d = document.getElementById('manual-date').value; 
             const t = document.getElementById('manual-task').value; 
-            const n = document.getElementById('manual-notes').value.trim(); 
+            let n = document.getElementById('manual-notes').value.trim(); 
             
-            if(!pIdx || !h || !d) return await appAlert("Attenzione", "Completa tutti i dati obbligatori!", "danger"); 
+            const startTime = document.getElementById('manual-start').value;
+            const endTime = document.getElementById('manual-end').value;
+
+            if(!pIdx || !h || !d) return await appAlert("Attenzione", "Completa tutti i dati obbligatori (Progetto, Data e Ore)!", "danger"); 
             
+            // Se sono stati messi orari di inizio e fine, li integriamo nelle note
+            if (startTime && endTime) {
+                const timeString = `[${startTime} - ${endTime}]`;
+                n = n ? `${timeString} ${n}` : timeString;
+            }
+
             await saveEntry(projects[pIdx], t, h, d, n); 
             document.getElementById('manual-notes').value = ""; 
             closeManualEntry(); 
