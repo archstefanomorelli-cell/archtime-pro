@@ -1281,7 +1281,8 @@
         // ================= DATI TEAM =================
 
         async function fetchProfiles() { 
-            const { data } = await supabaseClient.from('profiles').select('*').order('full_name'); 
+            // Aggiunto il filtro .eq('studio_id') per scaricare solo chi è attualmente nel tuo studio
+            const { data } = await supabaseClient.from('profiles').select('*').eq('studio_id', userProfile.studio_id).order('full_name'); 
             profiles = data || []; 
             renderProfiles(); 
         }
@@ -1461,13 +1462,18 @@
 
         async function deleteTeamMemberFromModal() {
             const id = document.getElementById('edit-team-id').value;
-            if(await appConfirm("Sgancia Collaboratore", "ATTENZIONE: Rimuovendo questo collaboratore lo sgancerai per sempre dallo Studio. Tuttavia, il suo storico di ore rimarrà visibile nei report dei progetti per non falsare i calcoli.\n\nConsiglio: Se non vuoi perdere il suo nome dalla lista, clicca Annulla e impostalo su 'Inattivo'.\n\nVuoi davvero sganciarlo dallo Studio?", "danger")) { 
+            if(await appConfirm("Sgancia Collaboratore", "ATTENZIONE: Rimuovendo questo collaboratore lo sgancerai per sempre dallo Studio. Il suo storico di ore rimarrà visibile nei report, ma lui dovrà usare un nuovo codice invito per rientrare.\n\nConsiglio: Se non vuoi perdere il suo nome dalla lista, clicca Annulla e impostalo su 'Inattivo'.\n\nVuoi davvero sganciarlo dallo Studio?", "danger")) { 
                 
-                // Manda il collaboratore in Limbo
-                await supabaseClient.from('profiles').update({ studio_id: null, role: 'staff', is_owner: false }).eq('id', id); 
+                // Chiama la funzione con i super-poteri creata su Supabase
+                const { error } = await supabaseClient.rpc('kick_user_from_studio', { user_to_kick: id }); 
+                
+                if (error) {
+                    await appAlert("Errore", "Impossibile rimuovere l'utente: " + error.message, "danger");
+                    return;
+                }
                 
                 closeEditTeamMemberModal();
-                fetchProfiles(); 
+                await fetchProfiles(); 
             }
         }
 
