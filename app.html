@@ -178,6 +178,51 @@
         </div>
     </div>
 
+    <div id="limbo-container" class="force-hide min-h-screen flex items-center justify-center p-4 bg-slate-900 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+        <div class="relative z-10 w-full max-w-lg bg-white border border-slate-200 rounded-3xl p-8 shadow-2xl">
+            <div class="w-16 h-16 bg-slate-100 text-slate-500 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-slate-200"><i data-lucide="door-open" class="w-8 h-8"></i></div>
+            <h2 class="text-2xl font-black text-slate-900 mb-2 tracking-tight text-center" id="limbo-user-name">Bentornato!</h2>
+            <p class="text-slate-500 text-sm mb-8 leading-relaxed text-center font-medium">Al momento non fai più parte di alcun team aziendale. <br>Scegli come vuoi continuare:</p>
+            
+            <div class="space-y-6">
+                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200">
+                    <h3 class="text-sm font-black text-slate-800 mb-3 flex items-center gap-2"><i data-lucide="link" class="w-4 h-4 text-primary-500"></i> Unisciti a uno Studio</h3>
+                    <div class="flex gap-2">
+                        <input type="text" id="limbo-invite-code" placeholder="Incolla Codice Invito" class="flex-1 border border-slate-200 rounded-xl p-3 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all bg-white">
+                        <button onclick="limboJoinStudio()" class="bg-primary-600 text-white px-5 rounded-xl font-bold hover:bg-primary-700 transition-all shadow-sm active:scale-95 shrink-0 text-sm">Entra</button>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <div class="flex-1 h-[1px] bg-slate-200"></div>
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">OPPURE</span>
+                    <div class="flex-1 h-[1px] bg-slate-200"></div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <h3 class="text-sm font-black text-slate-800 mb-3 flex items-center gap-2"><i data-lucide="briefcase" class="w-4 h-4 text-amber-500"></i> Crea il tuo Spazio di Lavoro</h3>
+                    <div class="flex gap-2 mb-3">
+                        <label class="flex-1 flex items-center justify-center gap-2 p-2.5 bg-slate-50 rounded-lg border border-slate-200 cursor-pointer hover:border-primary-300 transition-all relative has-[:checked]:bg-white has-[:checked]:border-primary-500 has-[:checked]:ring-1 has-[:checked]:ring-primary-500">
+                            <input type="radio" name="limbo-business-type" value="studio" checked class="sr-only">
+                            <span class="text-xs font-bold text-slate-700">Studio Tecnico</span>
+                        </label>
+                        <label class="flex-1 flex items-center justify-center gap-2 p-2.5 bg-slate-50 rounded-lg border border-slate-200 cursor-pointer hover:border-amber-300 transition-all relative has-[:checked]:bg-white has-[:checked]:border-amber-500 has-[:checked]:ring-1 has-[:checked]:ring-amber-500">
+                            <input type="radio" name="limbo-business-type" value="impresa" class="sr-only">
+                            <span class="text-xs font-bold text-slate-700">Impresa Edile</span>
+                        </label>
+                    </div>
+                    <input type="text" id="limbo-studio-name" placeholder="Nome della tua Azienda" class="w-full border border-slate-200 rounded-xl p-3 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all mb-3 bg-slate-50">
+                    <button onclick="limboCreateStudio()" class="w-full bg-slate-900 text-white py-3.5 rounded-xl font-bold hover:bg-slate-800 transition-all active:scale-[0.98] shadow-sm flex justify-center items-center gap-2">Diventa Manager</button>
+                </div>
+            </div>
+            
+            <div class="text-center mt-6">
+                <button onclick="handleLogout()" class="text-[11px] font-bold text-slate-400 hover:text-slate-600 transition-colors uppercase tracking-wider">Esci dall'account</button>
+            </div>
+        </div>
+    </div>
+
     <div id="paywall-container" class="force-hide fixed inset-0 z-[200] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
         <div class="bg-white border border-slate-200 rounded-2xl p-8 max-w-md w-full text-center shadow-xl">
             <div class="w-16 h-16 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-red-100"><i data-lucide="lock" class="w-8 h-8"></i></div>
@@ -657,7 +702,7 @@
 
     <div id="cookie-banner" class="force-hide fixed bottom-0 left-0 w-full bg-slate-900 text-white p-5 z-[9999] flex flex-col md:flex-row justify-between items-center gap-4 border-t border-slate-800 shadow-[0_-10px_20px_rgba(0,0,0,0.2)]">
         <div class="text-xs text-slate-300 leading-relaxed max-w-4xl">
-            <strong>Informativa sui Cookie:</strong> Utilizziamo esclusivamente cookie tecnici strettamente necessari per mantenere attiva la tua sessione, garantire la sicurezza e gestire i pagamenti. Non utilizziamo cookie di profilazione per scopi di marketing. <a href="privacy.html" target="_blank" class="text-white font-bold hover:underline transition-all">Privacy Policy</a>.
+            <strong>Informativa sui Cookie:</strong> Utilizziamo esclusivamente cookie tecnici strettamente necessari (Supabase e Stripe) per mantenere attiva la tua sessione, garantire la sicurezza e gestire i pagamenti. Non utilizziamo cookie di profilazione per scopi di marketing. <a href="privacy.html" target="_blank" class="text-white font-bold hover:underline transition-all">Privacy Policy</a>.
         </div>
         <button onclick="acceptCookies()" class="bg-primary-600 text-white text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-xl hover:bg-primary-500 transition-colors shadow-sm shrink-0 whitespace-nowrap active:scale-95">Ho capito</button>
     </div>
@@ -896,8 +941,9 @@
                 const checkedRole = document.querySelector('input[name="main-role"]:checked');
                 if(!checkedRole) return await appAlert("Attenzione", "Seleziona prima il tipo di account.", "danger");
                 
-                const isOwnerChoice = checkedRole.value === 'owner';
-                const finalRole = isOwnerChoice ? 'admin' : checkedRole.value;
+                let role = checkedRole.value; 
+                const isOwnerChoice = role === 'owner';
+                const finalRole = isOwnerChoice ? 'admin' : role; // Owner è un admin con badge
                 const isStaff = finalRole === 'staff';
                 const businessType = isStaff ? 'studio' : document.querySelector('input[name="business-type"]:checked').value;
                 const code = document.getElementById('invite-code-input').value.trim();
@@ -928,7 +974,7 @@
         async function exportUserData() {
             if(!userProfile) return await appAlert("Errore", "Utente non trovato.", "danger");
             try {
-                const exportData = { profile: userProfile, studio: userProfile.role === 'admin' ? studioData : "Dati Studio non accessibili.", projects: projects, entries: entries, expenses: expenses, exportDate: new Date().toISOString() };
+                const exportData = { profile: userProfile, studio: ['admin', 'owner'].includes(userProfile.role) || userProfile.is_owner ? studioData : "Dati Studio non accessibili.", projects: projects, entries: entries, expenses: expenses, exportDate: new Date().toISOString() };
                 const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
                 const downloadAnchorNode = document.createElement('a'); downloadAnchorNode.setAttribute("href", dataStr); downloadAnchorNode.setAttribute("download", "Export_" + userProfile.full_name.replace(/\s+/g, '_') + ".json");
                 document.body.appendChild(downloadAnchorNode); downloadAnchorNode.click(); downloadAnchorNode.remove();
@@ -946,6 +992,36 @@
             document.getElementById('app-container').classList.add('force-hide'); 
             document.getElementById('paywall-container').classList.remove('force-hide'); 
             lucide.createIcons(); 
+        }
+        
+        function showLimboScreen(fullName) {
+            document.getElementById('auth-container').classList.add('force-hide');
+            document.getElementById('app-container').classList.add('force-hide');
+            document.getElementById('limbo-user-name').innerText = `Bentornato, ${fullName.split(' ')[0]}!`;
+            document.getElementById('limbo-container').classList.remove('force-hide');
+            lucide.createIcons();
+        }
+
+        async function limboJoinStudio() {
+            const code = document.getElementById('limbo-invite-code').value.trim();
+            if(!code) return await appAlert("Attenzione", "Inserisci un Codice Invito valido.", "danger");
+            
+            const { error } = await supabaseClient.from('profiles').update({ studio_id: code, role: 'staff' }).eq('id', userProfile.id);
+            if(error) return await appAlert("Errore", "Impossibile unirsi allo studio. Controlla il codice.", "danger");
+            
+            await appAlert("Benvenuto", "Ti sei unito al nuovo team con successo!", "success");
+            location.reload();
+        }
+
+        async function limboCreateStudio() {
+            const bType = document.querySelector('input[name="limbo-business-type"]:checked').value;
+            const sName = document.getElementById('limbo-studio-name').value.trim() || 'Mio Spazio di Lavoro';
+            
+            const { data, error } = await supabaseClient.rpc('create_studio_from_limbo', { studio_name: sName, b_type: bType });
+            if(error) return await appAlert("Errore", error.message, "danger");
+            
+            await appAlert("Congratulazioni", "Il tuo nuovo Spazio di Lavoro è pronto!", "success");
+            location.reload();
         }
         
         function openUpgradeModal(featureName) { 
@@ -1051,6 +1127,13 @@
                 const { data: profile, error } = await supabaseClient.from('profiles').select('*').eq('id', user.id).single();
                 if(profile) {
                     userProfile = profile;
+                    
+                    // CONTROLLO LIMBO
+                    if(!userProfile.studio_id) {
+                        showLimboScreen(userProfile.full_name);
+                        return;
+                    }
+
                     const { data: studio } = await supabaseClient.from('studios').select('*').eq('id', userProfile.studio_id).single();
                     if(studio) studioData = studio;
 
@@ -1058,7 +1141,7 @@
                     activePlan = studioData?.plan_type || 'premium'; 
 
                     let bType = 'studio';
-                    if (userProfile.role === 'admin') {
+                    if (userProfile.role === 'admin' || userProfile.is_owner) {
                         bType = user?.user_metadata?.business_type || 'studio';
                         if (studioData && !studioData.business_type) {
                             await supabaseClient.from('studios').update({ business_type: bType }).eq('id', studioData.id);
@@ -1094,7 +1177,7 @@
                         }
                     }
 
-                    if(profile.role === 'admin') {
+                    if(['admin', 'owner'].includes(profile.role) || profile.is_owner) {
                         document.body.classList.add('is-admin');
                         activityCatalog = studioData?.activity_catalog ? studioData.activity_catalog : [...THEMES[currentBusinessType].defaultCatalog];
                         projectTemplates = studioData?.project_templates ? studioData.project_templates : [...THEMES[currentBusinessType].defaultTemplates];
@@ -1130,7 +1213,7 @@
                 btn.classList.toggle('text-primary-600', btn.dataset.tab === tabName); 
                 btn.classList.toggle('text-slate-400', btn.dataset.tab !== tabName); 
             }); 
-            if(tabName === 'analyze' && userProfile.role === 'admin') {
+            if(tabName === 'analyze' && document.body.classList.contains('is-admin')) {
                 setTimeout(renderStrategicCharts, 50); 
             }
             window.scrollTo(0, 0); 
@@ -1146,7 +1229,7 @@
             await fetchProjects(); 
             await fetchEntries(); 
             await fetchExpenses();
-            if(userProfile.role === 'admin') { 
+            if(document.body.classList.contains('is-admin')) { 
                 await fetchProfiles(); 
                 renderCatalogAndTemplatesUI(); 
                 await checkAndGenerateDemoData(); 
@@ -1275,12 +1358,12 @@
             
             // LOGICA DI SICUREZZA ANTI-GOLPE
             if (pr.is_owner && pr.id !== userProfile.id) {
-                // Nessuno può toccare l'Owner
+                // Nessuno può modificare l'Owner
                 btnDelete.classList.add('force-hide');
                 roleSelect.disabled = true;
                 roleSelect.classList.add('opacity-50', 'cursor-not-allowed');
             } else if (pr.role === 'admin' && pr.id !== userProfile.id && !userProfile.is_owner) {
-                // Admin non tocca un altro Admin
+                // Un Admin NON può modificare/eliminare un altro Admin
                 btnDelete.classList.add('force-hide');
                 roleSelect.disabled = true;
                 roleSelect.classList.add('opacity-50', 'cursor-not-allowed');
@@ -1290,7 +1373,7 @@
                 roleSelect.classList.remove('opacity-50', 'cursor-not-allowed');
                 
                 if (pr.id === userProfile.id) {
-                    btnDelete.classList.add('force-hide'); // Non si elimina da solo
+                    btnDelete.classList.add('force-hide'); // Nessuno si elimina da solo da qui
                 } else {
                     btnDelete.classList.remove('force-hide');
                 }
@@ -1335,7 +1418,7 @@
                 finalIsOwner = false;
             }
             
-            // Logica di Auto-sospensione (può farla un admin o l'owner se non è bloccato prima)
+            // Logica di Auto-sospensione
             if (id === userProfile.id && finalRole === 'inactive') {
                 if (userProfile.is_owner) {
                     return await appAlert("Azione Bloccata", "L'Owner non può auto-sospendersi.\nPrima devi cedere la Proprietà a un altro membro del team.", "danger");
@@ -1369,7 +1452,7 @@
             closeEditTeamMemberModal();
             await fetchProfiles(); 
             await fetchEntries(); 
-            if (userProfile.role === 'admin') { 
+            if (document.body.classList.contains('is-admin')) { 
                 await fetchProjects(); 
                 renderStrategicCharts(); 
             }
@@ -1378,8 +1461,11 @@
 
         async function deleteTeamMemberFromModal() {
             const id = document.getElementById('edit-team-id').value;
-            if(await appConfirm("Rimuovi Definitivamente", "ATTENZIONE: Eliminando il collaboratore si perderà per sempre il collegamento con le sue ore passate nel database.\n\nConsiglio: se ha smesso di lavorare con te, clicca su Annulla e cambia il suo ruolo in 'Inattivo' così manterrai lo storico contabile intatto.\n\nVuoi davvero eliminarlo definitivamente?", "danger")) { 
-                await supabaseClient.from('profiles').delete().eq('id', id); 
+            if(await appConfirm("Sgancia Collaboratore", "ATTENZIONE: Rimuovendo questo collaboratore lo sgancerai per sempre dallo Studio. Tuttavia, il suo storico di ore rimarrà visibile nei report dei progetti per non falsare i calcoli.\n\nConsiglio: Se non vuoi perdere il suo nome dalla lista, clicca Annulla e impostalo su 'Inattivo'.\n\nVuoi davvero sganciarlo dallo Studio?", "danger")) { 
+                
+                // Manda il collaboratore in Limbo
+                await supabaseClient.from('profiles').update({ studio_id: null, role: 'staff', is_owner: false }).eq('id', id); 
+                
                 closeEditTeamMemberModal();
                 fetchProfiles(); 
             }
@@ -1391,7 +1477,7 @@
             const { data } = await supabaseClient.from('projects').select('*').order('name'); 
             projects = data || []; 
             renderProjects(); 
-            if(userProfile.role === 'admin') renderStrategicCharts(); 
+            if(document.body.classList.contains('is-admin')) renderStrategicCharts(); 
         }
         
         async function fetchEntries() { 
@@ -1399,14 +1485,14 @@
             entries = data || []; 
             renderEntries(); 
             renderProjects(); 
-            if(userProfile.role === 'admin') renderStrategicCharts(); 
+            if(document.body.classList.contains('is-admin')) renderStrategicCharts(); 
         }
         
         async function fetchExpenses() { 
             const { data } = await supabaseClient.from('expenses').select('*').order('created_at', { ascending: false }); 
             expenses = data || []; 
             renderProjects(); 
-            if(userProfile && userProfile.role === 'admin') renderStrategicCharts(); 
+            if(userProfile && document.body.classList.contains('is-admin')) renderStrategicCharts(); 
         }
 
         function renderProjects() {
@@ -1827,7 +1913,7 @@
         }
 
         function renderStrategicCharts() {
-            if(!['admin', 'owner'].includes(userProfile.role)) return;
+            if(!document.body.classList.contains('is-admin')) return;
             const activeProjects = projects.filter(p => !p.is_archived);
             let totalBudget = 0, totalSpent = 0, projectSpend = {}; let totalTaskHours = 0;
             
@@ -1939,7 +2025,7 @@
             
             document.getElementById('week-display').innerText = `${start.toLocaleDateString('it-IT', {day:'2-digit',month:'short'})} - ${end.toLocaleDateString('it-IT', {day:'2-digit',month:'short',year:'numeric'})}`;
             
-            const isStaff = !['admin', 'owner'].includes(userProfile.role);
+            const isStaff = !document.body.classList.contains('is-admin');
 
             let weekly = entries.filter(e => {
                 const d = new Date(e.created_at).getTime();
