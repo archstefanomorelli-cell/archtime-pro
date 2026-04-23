@@ -397,15 +397,16 @@
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm text-left hidden lg:table">
                             <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold tracking-wider border-b border-slate-200">
-                                <tr>
-                                    <th class="px-5 py-4 font-bold whitespace-nowrap">Data</th>
-                                    <th class="px-5 py-4 text-center font-bold whitespace-nowrap">Team</th>
-                                    <th class="px-5 py-4 text-center font-bold w-full">Progetto</th>
-                                    <th class="px-5 py-4 font-bold min-w-[150px]">Attività / Note</th>
-                                    <th class="px-5 py-4 font-bold whitespace-nowrap">Tempo</th>
-                                    <th class="px-5 py-4 admin-only text-center font-bold whitespace-nowrap">Costo</th>
-                                </tr>
-                            </thead>
+    <tr>
+        <th class="px-5 py-4 font-bold whitespace-nowrap">Data</th>
+        <th class="px-5 py-4 text-center font-bold whitespace-nowrap">Team</th>
+        <th class="px-5 py-4 text-center font-bold w-full">Progetto</th>
+        <th class="px-5 py-4 font-bold min-w-[150px]">Attività / Note</th>
+        <th class="px-5 py-4 font-bold whitespace-nowrap">Tempo</th>
+        <th class="px-5 py-4 admin-only text-center font-bold whitespace-nowrap">Costo</th>
+        <th class="px-5 py-4 admin-only font-bold whitespace-nowrap"></th>
+    </tr>
+</thead>
                             <tbody id="entries-table-desktop" class="divide-y divide-slate-100"></tbody>
                         </table>
                         <div id="entries-empty-state" class="force-hide p-10 text-center text-slate-400 font-medium text-sm">Nessuna attività registrata in questa settimana.</div>
@@ -2082,23 +2083,25 @@
                 const bgClass = index % 2 === 0 ? 'bg-white' : 'bg-slate-50/60';
 
                 return `
-                <tr class="${bgClass} hover:bg-slate-100 border-b border-slate-100 transition-colors">
-                    <td class="p-5 font-bold text-slate-500 text-xs whitespace-nowrap">${new Date(e.created_at).toLocaleDateString('it-IT', {weekday:'short', day:'2-digit'})}</td>
-                    <td class="p-5 text-center whitespace-nowrap"><span class="bg-slate-100 text-slate-600 text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider">${e.user_name}</span></td>
-                    <td class="p-5 font-black text-slate-800 tracking-tight w-full">${e.project_name}</td>
-                    <td class="p-5 min-w-[150px]"><div class="text-xs font-bold text-slate-600">${e.task}</div><div class="text-[11px] text-slate-400 mt-0.5 break-words">${displayNotes}</div></td>
-                    <td class="p-5 whitespace-nowrap">
-                        <div class="font-mono font-black text-primary-600">${formatTime(Number(e.duration))}</div>
-                        ${timeRangeStr}
-                    </td>
-                    <td class="p-5 text-right admin-only whitespace-nowrap">
-                        <div class="flex justify-end gap-3 items-center">
-                            <span class="font-mono text-slate-400 text-sm font-bold">€${Number(e.rate).toFixed(2)}</span>
-                            <button onclick="openEditEntryModal('${e.id}')" class="text-slate-300 hover:text-primary-600 p-1.5 hover:bg-white rounded-lg transition-colors"><i data-lucide="pencil" class="w-4 h-4"></i></button>
-                            <button onclick="deleteEntry('${e.id}')" class="text-slate-300 hover:text-red-600 p-1.5 hover:bg-white rounded-lg transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                        </div>
-                    </td>
-                </tr>`;
+<tr class="${bgClass} hover:bg-slate-100 border-b border-slate-100 transition-colors">
+    <td class="p-5 font-bold text-slate-500 text-xs whitespace-nowrap">${new Date(e.created_at).toLocaleDateString('it-IT', {weekday:'short', day:'2-digit'})}</td>
+    <td class="p-5 text-center whitespace-nowrap"><span class="bg-slate-100 text-slate-600 text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider">${e.user_name}</span></td>
+    <td class="p-5 text-center font-black text-slate-800 tracking-tight w-full">${e.project_name}</td>
+    <td class="p-5 min-w-[150px]"><div class="text-xs font-bold text-slate-600">${e.task}</div><div class="text-[11px] text-slate-400 mt-0.5 break-words">${displayNotes}</div></td>
+    <td class="p-5 whitespace-nowrap">
+        <div class="font-mono font-black text-primary-600">${formatTime(Number(e.duration))}</div>
+        ${timeRangeStr}
+    </td>
+    <td class="p-5 text-center admin-only whitespace-nowrap">
+        <span class="font-mono text-slate-400 text-sm font-bold">€${Number(e.rate).toFixed(2)}</span>
+    </td>
+    <td class="p-5 text-right admin-only whitespace-nowrap">
+        <div class="flex justify-end gap-2 items-center">
+            <button onclick="openEditEntryModal('${e.id}')" class="text-slate-300 hover:text-primary-600 p-1.5 hover:bg-white rounded-lg transition-colors"><i data-lucide="pencil" class="w-4 h-4"></i></button>
+            <button onclick="deleteEntry('${e.id}')" class="text-slate-300 hover:text-red-600 p-1.5 hover:bg-white rounded-lg transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+        </div>
+    </td>
+</tr>`;
             }).join('');
             
             mobile.innerHTML = weekly.map((e, index) => {
