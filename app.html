@@ -183,7 +183,7 @@
         </div>
     </div>
 
-    <div id="limbo-container" class="force-hide min-h-screen flex items-center justify-center p-4 bg-slate-900 relative overflow-hidden">
+    <div id="limbo-container" class="force-hide min-h-screen flex items-center justify-center p-4 bg-slate-900 relative overflow-hidden z-[900]">
         <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
         <div class="relative z-10 w-full max-w-lg bg-white border border-slate-200 rounded-3xl p-8 shadow-2xl">
             <div class="w-16 h-16 bg-slate-100 text-slate-500 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-slate-200"><i data-lucide="door-open" class="w-8 h-8"></i></div>
@@ -334,9 +334,7 @@
                             <button onclick="generateInviteLink()" class="bg-white border border-slate-200 shadow-sm text-slate-600 text-[10px] font-bold px-2.5 py-1.5 rounded-lg hover:bg-slate-50 hover:text-primary-600 transition-all flex items-center gap-1.5 uppercase tracking-wider"><i data-lucide="link" class="w-3 h-3"></i> Invita</button>
                         </div>
                     </div>
-                    
                     <div id="team-list" class="space-y-3 mb-6"></div>
-                    
                     <div class="flex justify-start">
                         <button id="btn-toggle-inactive" onclick="toggleInactiveMembers()" class="text-[9px] font-bold uppercase tracking-wider text-slate-400 hover:text-primary-600 transition-colors flex items-center gap-1.5">
                             <i data-lucide="eye-off" class="w-3 h-3" id="icon-toggle-inactive"></i>
@@ -410,12 +408,12 @@
                         <table class="w-full text-sm text-left hidden lg:table">
                             <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold tracking-wider border-b border-slate-200">
                                 <tr>
-                                    <th class="px-5 py-4 font-bold">Data</th>
-                                    <th class="px-5 py-4 text-center font-bold">Team</th>
-                                    <th class="px-5 py-4 font-bold">Progetto</th>
-                                    <th class="px-5 py-4 font-bold">Attività / Note</th>
-                                    <th class="px-5 py-4 font-bold">Tempo</th>
-                                    <th class="px-5 py-4 admin-only text-right font-bold">Costo / Azioni</th>
+                                    <th class="px-5 py-4 font-bold whitespace-nowrap">Data</th>
+                                    <th class="px-5 py-4 text-center font-bold whitespace-nowrap">Team</th>
+                                    <th class="px-5 py-4 font-bold w-full">Progetto</th>
+                                    <th class="px-5 py-4 font-bold min-w-[150px]">Attività / Note</th>
+                                    <th class="px-5 py-4 font-bold whitespace-nowrap">Tempo</th>
+                                    <th class="px-5 py-4 admin-only text-right font-bold whitespace-nowrap">Costo / Azioni</th>
                                 </tr>
                             </thead>
                             <tbody id="entries-table-desktop" class="divide-y divide-slate-100"></tbody>
@@ -2076,23 +2074,21 @@
                 // "Radar" che cerca [00:00 - 00:00] all'inizio delle note
                 const timeMatch = displayNotes.match(/^\[(\d{2}:\d{2}) - (\d{2}:\d{2})\]\s*/);
                 if (timeMatch) {
-                    // Crea l'etichetta dell'orario
-                    timeRangeStr = `<div class="text-[9px] text-slate-400 font-medium mt-1 whitespace-nowrap">dalle ${timeMatch[1]} alle ${timeMatch[2]}</div>`;
-                    // Pulisce le note rimuovendo la parentesi quadra
+                    timeRangeStr = `<div class="text-[10px] text-slate-400 font-medium mt-1 whitespace-nowrap">dalle ${timeMatch[1]} alle ${timeMatch[2]}</div>`;
                     displayNotes = displayNotes.replace(timeMatch[0], '');
                 }
 
                 return `
                 <tr class="hover:bg-slate-50 border-b border-slate-100 transition-colors">
-                    <td class="p-5 font-bold text-slate-500 text-xs">${new Date(e.created_at).toLocaleDateString('it-IT', {weekday:'short', day:'2-digit'})}</td>
-                    <td class="p-5 text-center"><span class="bg-slate-100 text-slate-600 text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider">${e.user_name}</span></td>
-                    <td class="p-5 font-black text-slate-800 tracking-tight">${e.project_name}</td>
-                    <td class="p-5"><div class="text-xs font-bold text-slate-600">${e.task}</div><div class="text-[11px] text-slate-400 mt-0.5">${displayNotes}</div></td>
-                    <td class="p-5">
+                    <td class="p-5 font-bold text-slate-500 text-xs whitespace-nowrap">${new Date(e.created_at).toLocaleDateString('it-IT', {weekday:'short', day:'2-digit'})}</td>
+                    <td class="p-5 text-center whitespace-nowrap"><span class="bg-slate-100 text-slate-600 text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider">${e.user_name}</span></td>
+                    <td class="p-5 font-black text-slate-800 tracking-tight w-full">${e.project_name}</td>
+                    <td class="p-5 min-w-[150px]"><div class="text-xs font-bold text-slate-600">${e.task}</div><div class="text-[11px] text-slate-400 mt-0.5 break-words">${displayNotes}</div></td>
+                    <td class="p-5 whitespace-nowrap">
                         <div class="font-mono font-black text-primary-600">${formatTime(Number(e.duration))}</div>
                         ${timeRangeStr}
                     </td>
-                    <td class="p-5 text-right admin-only">
+                    <td class="p-5 text-right admin-only whitespace-nowrap">
                         <div class="flex justify-end gap-3 items-center">
                             <span class="font-mono text-slate-400 text-sm font-bold">€${Number(e.rate).toFixed(2)}</span>
                             <button onclick="openEditEntryModal('${e.id}')" class="text-slate-300 hover:text-primary-600 p-1.5 hover:bg-primary-50 rounded-lg transition-colors"><i data-lucide="pencil" class="w-4 h-4"></i></button>
@@ -2109,7 +2105,7 @@
                 // Stesso radar per la visualizzazione mobile
                 const timeMatch = displayNotes.match(/^\[(\d{2}:\d{2}) - (\d{2}:\d{2})\]\s*/);
                 if (timeMatch) {
-                    timeRangeStr = `<div class="text-[9px] text-slate-400 font-medium text-right mt-1.5">dalle ${timeMatch[1]}<br>alle ${timeMatch[2]}</div>`;
+                    timeRangeStr = `<div class="text-[9px] text-slate-400 font-medium text-right mt-1.5 whitespace-nowrap">dalle ${timeMatch[1]}<br>alle ${timeMatch[2]}</div>`;
                     displayNotes = displayNotes.replace(timeMatch[0], '');
                 }
 
@@ -2118,20 +2114,20 @@
                     <div class="flex justify-between mb-3">
                         <div>
                             <div class="flex gap-2 mb-1.5">
-                                <span class="text-[9px] font-bold text-slate-600 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded-md uppercase tracking-wider">${e.user_name}</span>
-                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">${new Date(e.created_at).toLocaleDateString('it-IT', {weekday:'short', day:'2-digit'})}</span>
+                                <span class="text-[9px] font-bold text-slate-600 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded-md uppercase tracking-wider whitespace-nowrap">${e.user_name}</span>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-0.5 whitespace-nowrap">${new Date(e.created_at).toLocaleDateString('it-IT', {weekday:'short', day:'2-digit'})}</span>
                             </div>
                             <h4 class="font-black text-sm text-slate-800 tracking-tight">${e.project_name}</h4>
                         </div>
-                        <div class="flex flex-col items-end">
+                        <div class="flex flex-col items-end whitespace-nowrap">
                             <span class="font-mono font-black text-primary-600 bg-primary-50 border border-primary-100 px-2 py-1 rounded-lg h-fit">${formatTime(Number(e.duration))}</span>
                             ${timeRangeStr}
                         </div>
                     </div>
                     <div class="flex flex-col gap-3">
-                        <div class="max-w-[90%]"><span class="text-xs text-slate-600 font-bold">${e.task}</span><div class="text-[11px] text-slate-400 mt-0.5">${displayNotes}</div></div>
+                        <div class="max-w-[90%]"><span class="text-xs text-slate-600 font-bold">${e.task}</span><div class="text-[11px] text-slate-400 mt-0.5 break-words">${displayNotes}</div></div>
                         <div class="admin-only flex justify-between border-t border-slate-100 pt-3">
-                            <span class="font-mono text-slate-500 font-bold text-xs">Costo: €${Number(e.rate).toFixed(2)}</span>
+                            <span class="font-mono text-slate-500 font-bold text-xs whitespace-nowrap">Costo: €${Number(e.rate).toFixed(2)}</span>
                             <div class="flex gap-2">
                                 <button onclick="openEditEntryModal('${e.id}')" class="text-slate-400 p-1.5 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button>
                                 <button onclick="deleteEntry('${e.id}')" class="text-slate-400 p-1.5 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
@@ -2263,7 +2259,6 @@
 
             if(!pIdx || !h || !d) return await appAlert("Attenzione", "Completa tutti i dati obbligatori (Progetto, Data e Ore)!", "danger"); 
             
-            // Se sono stati messi orari di inizio e fine, li integriamo nelle note
             if (startTime && endTime) {
                 const timeString = `[${startTime} - ${endTime}]`;
                 n = n ? `${timeString} ${n}` : timeString;
@@ -2542,10 +2537,8 @@
             await appAlert("Fatto!", "Se l'email esiste nei nostri sistemi, riceverai a breve un link sicuro per reimpostare la password.", "success");
         }
 
-        // IL "RADAR": Ascolta se l'utente arriva cliccando il link dall'email
         supabaseClient.auth.onAuthStateChange(async (event, session) => {
             if (event === 'PASSWORD_RECOVERY') {
-                // Nascondiamo tutto il resto dell'app e mostriamo la schermata Nuova Password
                 document.getElementById('auth-container').classList.add('force-hide');
                 document.getElementById('limbo-container').classList.add('force-hide');
                 document.getElementById('app-container').classList.add('force-hide');
@@ -2558,14 +2551,12 @@
             const newPass = document.getElementById('new-password').value;
             if(newPass.length < 6) return await appAlert("Attenzione", "La password deve essere di almeno 6 caratteri.", "danger");
             
-            // Aggiorniamo la password nel database
             const { data, error } = await supabaseClient.auth.updateUser({ password: newPass });
             if(error) return await appAlert("Errore", error.message, "danger");
             
             document.getElementById('update-password-container').classList.add('force-hide');
             await appAlert("Successo!", "La tua password è stata aggiornata. Bentornato a bordo!", "success");
             
-            // Rientriamo nell'app
             checkUser();
         }
         
