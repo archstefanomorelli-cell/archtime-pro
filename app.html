@@ -2069,13 +2069,29 @@
             document.getElementById('entries-empty-state').classList.toggle('force-hide', weekly.length > 0); 
             table.parentElement.classList.toggle('force-hide', weekly.length === 0);
             
-            table.innerHTML = weekly.map(e => `
+            table.innerHTML = weekly.map(e => {
+                let displayNotes = e.notes || '';
+                let timeRangeStr = '';
+                
+                // "Radar" che cerca [00:00 - 00:00] all'inizio delle note
+                const timeMatch = displayNotes.match(/^\[(\d{2}:\d{2}) - (\d{2}:\d{2})\]\s*/);
+                if (timeMatch) {
+                    // Crea l'etichetta dell'orario
+                    timeRangeStr = `<div class="text-[9px] text-slate-400 font-medium mt-1 whitespace-nowrap">dalle ${timeMatch[1]} alle ${timeMatch[2]}</div>`;
+                    // Pulisce le note rimuovendo la parentesi quadra
+                    displayNotes = displayNotes.replace(timeMatch[0], '');
+                }
+
+                return `
                 <tr class="hover:bg-slate-50 border-b border-slate-100 transition-colors">
                     <td class="p-5 font-bold text-slate-500 text-xs">${new Date(e.created_at).toLocaleDateString('it-IT', {weekday:'short', day:'2-digit'})}</td>
                     <td class="p-5 text-center"><span class="bg-slate-100 text-slate-600 text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider">${e.user_name}</span></td>
                     <td class="p-5 font-black text-slate-800 tracking-tight">${e.project_name}</td>
-                    <td class="p-5"><div class="text-xs font-bold text-slate-600">${e.task}</div><div class="text-[11px] text-slate-400 mt-0.5">${e.notes||''}</div></td>
-                    <td class="p-5 font-mono font-black text-primary-600">${formatTime(Number(e.duration))}</td>
+                    <td class="p-5"><div class="text-xs font-bold text-slate-600">${e.task}</div><div class="text-[11px] text-slate-400 mt-0.5">${displayNotes}</div></td>
+                    <td class="p-5">
+                        <div class="font-mono font-black text-primary-600">${formatTime(Number(e.duration))}</div>
+                        ${timeRangeStr}
+                    </td>
                     <td class="p-5 text-right admin-only">
                         <div class="flex justify-end gap-3 items-center">
                             <span class="font-mono text-slate-400 text-sm font-bold">€${Number(e.rate).toFixed(2)}</span>
@@ -2083,9 +2099,21 @@
                             <button onclick="deleteEntry('${e.id}')" class="text-slate-300 hover:text-red-600 p-1.5 hover:bg-red-50 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                         </div>
                     </td>
-                </tr>`).join('');
+                </tr>`;
+            }).join('');
             
-            mobile.innerHTML = weekly.map(e => `
+            mobile.innerHTML = weekly.map(e => {
+                let displayNotes = e.notes || '';
+                let timeRangeStr = '';
+                
+                // Stesso radar per la visualizzazione mobile
+                const timeMatch = displayNotes.match(/^\[(\d{2}:\d{2}) - (\d{2}:\d{2})\]\s*/);
+                if (timeMatch) {
+                    timeRangeStr = `<div class="text-[9px] text-slate-400 font-medium text-right mt-1.5">dalle ${timeMatch[1]}<br>alle ${timeMatch[2]}</div>`;
+                    displayNotes = displayNotes.replace(timeMatch[0], '');
+                }
+
+                return `
                 <div class="p-5 border-b border-slate-100 bg-white">
                     <div class="flex justify-between mb-3">
                         <div>
@@ -2095,10 +2123,13 @@
                             </div>
                             <h4 class="font-black text-sm text-slate-800 tracking-tight">${e.project_name}</h4>
                         </div>
-                        <span class="font-mono font-black text-primary-600 bg-primary-50 border border-primary-100 px-2 py-1 rounded-lg h-fit">${formatTime(Number(e.duration))}</span>
+                        <div class="flex flex-col items-end">
+                            <span class="font-mono font-black text-primary-600 bg-primary-50 border border-primary-100 px-2 py-1 rounded-lg h-fit">${formatTime(Number(e.duration))}</span>
+                            ${timeRangeStr}
+                        </div>
                     </div>
                     <div class="flex flex-col gap-3">
-                        <div class="max-w-[90%]"><span class="text-xs text-slate-600 font-bold">${e.task}</span><div class="text-[11px] text-slate-400 mt-0.5">${e.notes||''}</div></div>
+                        <div class="max-w-[90%]"><span class="text-xs text-slate-600 font-bold">${e.task}</span><div class="text-[11px] text-slate-400 mt-0.5">${displayNotes}</div></div>
                         <div class="admin-only flex justify-between border-t border-slate-100 pt-3">
                             <span class="font-mono text-slate-500 font-bold text-xs">Costo: €${Number(e.rate).toFixed(2)}</span>
                             <div class="flex gap-2">
@@ -2107,7 +2138,8 @@
                             </div>
                         </div>
                     </div>
-                </div>`).join('');
+                </div>`;
+            }).join('');
             lucide.createIcons();
         }
 
