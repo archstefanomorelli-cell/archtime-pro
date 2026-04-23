@@ -1913,6 +1913,33 @@
             closeEditProjectModal(); showProjectDetail(id); 
         }
 
+        async function addExpense(projectId) {
+            const desc = document.getElementById('exp-desc').value.trim();
+            const amount = parseFloat(document.getElementById('exp-amount').value);
+            
+            if(!desc || !amount || amount <= 0) return await appAlert("Attenzione", "Inserisci una descrizione e un importo valido.", "danger");
+            
+            await supabaseClient.from('expenses').insert([{
+                studio_id: userProfile.studio_id,
+                project_id: projectId,
+                description: desc,
+                amount: amount,
+                user_name: userProfile.full_name,
+                created_at: new Date().toISOString()
+            }]);
+            
+            await fetchExpenses();
+            showProjectDetail(projectId);
+        }
+
+        async function deleteExpense(expId, projectId) {
+            if(await appConfirm("Elimina Spesa", "Vuoi davvero eliminare questa spesa?", "danger")) {
+                await supabaseClient.from('expenses').delete().eq('id', expId);
+                await fetchExpenses();
+                showProjectDetail(projectId);
+            }
+        }
+        
         function renderStrategicCharts() {
             if(!document.body.classList.contains('is-admin')) return;
             const activeProjects = projects.filter(p => !p.is_archived);
