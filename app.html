@@ -1933,9 +1933,7 @@
             await supabaseClient.from('entries').update({ project_name: name }).eq('project_id', id);
             await fetchProjects(); await fetchEntries();
             closeEditProjectModal(); showProjectDetail(id); 
-        }
-
-        async function addExpense(projectId) {
+        }async function addExpense(projectId) {
             const desc = document.getElementById('exp-desc').value.trim();
             const amount = parseFloat(document.getElementById('exp-amount').value);
             
@@ -2475,17 +2473,4 @@
         async function generatePDFReport() {
             if (activePlan === 'starter') return;
             const s = document.getElementById('report-start').value, e = document.getElementById('report-end').value;
-            if(!s || !e) return await appAlert("Attenzione", "Seleziona le date per il report.", "danger"); 
-            const start = new Date(s); start.setHours(0,0,0,0); const end = new Date(e); end.setHours(23,59,59,999);
-            if(start > end) return await appAlert("Attenzione", "La data di inizio deve essere precedente a quella di fine.", "danger");
-            
-            const filE = entries.filter(ent => { const d = new Date(ent.created_at); return d >= start && d <= end; });
-            if (filE.length === 0) return await appAlert("Informazione", "Nessuna attività registrata nel periodo selezionato.", "info");
-
-            const { jsPDF } = window.jspdf; const doc = new jsPDF();
-            const pdfColor = THEMES[currentBusinessType].pdfColor;
-            let logoData = null, startY = 30; if(studioData?.logo_url) { try { logoData = await getBase64FromUrl(studioData.logo_url); } catch(err) {} }
-            if(logoData) { const imgH = 12; const imgW = (logoData.width/logoData.height)*imgH; doc.addImage(logoData.url, 'PNG', 14, 15, imgW, imgH); startY = 40; }
-
-            doc.setFontSize(26); doc.setTextColor(15, 23, 42); doc.text(studioData?.name||"Azienda", 14, startY);
-            doc.setFontSize(
+            if(!s
