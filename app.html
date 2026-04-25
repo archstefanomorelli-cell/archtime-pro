@@ -112,17 +112,14 @@
                 </div>
                 <div class="space-y-4">
                     <div id="signup-fields" class="force-hide space-y-4">
-                        
                         <div class="p-5 bg-slate-50 rounded-xl border border-slate-200">
                             <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-3">Tipo di Account</label>
-                            
                             <div class="space-y-3">
                                 <div>
                                     <label class="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200 cursor-pointer hover:border-primary-300 transition-all shadow-sm">
                                         <input type="radio" name="main-role" value="owner" onchange="toggleSignupOptions()" class="w-4 h-4 text-primary-600 focus:ring-primary-500">
                                         <span class="text-sm font-bold text-slate-700">Manager (Crea Spazio di Lavoro)</span>
                                     </label>
-                                    
                                     <div id="sector-selection" class="force-hide pl-4 border-l-2 border-primary-200 ml-3 mt-3 transition-all duration-300">
                                         <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-2">Seleziona il tuo settore:</label>
                                         <div class="flex gap-2">
@@ -137,24 +134,17 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <label class="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200 cursor-pointer hover:border-primary-300 transition-all shadow-sm">
                                     <input type="radio" name="main-role" value="staff" onchange="toggleSignupOptions()" class="w-4 h-4 text-primary-600 focus:ring-primary-500">
                                     <span class="text-sm font-bold text-slate-700">Collaboratore (Unisciti)</span>
                                 </label>
                             </div>
-
-                            <div id="trial-info-container" class="force-hide mt-4 p-3.5 bg-primary-50 border border-primary-100 rounded-xl flex gap-3 items-start">
-                                <i data-lucide="gift" class="w-5 h-5 text-primary-600 shrink-0"></i>
-                                <p class="text-xs text-primary-900 leading-relaxed"><strong class="font-black">15 giorni di prova gratuita!</strong><br>Nessuna carta richiesta.</p>
-                            </div>
+                            <div id="trial-info-container" class="force-hide mt-4 p-3.5 bg-primary-50 border border-primary-100 rounded-xl flex gap-3 items-start"><i data-lucide="gift" class="w-5 h-5 text-primary-600 shrink-0"></i><p class="text-xs text-primary-900 leading-relaxed"><strong class="font-black">15 giorni di prova gratuita!</strong><br>Nessuna carta richiesta.</p></div>
                         </div>
-                        
                         <div id="invite-code-container" class="force-hide">
                             <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Codice Invito Manager</label>
                             <input type="text" id="invite-code-input" onkeydown="if(event.key === 'Enter'){ event.preventDefault(); handleAuthAction(); }" placeholder="Incolla codice" class="w-full border border-primary-200 bg-primary-50/30 rounded-xl p-3.5 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all">
                         </div>
-                        
                         <input type="text" id="full-name" onkeydown="if(event.key === 'Enter'){ event.preventDefault(); handleAuthAction(); }" placeholder="Nome e Cognome" class="w-full border border-slate-200 rounded-xl p-3.5 text-sm outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all bg-white">
                     </div>
                     
@@ -407,16 +397,16 @@
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm text-left hidden lg:table">
                             <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold tracking-wider border-b border-slate-200">
-                                <tr>
-                                    <th class="px-5 py-4 font-bold whitespace-nowrap">Data</th>
-                                    <th class="px-5 py-4 text-center font-bold whitespace-nowrap">Team</th>
-                                    <th class="px-5 py-4 text-center font-bold w-full">Progetto</th>
-                                    <th class="px-5 py-4 font-bold min-w-[150px]">Attività / Note</th>
-                                    <th class="px-5 py-4 font-bold whitespace-nowrap">Tempo</th>
-                                    <th class="px-5 py-4 admin-only text-center font-bold whitespace-nowrap">Costo</th>
-                                    <th class="px-5 py-4 admin-only font-bold whitespace-nowrap"></th>
-                                </tr>
-                            </thead>
+    <tr>
+        <th class="px-5 py-4 font-bold whitespace-nowrap">Data</th>
+        <th class="px-5 py-4 text-center font-bold whitespace-nowrap">Team</th>
+        <th class="px-5 py-4 text-center font-bold w-full">Progetto</th>
+        <th class="px-5 py-4 font-bold min-w-[150px]">Attività / Note</th>
+        <th class="px-5 py-4 font-bold whitespace-nowrap">Tempo</th>
+        <th class="px-5 py-4 admin-only text-center font-bold whitespace-nowrap">Costo</th>
+        <th class="px-5 py-4 admin-only font-bold whitespace-nowrap"></th>
+    </tr>
+</thead>
                             <tbody id="entries-table-desktop" class="divide-y divide-slate-100"></tbody>
                         </table>
                         <div id="entries-empty-state" class="force-hide p-10 text-center text-slate-400 font-medium text-sm">Nessuna attività registrata in questa settimana.</div>
@@ -433,25 +423,31 @@
         </nav>
     </div>
 
-    <div id="modal-team-detail" class="force-hide fixed inset-0 z-[100] modal flex items-end lg:items-center justify-center lg:p-4">
-        <div class="w-full h-[90vh] lg:h-auto lg:max-w-4xl lg:max-h-[90vh] overflow-y-auto p-6 lg:p-10 shadow-xl border border-slate-200 relative rounded-t-3xl lg:rounded-2xl bg-white">
-            <button onclick="closeTeamMemberDetail()" class="absolute top-4 right-4 lg:top-6 lg:right-6 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors z-10"><i data-lucide="x"></i></button>
-            <div id="team-detail-content"></div>
-        </div>
-    </div>
-
-    <div id="modal-change-role" class="force-hide fixed inset-0 z-[300] modal flex items-center justify-center p-4">
-        <div class="w-full max-w-sm p-6 lg:p-8 shadow-xl border border-slate-200 rounded-2xl relative bg-white">
-            <button onclick="closeRoleModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>
-            <h2 class="text-lg font-black text-slate-800 tracking-tight mb-2 flex items-center gap-2"><i data-lucide="shield" class="text-primary-500 w-5 h-5"></i> Modifica Status</h2>
-            <p class="text-[11px] text-slate-500 uppercase tracking-wider font-bold mb-6">Scegli il livello di accesso.</p>
-            <input type="hidden" id="change-role-id">
-            <select id="change-role-select" class="w-full border border-slate-200 rounded-xl p-3.5 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none text-slate-700 font-bold mb-6 cursor-pointer">
-                <option value="staff">Staff (Collaboratore base)</option>
-                <option value="admin">Admin (Può gestire tutto)</option>
-                <option value="inactive">Inattivo (Accesso sospeso)</option>
-            </select>
-            <button onclick="saveNewRole()" class="w-full bg-slate-900 text-white py-3.5 rounded-xl font-bold shadow-sm hover:bg-slate-800 transition-all active:scale-[0.98]">Salva Impostazioni</button>
+    <div id="modal-edit-team" class="force-hide fixed inset-0 z-[100] modal flex items-center justify-center p-4">
+        <div class="w-full max-w-md p-6 lg:p-8 shadow-xl border border-slate-200 rounded-2xl relative bg-white">
+            <button onclick="closeEditTeamMemberModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>
+            <h2 class="text-lg font-black text-slate-800 tracking-tight mb-6 flex items-center gap-2"><i data-lucide="user-cog" class="text-primary-500 w-5 h-5"></i> Modifica Collaboratore</h2>
+            <input type="hidden" id="edit-team-id">
+            <div class="space-y-4">
+                <div>
+                    <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Nome e Cognome</label>
+                    <input type="text" id="edit-team-name" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Ruolo</label>
+                        <select id="edit-team-role" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none text-slate-700"></select>
+                    </div>
+                    <div>
+                        <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Costo Orario (€)</label>
+                        <input type="number" step="0.01" id="edit-team-cost" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all font-bold">
+                    </div>
+                </div>
+                <div class="flex gap-2 pt-4 mt-2 border-t border-slate-100">
+                    <button id="btn-delete-team" onclick="deleteTeamMemberFromModal()" class="bg-white text-slate-500 border border-slate-200 hover:bg-red-50 hover:text-red-600 hover:border-red-200 px-4 py-3.5 rounded-xl transition-colors shadow-sm flex items-center justify-center shrink-0" title="Sgancia dallo Studio"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    <button onclick="saveTeamMemberEdit()" class="flex-1 bg-slate-900 text-white py-3.5 rounded-xl font-bold shadow-sm hover:bg-slate-800 transition-all active:scale-[0.98]">Salva Modifiche</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -577,10 +573,6 @@
             <button onclick="closeManualEntry()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>
             <h2 class="text-lg font-black text-slate-800 tracking-tight mb-6">Inserimento Manuale</h2>
             <div class="space-y-4">
-                <div class="admin-only">
-                    <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Team</label>
-                    <select id="manual-user" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none text-slate-700 font-bold"></select>
-                </div>
                 <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Progetto</label><select id="manual-project" onchange="updateManualTaskDropdown()" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none"></select></div>
                 <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Attività</label><select id="manual-task" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none"></select></div>
                 
@@ -1310,22 +1302,29 @@
         function renderProfiles() {
             const list = document.getElementById('team-list');
             const visibleProfiles = profiles.filter(p => showInactiveMembers ? true : p.role !== 'inactive');
-
-            list.innerHTML = visibleProfiles.map((pr, index) => {
+            
+            list.innerHTML = visibleProfiles.map(pr => {
+                const roleBadge = pr.is_owner 
+                    ? '<span class="bg-indigo-900 text-indigo-100 border border-indigo-800 text-[9px] px-2 py-0.5 rounded-md uppercase font-bold tracking-wider">Owner</span>'
+                    : (pr.role === 'admin' 
+                        ? '<span class="bg-indigo-50 text-indigo-600 border border-indigo-100 text-[9px] px-2 py-0.5 rounded-md uppercase font-bold tracking-wider">Admin</span>' 
+                        : (pr.role === 'inactive' ? '<span class="bg-red-50 text-red-500 border border-red-200 text-[9px] px-2 py-0.5 rounded-md uppercase font-bold tracking-wider">Inattivo</span>' : '<span class="bg-slate-100 text-slate-500 border border-slate-200 text-[9px] px-2 py-0.5 rounded-md uppercase font-bold tracking-wider">Staff</span>')
+                      );
+                
                 const opacityClass = pr.role === 'inactive' ? 'opacity-60 grayscale' : '';
-                const bgClass = index % 2 === 0 ? 'bg-white' : 'bg-slate-50/60';
-                const roleBadge = pr.is_owner ? '<span class="text-[8px] bg-indigo-900 text-white px-2 py-0.5 rounded uppercase font-bold">Owner</span>' : (pr.role === 'admin' ? '<span class="text-[8px] bg-indigo-50 text-indigo-600 border border-indigo-100 px-2 py-0.5 rounded uppercase font-bold">Admin</span>' : (pr.role === 'inactive' ? '<span class="text-[8px] bg-red-50 text-red-500 border border-red-200 px-2 py-0.5 rounded uppercase font-bold">Inattivo</span>' : '<span class="text-[8px] bg-slate-100 text-slate-500 border border-slate-200 px-2 py-0.5 rounded uppercase font-bold">Staff</span>'));
-
+                
                 return `
-                    <div class="${bgClass} p-4 rounded-xl border border-slate-200 flex justify-between items-center shadow-sm hover:shadow-md hover:border-primary-300 transition-all cursor-pointer group ${opacityClass}" onclick="showTeamMemberDetail('${pr.id}')">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 bg-primary-100 text-primary-700 rounded-full flex items-center justify-center font-bold text-xs uppercase shrink-0">${pr.full_name.charAt(0)}</div>
-                            <h4 class="font-black text-slate-800 text-sm tracking-tight">${pr.full_name}</h4>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 flex justify-between items-center shadow-sm hover:shadow-md transition-shadow group ${opacityClass}">
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <h4 class="font-black text-slate-800 text-sm tracking-tight">${pr.full_name}</h4>
+                                ${roleBadge}
+                            </div>
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">${pr.email}</p>
                         </div>
-                        <div class="flex items-center gap-2">
-                            ${roleBadge}
-                            <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 group-hover:text-primary-500 transition-colors"></i>
-                        </div>
+                        <button onclick="openEditTeamMemberModal('${pr.id}')" class="text-slate-400 hover:text-primary-600 bg-slate-50 hover:bg-primary-50 p-2 rounded-lg border border-slate-200 hover:border-primary-200 transition-all shadow-sm">
+                            <i data-lucide="edit-2" class="w-4 h-4"></i>
+                        </button>
                     </div>`;
             }).join('');
             lucide.createIcons();
@@ -1338,158 +1337,139 @@
             renderProfiles();
         }
 
-        function closeTeamMemberDetail() { document.getElementById('modal-team-detail').classList.add('force-hide'); }
-
-     async function showTeamMemberDetail(id) {
-            const pr = profiles.find(p => p.id === id);
+        function openEditTeamMemberModal(id) {
+            const pr = profiles.find(p => p.id === id); 
             if(!pr) return;
-
-            const userEntries = entries.filter(e => e.user_name === pr.full_name);
-            const totalH = userEntries.reduce((s, e) => s + Number(e.duration), 0);
-            const totalC = userEntries.reduce((s, e) => s + Number(e.rate), 0);
-
-            const projectBreakdown = {};
-            userEntries.forEach(e => {
-                if(!projectBreakdown[e.project_name]) projectBreakdown[e.project_name] = {};
-                projectBreakdown[e.project_name][e.task] = (projectBreakdown[e.project_name][e.task] || 0) + Number(e.duration);
-            });
-
-            let disableManagement = false;
-            if (pr.is_owner && pr.id !== userProfile.id) disableManagement = true;
-            if (pr.role === 'admin' && pr.id !== userProfile.id && !userProfile.is_owner) disableManagement = true;
-
-            // Nota il "pr-8 lg:pr-12" che protegge il tasto X in alto a destra
-            let html = `
-                <div class="flex flex-col lg:flex-row justify-between items-start mb-8 gap-4 pr-8 lg:pr-12">
-                    <div>
-                        <h2 class="text-3xl font-black text-slate-800 mb-1 tracking-tight">${pr.full_name}</h2>
-                        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">${pr.email}</p>
-                    </div>
-                    
-                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 flex items-center gap-4 w-full lg:w-auto shadow-sm">
-                        <div>
-                            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Status & Ruolo</p>
-                            <div class="flex items-center gap-3">
-                                <span class="text-sm font-black text-slate-900 uppercase">${pr.role === 'inactive' ? 'Inattivo (Sospeso)' : (pr.is_owner ? 'Proprietario' : pr.role)}</span>
-                                ${!disableManagement ? `<button onclick="openRoleModal('${pr.id}', '${pr.role}')" class="text-slate-400 hover:text-primary-600 bg-white border border-slate-200 shadow-sm p-1.5 rounded-lg transition-colors" title="Modifica Ruolo"><i data-lucide="edit-2" class="w-3.5 h-3.5"></i></button>` : ''}
-                            </div>
-                        </div>
-                        ${!disableManagement ? `
-                            <div class="w-[1px] h-8 bg-slate-200"></div>
-                            <button onclick="deleteTeamMemberFromDetail('${pr.id}')" class="text-slate-400 hover:text-red-600 bg-white border border-slate-200 p-2 rounded-xl shadow-sm hover:bg-red-50 transition-colors" title="Elimina dal Team"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                        ` : ''}
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-10">
-                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200">
-                        <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Ore Totali Prestate</p>
-                        <p class="text-2xl font-black text-slate-800">${formatTime(totalH)}</p>
-                    </div>
-                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 admin-only">
-                        <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Costo Totale</p>
-                        <p class="text-2xl font-black text-primary-600">€ ${totalC.toFixed(2)}</p>
-                    </div>
-                    <div class="bg-white p-5 rounded-2xl border-2 border-primary-100 shadow-sm admin-only">
-                        <p class="text-[10px] font-bold text-primary-500 uppercase tracking-wider mb-2">Tariffa Oraria</p>
-                        <div class="flex items-center gap-2">
-                            <span class="text-sm font-bold text-slate-400">€</span>
-                            <input type="number" id="detail-team-cost" value="${pr.hourly_cost || 0}" class="w-20 font-black text-lg text-slate-800 outline-none">
-                            <span class="text-xs font-bold text-slate-400">/h</span>
-                            <button onclick="updateMemberCostFromDetail('${pr.id}')" class="ml-auto bg-primary-600 text-white p-2 rounded-lg hover:bg-primary-700 transition-colors"><i data-lucide="save" class="w-4 h-4"></i></button>
-                        </div>
-                    </div>
-                </div>
-
-                <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-6 pb-2 border-b border-slate-100">Distribuzione Lavoro per Progetto</h3>
-                <div class="space-y-6">
+            
+            document.getElementById('edit-team-id').value = pr.id;
+            document.getElementById('edit-team-name').value = pr.full_name || '';
+            document.getElementById('edit-team-cost').value = pr.hourly_cost || 0;
+            
+            const roleSelect = document.getElementById('edit-team-role');
+            
+            let optionsHtml = `
+                <option value="staff">Staff</option>
+                <option value="inactive">Inattivo (Sospeso)</option>
             `;
-
-            if(Object.keys(projectBreakdown).length === 0) {
-                 html += `<p class="text-sm text-slate-500 font-medium">Nessuna attività registrata.</p>`;
-            }
-
-            for (const [projName, tasks] of Object.entries(projectBreakdown)) {
-                html += `
-                    <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
-                        <div class="bg-slate-50 px-5 py-3 border-b border-slate-200">
-                            <h4 class="font-black text-slate-800 text-sm uppercase tracking-tight">${projName}</h4>
-                        </div>
-                        <div class="p-5 space-y-4">
-                `;
-                for (const [taskName, hours] of Object.entries(tasks)) {
-                    html += `
-                        <div class="flex justify-between items-center text-sm">
-                            <span class="font-medium text-slate-600">${taskName}</span>
-                            <span class="font-mono font-bold text-slate-900 bg-slate-100 px-2 py-0.5 rounded text-xs">${formatTime(hours)}</span>
-                        </div>
-                    `;
+            
+            if (userProfile.is_owner) {
+                if (pr.id !== userProfile.id) {
+                    optionsHtml += `<option value="admin">Admin</option>`;
+                    optionsHtml += `<option value="transfer_owner">Owner (Cedi Proprietà)</option>`;
+                } else {
+                    optionsHtml += `<option value="owner">Owner</option>`;
                 }
-                html += `</div></div>`;
+            } else if (userProfile.role === 'admin') {
+                optionsHtml += `<option value="admin">Admin</option>`;
             }
-
-            html += `</div>`;
-
-            // La vecchia parte dei bottoni in fondo è stata completamente rimossa
-
-            document.getElementById('team-detail-content').innerHTML = html;
-            document.getElementById('modal-team-detail').classList.remove('force-hide');
+            
+            roleSelect.innerHTML = optionsHtml;
+            roleSelect.value = pr.is_owner ? 'owner' : pr.role;
+            
+            const btnDelete = document.getElementById('btn-delete-team');
+            
+            if (pr.is_owner && pr.id !== userProfile.id) {
+                btnDelete.classList.add('force-hide');
+                roleSelect.disabled = true;
+                roleSelect.classList.add('opacity-50', 'cursor-not-allowed');
+            } else if (pr.role === 'admin' && pr.id !== userProfile.id && !userProfile.is_owner) {
+                btnDelete.classList.add('force-hide');
+                roleSelect.disabled = true;
+                roleSelect.classList.add('opacity-50', 'cursor-not-allowed');
+            } else {
+                roleSelect.disabled = false;
+                roleSelect.classList.remove('opacity-50', 'cursor-not-allowed');
+                if (pr.id === userProfile.id) {
+                    btnDelete.classList.add('force-hide');
+                } else {
+                    btnDelete.classList.remove('force-hide');
+                }
+            }
+            
+            document.getElementById('modal-edit-team').classList.remove('force-hide'); 
             lucide.createIcons();
         }
 
-        async function updateMemberCostFromDetail(id) {
-            const newCost = parseFloat(document.getElementById('detail-team-cost').value) || 0;
-            const pr = profiles.find(p => p.id === id);
-            if(pr && pr.hourly_cost !== newCost) {
-                 if(await appConfirm("Ricalcolo Storico", `Hai modificato la tariffa oraria di ${pr.full_name}.\nVuoi ricalcolare automaticamente il costo di TUTTE le ore che ha già registrato in passato con questa nuova tariffa?`, "info")) {
-                    const { data: userEntries } = await supabaseClient.from('entries').select('id, duration').eq('user_name', pr.full_name);
+        function closeEditTeamMemberModal() {
+            document.getElementById('modal-edit-team').classList.add('force-hide');
+        }
+
+        async function saveTeamMemberEdit() {
+            const id = document.getElementById('edit-team-id').value;
+            const newName = document.getElementById('edit-team-name').value.trim();
+            const newCost = parseFloat(document.getElementById('edit-team-cost').value) || 0;
+            const roleSelection = document.getElementById('edit-team-role').value;
+            
+            if(!newName) return await appAlert("Attenzione", "Inserisci il nome e cognome", "danger");
+            
+            const oldProf = profiles.find(p => p.id === id);
+            let finalRole = oldProf.role;
+            let finalIsOwner = oldProf.is_owner;
+
+            if (roleSelection === 'transfer_owner' && id !== userProfile.id) {
+                if(!await appConfirm("Trasferimento Proprietà", "ATTENZIONE: Stai cedendo la proprietà dello Spazio di Lavoro a questo utente.\nDiventerai un normale Admin, e perderai l'accesso alla gestione dell'abbonamento Stripe.\nVuoi davvero procedere?", "danger")) {
+                    return;
+                }
+                await supabaseClient.from('profiles').update({ is_owner: false }).eq('id', userProfile.id);
+                userProfile.is_owner = false;
+                finalRole = 'admin';
+                finalIsOwner = true;
+            } else if (roleSelection === 'owner') {
+                finalRole = 'admin';
+                finalIsOwner = true;
+            } else {
+                finalRole = roleSelection;
+                finalIsOwner = false;
+            }
+            
+            if (id === userProfile.id && finalRole === 'inactive') {
+                if (userProfile.is_owner) {
+                    return await appAlert("Azione Bloccata", "L'Owner non può auto-sospendersi.\nPrima devi cedere la Proprietà a un altro membro del team.", "danger");
+                }
+                if(!await appConfirm("Auto-Sospensione", "ATTENZIONE: Stai impostando il tuo account come Inattivo.\nSe confermi, verrai disconnesso all'istante.\n\nVuoi procedere?", "danger")) {
+                    return; 
+                }
+            }
+
+            await supabaseClient.from('profiles').update({ full_name: newName, hourly_cost: newCost, role: finalRole, is_owner: finalIsOwner }).eq('id', id);
+            
+            if (oldProf && oldProf.hourly_cost !== newCost) {
+                if(await appConfirm("Ricalcolo Storico", `Hai modificato la tariffa oraria di ${newName}.\nVuoi ricalcolare automaticamente il costo di TUTTE le ore che ha già registrato in passato con questa nuova tariffa?`, "info")) {
+                    const { data: userEntries } = await supabaseClient.from('entries').select('id, duration').eq('user_name', oldProf.full_name);
                     if(userEntries && userEntries.length > 0) {
                         for(let e of userEntries) {
                             await supabaseClient.from('entries').update({ rate: (e.duration * newCost) }).eq('id', e.id);
                         }
                     }
                 }
-                await supabaseClient.from('profiles').update({ hourly_cost: newCost }).eq('id', id);
-                await fetchProfiles();
-                await fetchEntries();
-                if (document.body.classList.contains('is-admin')) { renderStrategicCharts(); }
-                await appAlert("Fatto", "Tariffa aggiornata con successo!", "success");
-                showTeamMemberDetail(id);
             }
-        }
-        
-        function openRoleModal(id, currentRole) {
-            document.getElementById('change-role-id').value = id;
-            document.getElementById('change-role-select').value = currentRole;
-            document.getElementById('modal-change-role').classList.remove('force-hide');
-            lucide.createIcons();
-        }
-
-        function closeRoleModal() {
-            document.getElementById('modal-change-role').classList.add('force-hide');
-        }
-
-        async function saveNewRole() {
-            const id = document.getElementById('change-role-id').value;
-            const newRole = document.getElementById('change-role-select').value;
             
-            await supabaseClient.from('profiles').update({ role: newRole }).eq('id', id);
-            
-            closeRoleModal();
-            await fetchProfiles();
-            showTeamMemberDetail(id);
-            await appAlert("Fatto", "Status aggiornato con successo!", "success");
+            if (id === userProfile.id && finalRole === 'inactive') {
+                await supabaseClient.auth.signOut();
+                location.reload();
+                return;
+            }
+
+            closeEditTeamMemberModal();
+            await fetchProfiles(); 
+            await fetchEntries(); 
+            if (document.body.classList.contains('is-admin')) { 
+                await fetchProjects(); 
+                renderStrategicCharts(); 
+            }
+            await appAlert("Fatto", "Profilo aggiornato con successo!", "success");
         }
 
-        async function deleteTeamMemberFromDetail(id) {
-            if(await appConfirm("Attenzione", "Vuoi davvero rimuovere questo membro dal team? Finirà nel Limbo e non potrà più accedere allo Studio.", "danger")) {
+        async function deleteTeamMemberFromModal() {
+            const id = document.getElementById('edit-team-id').value;
+            if(await appConfirm("Rimuovi Definitivamente", "ATTENZIONE: Eliminando il collaboratore lo sgancerai per sempre dallo Studio. Il suo storico di ore rimarrà visibile nei report, ma lui non potrà più accedere se non con un nuovo invito.\n\nConsiglio: se ha smesso di lavorare con te, clicca su Annulla e cambia il suo ruolo in 'Inattivo' così manterrai il profilo intatto.\n\nVuoi davvero eliminarlo?", "danger")) { 
                 const { error } = await supabaseClient.rpc('kick_user_from_studio', { user_to_kick: id });
                 if(error) {
-                    await appAlert("Errore", error.message, "danger");
-                } else {
-                    closeTeamMemberDetail();
-                    await fetchProfiles();
+                    await appAlert("Errore", "Impossibile rimuovere l'utente: " + error.message, "danger");
+                    return;
                 }
+                closeEditTeamMemberModal();
+                await fetchProfiles(); 
             }
         }
 
@@ -1932,7 +1912,9 @@
             await supabaseClient.from('entries').update({ project_name: name }).eq('project_id', id);
             await fetchProjects(); await fetchEntries();
             closeEditProjectModal(); showProjectDetail(id); 
-        }async function addExpense(projectId) {
+        }
+
+        async function addExpense(projectId) {
             const desc = document.getElementById('exp-desc').value.trim();
             const amount = parseFloat(document.getElementById('exp-amount').value);
             
@@ -2078,6 +2060,7 @@
                 const d = new Date(e.created_at).getTime();
                 const inDate = d >= start.getTime() && d <= end.getTime();
                 
+                // Filtro sicurezza: il collaboratore vede solo se stesso
                 if (isStaff) {
                     return inDate && e.user_email === userProfile.email;
                 }
@@ -2242,13 +2225,9 @@
             lucide.createIcons();
         }
 
-        async function saveEntry(proj, task, hours, customDate = null, notes = "", forceUserName = null, forceUserEmail = null) {
-            const uName = forceUserName || userProfile.full_name;
-            const uEmail = forceUserEmail || userProfile.email;
-            const prof = profiles.find(p => p.full_name === uName) || userProfile;
-            const rate = (prof.hourly_cost || 0) * hours;
-            
-            const payload = { project_id: proj.id, project_name: proj.name, task, duration: hours, user_email: uEmail, user_name: uName, rate: rate, studio_id: userProfile.studio_id, notes: notes };
+        async function saveEntry(proj, task, hours, customDate = null, notes = "") {
+            const { data: prof } = await supabaseClient.from('profiles').select('*').eq('id', userProfile.id).single();
+            const payload = { project_id: proj.id, project_name: proj.name, task, duration: hours, user_email: userProfile.email, user_name: prof.full_name, rate: (prof ? prof.hourly_cost : 0) * hours, studio_id: userProfile.studio_id, notes: notes };
             if(customDate) payload.created_at = new Date(customDate).toISOString();
             await supabaseClient.from('entries').insert([payload]); 
             fetchEntries();
@@ -2261,12 +2240,6 @@
             document.getElementById('manual-end').value = '';
             document.getElementById('manual-hours').value = '';
             document.getElementById('manual-notes').value = '';
-            
-            const mUser = document.getElementById('manual-user');
-            if(mUser) {
-                mUser.innerHTML = profiles.filter(p => p.role !== 'inactive').map(pr => `<option value="${pr.full_name}" ${pr.full_name === userProfile.full_name ? 'selected' : ''}>${pr.full_name}</option>`).join(''); 
-            }
-
             document.getElementById('manual-project').innerHTML = '<option value="" disabled selected>Scegli...</option>' + projects.filter(p => !p.is_archived).map((p, i) => `<option value="${projects.indexOf(p)}">${p.name}</option>`).join(''); 
         }
         
@@ -2307,15 +2280,7 @@
                 n = n ? `${timeString} ${n}` : timeString;
             }
 
-            let uName = null;
-            let uEmail = null;
-            if(document.body.classList.contains('is-admin')) {
-                const selUser = document.getElementById('manual-user').value;
-                const pr = profiles.find(p => p.full_name === selUser);
-                if(pr) { uName = pr.full_name; uEmail = pr.email; }
-            }
-
-            await saveEntry(projects[pIdx], t, h, d, n, uName, uEmail); 
+            await saveEntry(projects[pIdx], t, h, d, n); 
             document.getElementById('manual-notes').value = ""; 
             closeManualEntry(); 
         }
