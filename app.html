@@ -1340,7 +1340,7 @@
 
         function closeTeamMemberDetail() { document.getElementById('modal-team-detail').classList.add('force-hide'); }
 
-        async function showTeamMemberDetail(id) {
+     async function showTeamMemberDetail(id) {
             const pr = profiles.find(p => p.id === id);
             if(!pr) return;
 
@@ -1358,11 +1358,26 @@
             if (pr.is_owner && pr.id !== userProfile.id) disableManagement = true;
             if (pr.role === 'admin' && pr.id !== userProfile.id && !userProfile.is_owner) disableManagement = true;
 
+            // Nota il "pr-8 lg:pr-12" che protegge il tasto X in alto a destra
             let html = `
-                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-4">
+                <div class="flex flex-col lg:flex-row justify-between items-start mb-8 gap-4 pr-8 lg:pr-12">
                     <div>
                         <h2 class="text-3xl font-black text-slate-800 mb-1 tracking-tight">${pr.full_name}</h2>
                         <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">${pr.email}</p>
+                    </div>
+                    
+                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 flex items-center gap-4 w-full lg:w-auto shadow-sm">
+                        <div>
+                            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Status & Ruolo</p>
+                            <div class="flex items-center gap-3">
+                                <span class="text-sm font-black text-slate-900 uppercase">${pr.role === 'inactive' ? 'Inattivo (Sospeso)' : (pr.is_owner ? 'Proprietario' : pr.role)}</span>
+                                ${!disableManagement ? `<button onclick="openRoleModal('${pr.id}', '${pr.role}')" class="text-slate-400 hover:text-primary-600 bg-white border border-slate-200 shadow-sm p-1.5 rounded-lg transition-colors" title="Modifica Ruolo"><i data-lucide="edit-2" class="w-3.5 h-3.5"></i></button>` : ''}
+                            </div>
+                        </div>
+                        ${!disableManagement ? `
+                            <div class="w-[1px] h-8 bg-slate-200"></div>
+                            <button onclick="deleteTeamMemberFromDetail('${pr.id}')" class="text-slate-400 hover:text-red-600 bg-white border border-slate-200 p-2 rounded-xl shadow-sm hover:bg-red-50 transition-colors" title="Elimina dal Team"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        ` : ''}
                     </div>
                 </div>
 
@@ -1415,23 +1430,7 @@
 
             html += `</div>`;
 
-            html += `
-                <div class="flex justify-end mt-12 pt-8 border-t border-slate-100 admin-only">
-                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 flex items-center gap-6 w-full lg:w-auto shadow-sm">
-                        <div>
-                            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Status & Ruolo</p>
-                            <div class="flex items-center gap-3">
-                                <span class="text-sm font-black text-slate-900 uppercase">${pr.role === 'inactive' ? 'Inattivo (Sospeso)' : (pr.is_owner ? 'Proprietario' : pr.role)}</span>
-                                ${!disableManagement ? `<button onclick="openRoleModal('${pr.id}', '${pr.role}')" class="text-slate-400 hover:text-primary-600 bg-white border border-slate-200 shadow-sm p-1.5 rounded-lg transition-colors"><i data-lucide="edit-2" class="w-3.5 h-3.5"></i></button>` : ''}
-                            </div>
-                        </div>
-                        ${!disableManagement ? `
-                            <div class="w-[1px] h-10 bg-slate-200"></div>
-                            <button onclick="deleteTeamMemberFromDetail('${pr.id}')" class="text-slate-400 hover:text-red-600 bg-white border border-slate-200 p-2.5 rounded-xl shadow-sm hover:bg-red-50 transition-colors" title="Elimina dal Team"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
-                        ` : ''}
-                    </div>
-                </div>
-            `;
+            // La vecchia parte dei bottoni in fondo è stata completamente rimossa
 
             document.getElementById('team-detail-content').innerHTML = html;
             document.getElementById('modal-team-detail').classList.remove('force-hide');
