@@ -435,8 +435,23 @@
 
     <div id="modal-team-detail" class="force-hide fixed inset-0 z-[100] modal flex items-end lg:items-center justify-center lg:p-4">
         <div class="w-full h-[90vh] lg:h-auto lg:max-w-4xl lg:max-h-[90vh] overflow-y-auto p-6 lg:p-10 shadow-xl border border-slate-200 relative rounded-t-3xl lg:rounded-2xl bg-white">
-            <button onclick="closeTeamMemberDetail()" class="absolute top-4 right-4 lg:top-6 lg:right-6 text-slate-400 hover:text-slate-700 bg-slate-50 rounded-full p-2 transition-colors z-10"><i data-lucide="x"></i></button>
+            <button onclick="closeTeamMemberDetail()" class="absolute top-4 right-4 lg:top-6 lg:right-6 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors z-10"><i data-lucide="x"></i></button>
             <div id="team-detail-content"></div>
+        </div>
+    </div>
+
+    <div id="modal-change-role" class="force-hide fixed inset-0 z-[300] modal flex items-center justify-center p-4">
+        <div class="w-full max-w-sm p-6 lg:p-8 shadow-xl border border-slate-200 rounded-2xl relative bg-white">
+            <button onclick="closeRoleModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>
+            <h2 class="text-lg font-black text-slate-800 tracking-tight mb-2 flex items-center gap-2"><i data-lucide="shield" class="text-primary-500 w-5 h-5"></i> Modifica Status</h2>
+            <p class="text-[11px] text-slate-500 uppercase tracking-wider font-bold mb-6">Scegli il livello di accesso.</p>
+            <input type="hidden" id="change-role-id">
+            <select id="change-role-select" class="w-full border border-slate-200 rounded-xl p-3.5 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none text-slate-700 font-bold mb-6 cursor-pointer">
+                <option value="staff">Staff (Collaboratore base)</option>
+                <option value="admin">Admin (Può gestire tutto)</option>
+                <option value="inactive">Inattivo (Accesso sospeso)</option>
+            </select>
+            <button onclick="saveNewRole()" class="w-full bg-slate-900 text-white py-3.5 rounded-xl font-bold shadow-sm hover:bg-slate-800 transition-all active:scale-[0.98]">Salva Impostazioni</button>
         </div>
     </div>
 
@@ -562,6 +577,10 @@
             <button onclick="closeManualEntry()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-full p-2 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>
             <h2 class="text-lg font-black text-slate-800 tracking-tight mb-6">Inserimento Manuale</h2>
             <div class="space-y-4">
+                <div class="admin-only">
+                    <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Team</label>
+                    <select id="manual-user" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none text-slate-700 font-bold"></select>
+                </div>
                 <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Progetto</label><select id="manual-project" onchange="updateManualTaskDropdown()" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none"></select></div>
                 <div><label class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5 ml-1">Attività</label><select id="manual-task" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all appearance-none"></select></div>
                 
@@ -1325,7 +1344,7 @@
             const pr = profiles.find(p => p.id === id);
             if(!pr) return;
 
-            const userEntries = entries.filter(e => e.user_email === pr.email);
+            const userEntries = entries.filter(e => e.user_name === pr.full_name);
             const totalH = userEntries.reduce((s, e) => s + Number(e.duration), 0);
             const totalC = userEntries.reduce((s, e) => s + Number(e.rate), 0);
 
@@ -1335,15 +1354,15 @@
                 projectBreakdown[e.project_name][e.task] = (projectBreakdown[e.project_name][e.task] || 0) + Number(e.duration);
             });
 
+            let disableManagement = false;
+            if (pr.is_owner && pr.id !== userProfile.id) disableManagement = true;
+            if (pr.role === 'admin' && pr.id !== userProfile.id && !userProfile.is_owner) disableManagement = true;
+
             let html = `
                 <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-4">
                     <div>
                         <h2 class="text-3xl font-black text-slate-800 mb-1 tracking-tight">${pr.full_name}</h2>
                         <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">${pr.email}</p>
-                    </div>
-                    <div class="bg-primary-50 px-4 py-2 rounded-xl border border-primary-100">
-                        <p class="text-[10px] font-bold text-primary-600 uppercase">Status attuale</p>
-                        <p class="text-sm font-black text-primary-900 uppercase">${pr.role === 'inactive' ? 'Inattivo / Sospeso' : (pr.is_owner ? 'Proprietario' : pr.role)}</p>
                     </div>
                 </div>
 
@@ -1396,19 +1415,23 @@
 
             html += `</div>`;
 
-            let disableManagement = false;
-            if (pr.is_owner && pr.id !== userProfile.id) disableManagement = true;
-            if (pr.role === 'admin' && pr.id !== userProfile.id && !userProfile.is_owner) disableManagement = true;
-            if (pr.id === userProfile.id) disableManagement = true;
-
-            if(!disableManagement) {
-                html += `
-                    <div class="mt-12 pt-8 border-t border-slate-100 flex justify-between gap-4 admin-only">
-                        <button onclick="updateMemberStatusFromDetail('${pr.id}', '${pr.role === 'inactive' ? 'staff' : 'inactive'}')" class="text-xs font-bold ${pr.role === 'inactive' ? 'text-emerald-500 hover:bg-emerald-50' : 'text-red-500 hover:bg-red-50'} px-4 py-3 rounded-xl transition-colors">${pr.role === 'inactive' ? 'Riattiva Collaboratore' : 'Sospendi Collaboratore'}</button>
-                        <button onclick="deleteTeamMemberFromDetail('${pr.id}')" class="bg-slate-100 text-slate-600 px-6 py-3 rounded-xl font-bold hover:bg-red-600 hover:text-white transition-all shadow-sm">Sgancia dallo Studio</button>
+            html += `
+                <div class="flex justify-end mt-12 pt-8 border-t border-slate-100 admin-only">
+                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 flex items-center gap-6 w-full lg:w-auto shadow-sm">
+                        <div>
+                            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Status & Ruolo</p>
+                            <div class="flex items-center gap-3">
+                                <span class="text-sm font-black text-slate-900 uppercase">${pr.role === 'inactive' ? 'Inattivo (Sospeso)' : (pr.is_owner ? 'Proprietario' : pr.role)}</span>
+                                ${!disableManagement ? `<button onclick="openRoleModal('${pr.id}', '${pr.role}')" class="text-slate-400 hover:text-primary-600 bg-white border border-slate-200 shadow-sm p-1.5 rounded-lg transition-colors"><i data-lucide="edit-2" class="w-3.5 h-3.5"></i></button>` : ''}
+                            </div>
+                        </div>
+                        ${!disableManagement ? `
+                            <div class="w-[1px] h-10 bg-slate-200"></div>
+                            <button onclick="deleteTeamMemberFromDetail('${pr.id}')" class="text-slate-400 hover:text-red-600 bg-white border border-slate-200 p-2.5 rounded-xl shadow-sm hover:bg-red-50 transition-colors" title="Elimina dal Team"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+                        ` : ''}
                     </div>
-                `;
-            }
+                </div>
+            `;
 
             document.getElementById('team-detail-content').innerHTML = html;
             document.getElementById('modal-team-detail').classList.remove('force-hide');
@@ -1436,14 +1459,27 @@
             }
         }
         
-        async function updateMemberStatusFromDetail(id, newStatus) {
-            const pr = profiles.find(p => p.id === id);
-            const msg = newStatus === 'inactive' ? "Sospendere questo collaboratore? Non potrà più accedere." : "Riattivare questo collaboratore?";
-            if(await appConfirm("Modifica Status", msg, "info")) {
-                 await supabaseClient.from('profiles').update({ role: newStatus }).eq('id', id);
-                 await fetchProfiles();
-                 showTeamMemberDetail(id);
-            }
+        function openRoleModal(id, currentRole) {
+            document.getElementById('change-role-id').value = id;
+            document.getElementById('change-role-select').value = currentRole;
+            document.getElementById('modal-change-role').classList.remove('force-hide');
+            lucide.createIcons();
+        }
+
+        function closeRoleModal() {
+            document.getElementById('modal-change-role').classList.add('force-hide');
+        }
+
+        async function saveNewRole() {
+            const id = document.getElementById('change-role-id').value;
+            const newRole = document.getElementById('change-role-select').value;
+            
+            await supabaseClient.from('profiles').update({ role: newRole }).eq('id', id);
+            
+            closeRoleModal();
+            await fetchProfiles();
+            showTeamMemberDetail(id);
+            await appAlert("Fatto", "Status aggiornato con successo!", "success");
         }
 
         async function deleteTeamMemberFromDetail(id) {
@@ -2117,7 +2153,7 @@
                     </div>
                     <div class="flex flex-col gap-3">
                         <div class="max-w-[90%]"><span class="text-xs text-slate-600 font-bold">${e.task}</span><div class="text-[11px] text-slate-400 mt-0.5 break-words">${displayNotes}</div></div>
-                        <div class="admin-only flex justify-between border-t border-slate-100 pt-3">
+                        <div class="admin-only flex justify-between border-t border-slate-200 pt-3">
                             <span class="font-mono text-slate-500 font-bold text-xs whitespace-nowrap">Costo: €${Number(e.rate).toFixed(2)}</span>
                             <div class="flex gap-2">
                                 <button onclick="openEditEntryModal('${e.id}')" class="text-slate-400 p-1.5 hover:text-primary-600 hover:bg-white rounded-lg transition-colors"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button>
@@ -2209,9 +2245,13 @@
             lucide.createIcons();
         }
 
-        async function saveEntry(proj, task, hours, customDate = null, notes = "") {
-            const { data: prof } = await supabaseClient.from('profiles').select('*').eq('id', userProfile.id).single();
-            const payload = { project_id: proj.id, project_name: proj.name, task, duration: hours, user_email: userProfile.email, user_name: prof.full_name, rate: (prof ? prof.hourly_cost : 0) * hours, studio_id: userProfile.studio_id, notes: notes };
+        async function saveEntry(proj, task, hours, customDate = null, notes = "", forceUserName = null, forceUserEmail = null) {
+            const uName = forceUserName || userProfile.full_name;
+            const uEmail = forceUserEmail || userProfile.email;
+            const prof = profiles.find(p => p.full_name === uName) || userProfile;
+            const rate = (prof.hourly_cost || 0) * hours;
+            
+            const payload = { project_id: proj.id, project_name: proj.name, task, duration: hours, user_email: uEmail, user_name: uName, rate: rate, studio_id: userProfile.studio_id, notes: notes };
             if(customDate) payload.created_at = new Date(customDate).toISOString();
             await supabaseClient.from('entries').insert([payload]); 
             fetchEntries();
@@ -2224,6 +2264,12 @@
             document.getElementById('manual-end').value = '';
             document.getElementById('manual-hours').value = '';
             document.getElementById('manual-notes').value = '';
+            
+            const mUser = document.getElementById('manual-user');
+            if(mUser) {
+                mUser.innerHTML = profiles.filter(p => p.role !== 'inactive').map(pr => `<option value="${pr.full_name}" ${pr.full_name === userProfile.full_name ? 'selected' : ''}>${pr.full_name}</option>`).join(''); 
+            }
+
             document.getElementById('manual-project').innerHTML = '<option value="" disabled selected>Scegli...</option>' + projects.filter(p => !p.is_archived).map((p, i) => `<option value="${projects.indexOf(p)}">${p.name}</option>`).join(''); 
         }
         
@@ -2264,7 +2310,15 @@
                 n = n ? `${timeString} ${n}` : timeString;
             }
 
-            await saveEntry(projects[pIdx], t, h, d, n); 
+            let uName = null;
+            let uEmail = null;
+            if(document.body.classList.contains('is-admin')) {
+                const selUser = document.getElementById('manual-user').value;
+                const pr = profiles.find(p => p.full_name === selUser);
+                if(pr) { uName = pr.full_name; uEmail = pr.email; }
+            }
+
+            await saveEntry(projects[pIdx], t, h, d, n, uName, uEmail); 
             document.getElementById('manual-notes').value = ""; 
             closeManualEntry(); 
         }
@@ -2434,160 +2488,4 @@
             if(logoData) { const imgH = 12; const imgW = (logoData.width/logoData.height)*imgH; doc.addImage(logoData.url, 'PNG', 14, 15, imgW, imgH); startY = 40; }
 
             doc.setFontSize(26); doc.setTextColor(15, 23, 42); doc.text(studioData?.name||"Azienda", 14, startY);
-            doc.setFontSize(16); doc.setTextColor(15, 23, 42); doc.text(`Rapporto Attività`, 14, startY + 15);
-            doc.setFontSize(12); doc.setTextColor(100, 116, 139); doc.text(`Dal ${start.toLocaleDateString()} al ${end.toLocaleDateString()}`, 14, startY + 23);
-            
-            const totalH = filE.reduce((sum, ent) => sum + Number(ent.duration), 0); const totalC = filE.reduce((sum, ent) => sum + Number(ent.rate), 0);
-            doc.setDrawColor(226, 232, 240); doc.line(14, startY+30, 196, startY+30);
-            doc.setFontSize(12); doc.setTextColor(15, 23, 42); doc.text(`Riepilogo Globale:`, 14, startY + 45);
-            doc.setFontSize(10); doc.text(`Ore Totali: ${formatTime(totalH)}`, 14, startY + 53); doc.text(`Valore Economico: €${totalC.toFixed(2)}`, 14, startY + 60);
-
-            const projLabel = currentBusinessType === 'impresa' ? 'Cantiere' : 'Progetto';
-
-            [...new Set(filE.map(ent => ent.project_id))].forEach((pid) => {
-                const p = projects.find(x => x.id === pid); const pE = filE.filter(ent => ent.project_id === pid).sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
-                doc.addPage(); let pY = 20; if(logoData) { doc.addImage(logoData.url, 'PNG', 14, 10, (logoData.width/logoData.height)*8, 8); pY = 28; }
-                doc.setFontSize(18); doc.setTextColor(...pdfColor); doc.text(p?p.name:"Eliminato", 14, pY);
-                doc.setFontSize(10); doc.setTextColor(100, 116, 139); doc.text(`Cliente: ${p?p.client:'-'} | Periodo: ${s} / ${e}`, 14, pY+7);
-                doc.text(`Ore Periodo: ${formatTime(pE.reduce((sum,ent)=>sum+Number(ent.duration),0))} | Valore: €${pE.reduce((sum,ent)=>sum+Number(ent.rate),0).toFixed(2)}`, 14, pY+13);
-                doc.autoTable({ 
-                    startY: pY+20, 
-                    head: [['Data', 'Team', 'Attività', 'Ore', 'Costo']], 
-                    body: pE.map(ent => {
-                        let dispNotes = ent.notes || '';
-                        const match = dispNotes.match(/^\[(\d{2}:\d{2}) - (\d{2}:\d{2})\]\s*/);
-                        if(match) dispNotes = dispNotes.replace(match[0], '') + `\n(dalle ${match[1]} alle ${match[2]})`;
-                        return [new Date(ent.created_at).toLocaleDateString(), ent.user_name, dispNotes ? `${ent.task}\n(${dispNotes})` : ent.task, formatTime(Number(ent.duration)), `€${Number(ent.rate).toFixed(2)}`];
-                    }), 
-                    theme: 'striped', headStyles: { fillColor: pdfColor }, styles: { fontSize: 9 } 
-                });
-            });
-            doc.save(`Report_${start.toISOString().split('T')[0]}.pdf`); closeReportModal();
-        }
-
-        function openTeamReportModal() { 
-            if(activePlan === 'starter') return openUpgradeModal('Report Team PDF');
-            const today = new Date(); const fmt = (d) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-            document.getElementById('team-report-start').value = fmt(firstDay); document.getElementById('team-report-end').value = fmt(today);
-            
-            const userSelect = document.getElementById('team-report-user');
-            const activeProfiles = profiles.filter(p => p.role !== 'inactive');
-            userSelect.innerHTML = '<option value="all">Tutto il Team</option>' + activeProfiles.map(pr => `<option value="${pr.full_name}">${pr.full_name}</option>`).join('');
-            
-            document.getElementById('modal-team-report').classList.remove('force-hide'); lucide.createIcons();
-        }
-
-        function closeTeamReportModal() { document.getElementById('modal-team-report').classList.add('force-hide'); }
-
-        async function generateTeamPDFReport() {
-            if (activePlan === 'starter') return;
-            const s = document.getElementById('team-report-start').value, e = document.getElementById('team-report-end').value;
-            const selectedUser = document.getElementById('team-report-user').value;
-            
-            if(!s || !e) return await appAlert("Attenzione", "Seleziona le date per il report.", "danger"); 
-            const start = new Date(s); start.setHours(0,0,0,0); const end = new Date(e); end.setHours(23,59,59,999);
-            if(start > end) return await appAlert("Attenzione", "La data di inizio deve essere precedente a quella di fine.", "danger");
-            
-            let filE = entries.filter(ent => { const d = new Date(ent.created_at); return d >= start && d <= end; });
-            if (selectedUser !== 'all') { filE = filE.filter(ent => ent.user_name === selectedUser); }
-            if (filE.length === 0) return await appAlert("Informazione", "Nessuna attività registrata per il periodo e il collaboratore selezionati.", "info");
-
-            const { jsPDF } = window.jspdf; const doc = new jsPDF();
-            const pdfColor = THEMES[currentBusinessType].pdfColor;
-            let logoData = null; if(studioData?.logo_url) { try { logoData = await getBase64FromUrl(studioData.logo_url); } catch(err) {} }
-
-            const usersInReport = [...new Set(filE.map(ent => ent.user_name))].sort();
-
-            usersInReport.forEach((uname, index) => {
-                const uEntries = filE.filter(ent => ent.user_name === uname).sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
-                const uTotalH = uEntries.reduce((sum, ent) => sum + Number(ent.duration), 0);
-                const uTotalC = uEntries.reduce((sum, ent) => sum + Number(ent.rate), 0);
-
-                if(index > 0) doc.addPage(); 
-                
-                let currentY = 20; 
-                if(logoData) { doc.addImage(logoData.url, 'PNG', 14, 10, (logoData.width/logoData.height)*8, 8); currentY = 28; } 
-
-                doc.setFontSize(18); doc.setTextColor(...pdfColor); doc.text(`Collaboratore: ${uname}`, 14, currentY);
-                doc.setFontSize(10); doc.setTextColor(100, 116, 139); doc.text(`Totale Periodo: ${formatTime(uTotalH)} | Costo Totale: €${uTotalC.toFixed(2)}`, 14, currentY+7);
-
-                currentY += 15;
-                const projLabel = currentBusinessType === 'impresa' ? 'Cantiere' : 'Progetto';
-                const projectsForUser = [...new Set(uEntries.map(ent => ent.project_name))].sort();
-
-                projectsForUser.forEach(projName => {
-                    const pEntries = uEntries.filter(ent => ent.project_name === projName);
-                    const pTotalH = pEntries.reduce((sum, ent) => sum + Number(ent.duration), 0);
-                    const pTotalC = pEntries.reduce((sum, ent) => sum + Number(ent.rate), 0);
-
-                    if(currentY > doc.internal.pageSize.height - 30) { doc.addPage(); currentY = 20; }
-
-                    doc.setFontSize(12); doc.setTextColor(15, 23, 42); doc.text(`${projLabel}: ${projName}`, 14, currentY);
-                    doc.setFontSize(9); doc.setTextColor(100, 116, 139); doc.text(`Subtotale: ${formatTime(pTotalH)} | €${pTotalC.toFixed(2)}`, 14, currentY + 5);
-
-                    doc.autoTable({
-                        startY: currentY + 8,
-                        head: [['Data', 'Attività', 'Ore', 'Costo']],
-                        body: pEntries.map(ent => {
-                            let dispNotes = ent.notes || '';
-                            const match = dispNotes.match(/^\[(\d{2}:\d{2}) - (\d{2}:\d{2})\]\s*/);
-                            if(match) dispNotes = dispNotes.replace(match[0], '') + `\n(dalle ${match[1]} alle ${match[2]})`;
-                            return [new Date(ent.created_at).toLocaleDateString(), dispNotes ? `${ent.task}\n(${dispNotes})` : ent.task, formatTime(Number(ent.duration)), `€${Number(ent.rate).toFixed(2)}`];
-                        }),
-                        theme: 'striped', headStyles: { fillColor: pdfColor }, styles: { fontSize: 9 }, margin: { bottom: 15 }
-                    });
-                    currentY = doc.lastAutoTable.finalY + 12; 
-                });
-            });
-
-            doc.save(`Report_Team_${start.toISOString().split('T')[0]}.pdf`); closeTeamReportModal();
-        }
-
-        // ================= RECUPERO PASSWORD =================
-
-        function openForgotPassword() { document.getElementById('modal-forgot-password').classList.remove('force-hide'); lucide.createIcons(); }
-        function closeForgotPassword() { document.getElementById('modal-forgot-password').classList.add('force-hide'); }
-
-        async function sendResetLink() {
-            const email = document.getElementById('forgot-email').value.trim();
-            if(!email) return await appAlert("Attenzione", "Inserisci la tua email.", "danger");
-            
-            const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-                redirectTo: window.location.href 
-            });
-            
-            if(error) return await appAlert("Errore", error.message, "danger");
-            
-            closeForgotPassword();
-            await appAlert("Fatto!", "Se l'email esiste nei nostri sistemi, riceverai a breve un link sicuro per reimpostare la password.", "success");
-        }
-
-        supabaseClient.auth.onAuthStateChange(async (event, session) => {
-            if (event === 'PASSWORD_RECOVERY') {
-                document.getElementById('auth-container').classList.add('force-hide');
-                document.getElementById('limbo-container').classList.add('force-hide');
-                document.getElementById('app-container').classList.add('force-hide');
-                document.getElementById('update-password-container').classList.remove('force-hide');
-                lucide.createIcons();
-            }
-        });
-
-        async function saveNewPassword() {
-            const newPass = document.getElementById('new-password').value;
-            if(newPass.length < 6) return await appAlert("Attenzione", "La password deve essere di almeno 6 caratteri.", "danger");
-            
-            const { data, error } = await supabaseClient.auth.updateUser({ password: newPass });
-            if(error) return await appAlert("Errore", error.message, "danger");
-            
-            document.getElementById('update-password-container').classList.add('force-hide');
-            await appAlert("Successo!", "La tua password è stata aggiornata. Bentornato a bordo!", "success");
-            
-            checkUser();
-        }
-        
-        lucide.createIcons();
-        checkUser();
-    </script>
-</body>
-</html>
+            doc.setFontSize(
